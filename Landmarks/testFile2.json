@@ -1,0 +1,45 @@
+ {
+  "@context": "http://iiif.io/api/presentation/2/context.json",
+  "label": "Automobile crash into billboard on Wilshire Blvd. and Mansfield Street in Los Angeles, circa 1942",
+  "@id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fzz0002q5nt/manifest",
+  "@type": "sc:Manifest",
+  "metadata": [
+    {
+      "label": "Repository",
+      "value": "University of California, Los Angeles. Library. Department of Special Collections"
+    }
+  ],
+  "sequences": [
+    {
+      "@id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fzz0002q5nt/manifest/sequence/normal",
+      "@type": "sc:Sequence",
+      "canvases": [
+        {
+          "@type": "sc:Canvas",
+          "label": "Automobile crash into billboard on Wilshire Blvd. and Mansfield Street in Los Angeles, circa 1942",
+          "@id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fzz0002q5nt/manifest/canvas/zz0002q5nt",
+          "width": 6147,
+          "height": 4913,
+          "images": [
+            {
+              "@type": "oa:Annotation",
+              "@id": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fzz0002q5nt/annotation/zz0002q5nt",
+              "motivation": "sc:painting",
+              "on": "https://iiif.library.ucla.edu/ark%3A%2F21198%2Fzz0002q5nt/manifest/canvas/zz0002q5nt",
+              "resource": {
+                "@id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fzz0002q5nt/full/600,/0/default.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://iiif.library.ucla.edu/iiif/2/ark%3A%2F21198%2Fzz0002q5nt",
+                  "profile": "http://iiif.io/api/image/2/level0.json"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

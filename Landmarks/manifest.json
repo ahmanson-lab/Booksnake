@@ -1,0 +1,126 @@
+{
+  "@context": "http://iiif.io/api/presentation/2/context.json",
+  "@id": "https://www.loc.gov/item/2009579466/manifest.json",
+  "@type": "sc:Manifest",
+  "attribution": "Provided by the Library of Congress",
+  "description": "Relief shown by hachures. Includes illustrations of cities and people along filigreed border. Inset: view of Antarctic Continent as seen by the U.S. Ship Peacock, January 19th, 1840. 4 x 29 cm. List of distances to and from various cities around the world at the top of map. An explanation of projection at the top of map. An explanation of scale in the lower left corner of map. Geographical epochs listed in the lower right of map. \"Entered according to Act of Congress in the year 1846 by D. Griffing Johnson in the clerks office of the District Court of the Southern District of New York.\" Available also through the Library of Congress Web site as a raster image. LC Copy cut and mounted on cloth.",
+  "label": "Colton's illustrated & embellished steel plate map of the world on Mercator's projection : compiled from the latest & most authentic sources exhibiting the recent Arctic and Antarctic discoveries & explorations",
+  "logo": "https://loc.gov/static/images/logo-loc-new-branding.svg",
+  "metadata": [
+    {
+      "label": "APA Citation Style",
+      "value": "Johnson, D. G. (1854) <cite>Colton's illustrated & embellished steel plate map of the world on Mercator's projection: compiled from the latest & most authentic sources exhibiting the recent Arctic and Antarctic discoveries & explorations</cite>. New York: J.H. Colton. [Map] Retrieved from the Library of Congress, https://www.loc.gov/item/2009579466/."
+    },
+    {
+      "label": "MLA Citation Style",
+      "value": "Johnson, D. Griffing. <cite>Colton's illustrated & embellished steel plate map of the world on Mercator's projection: compiled from the latest & most authentic sources exhibiting the recent Arctic and Antarctic discoveries & explorations</cite>. New York: J.H. Colton, 1854. Map. Retrieved from the Library of Congress, &lt;www.loc.gov/item/2009579466/&gt;."
+    },
+    {
+      "label": "Chicago Citation Style",
+      "value": "Johnson, D. Griffing. <cite>Colton's illustrated & embellished steel plate map of the world on Mercator's projection: compiled from the latest & most authentic sources exhibiting the recent Arctic and Antarctic discoveries & explorations</cite>. New York: J.H. Colton, 1854. Map. https://www.loc.gov/item/2009579466/."
+    },
+    {
+      "label": "Contributors",
+      "value": [
+        "Johnson, D. Griffing."
+      ]
+    },
+    {
+      "label": "Created Published",
+      "value": [
+        "New York : J.H. Colton, 1854."
+      ]
+    },
+    {
+      "label": "Original Format",
+      "value": [
+        "map"
+      ]
+    },
+    {
+      "label": "Subjects",
+      "value": [
+        "earth",
+        "world maps"
+      ]
+    },
+    {
+      "label": "Online Format",
+      "value": [
+        "image"
+      ]
+    },
+    {
+      "label": "Item Url",
+      "value": "https://www.loc.gov/item/2009579466/"
+    }
+  ],
+  "navDate": "1854-01-01:T00:00:00Z",
+  "seeAlso": [
+    {
+      "@id": "https://lccn.loc.gov/2009579466/marcxml",
+      "format": "text/xml"
+    },
+    {
+      "@id": "https://lccn.loc.gov/2009579466/mods",
+      "format": "text/xml"
+    },
+    {
+      "@id": "https://lccn.loc.gov/2009579466/dc",
+      "format": "text/html"
+    }
+  ],
+  "sequences": [
+    {
+      "@type": "sc:Sequence",
+      "canvases": [
+        {
+          "@id": "https://tile.loc.gov/image-services/iiif/service:gmd:gmd3:g3200:g3200:ct002354",
+          "@type": "sc:Canvas",
+          "height": 4227,
+          "images": [
+            {
+              "@id": "https://www.loc.gov/resource/g3200.ct002354/seq-1/",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://tile.loc.gov/image-services/iiif/service:gmd:gmd3:g3200:g3200:ct002354",
+              "resource": {
+                "@id": "https://tile.loc.gov/image-services/iiif/service:gmd:gmd3:g3200:g3200:ct002354/full/pct:25/0/default.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 4227,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://tile.loc.gov/image-services/iiif/service:gmd:gmd3:g3200:g3200:ct002354",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                },
+                "width": 5954
+              }
+            }
+          ],
+          "label": "Page 1",
+          "metadata": [
+            {
+              "label": "Library of Congress Resource URL",
+              "value": "https://www.loc.gov/resource/g3200.ct002354/?sp=1"
+            }
+          ],
+          "related": "https://www.loc.gov/resource/g3200.ct002354/?sp=1",
+          "thumbnail": {
+            "@id": "https://tile.loc.gov/storage-services/service/gmd/gmd3/g3200/g3200/ct002354.gif",
+            "format": "image/jpeg",
+            "height": 150,
+            "width": 211
+          },
+          "width": 5954
+        }
+      ],
+      "label": "Order of the views"
+    }
+  ],
+  "thumbnail": {
+    "@id": "https://tile.loc.gov/storage-services/service/gmd/gmd3/g3200/g3200/ct002354.gif"
+  },
+  "viewingDirection": "left-to-right",
+  "viewingHint": "paged"
+}
