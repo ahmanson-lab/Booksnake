@@ -11,11 +11,9 @@ class ARView: UIViewController, ARSCNViewDelegate {
     public var texture_image: UIImage?
     public var width: CGFloat?
     public var length: CGFloat?
-    
     public var planeNode: SCNNode?
+    
     var shadowNode: SCNNode?
-    var dirNode: SCNNode?
-
     var target_mat: SCNMaterial?
     var shadow_mat: SCNMaterial?
     var arscene: SCNScene?
@@ -55,7 +53,7 @@ class ARView: UIViewController, ARSCNViewDelegate {
         instructions.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * (2/3) - 10, width: UIScreen.main.bounds.width, height: 200)
         instructions.textAlignment = .center
         instructions.font.withSize(25)
-        instructions.text = "Tap to place item"
+        instructions.text = "Tap and hold to place item"
         instructions.textColor = .white
         sceneView.addSubview(instructions)
         
@@ -74,16 +72,17 @@ class ARView: UIViewController, ARSCNViewDelegate {
         
         let image_plane = SCNPlane(width: length ?? 1, height: width ?? 1)
         planeNode = SCNNode(geometry: image_plane)
-        //planeNode?.castsShadow = true
+        planeNode?.castsShadow = true
         
-        shadowNode = SCNNode(geometry: image_plane)
+        let shadow_plane = SCNPlane(width: length ?? 1, height: width ?? 1)
+        shadowNode = SCNNode(geometry: shadow_plane)
         
-        planeNode?.geometry?.materials = [shadow_mat!]
 
         //adjust object so it's parallel to floor
         let quat = simd_quatf(angle: GLKMathDegreesToRadians(-90), axis: simd_float3(1, 0, 0))
         let rot_matrix = float4x4(quat)
         planeNode?.simdTransform *= rot_matrix
+        shadowNode?.simdTransform *= rot_matrix
         
         //add shadow node
 
@@ -99,12 +98,13 @@ class ARView: UIViewController, ARSCNViewDelegate {
     //MARK: - Gestures
     
     func addGestures(){
-        let tap = UITapGestureRecognizer(target: self, action: #selector(tapGesture))
+        //let tap = UITapGestureRecognizer(target: self, action: #selector(tapGesture))
         let drag = UIPanGestureRecognizer(target: self, action: #selector(dragGesture))
         let rotate = UIRotationGestureRecognizer(target: self, action: #selector(rotGesture))
-
-        sceneView.addGestureRecognizer(tap)
-      //  sceneView.addGestureRecognizer(press)
+        let press = UILongPressGestureRecognizer(target: self, action: #selector(pressGesture))
+        
+        //sceneView.addGestureRecognizer(tap)
+        sceneView.addGestureRecognizer(press)
         sceneView.addGestureRecognizer(rotate)
        sceneView.addGestureRecognizer(drag)
     }
@@ -114,28 +114,31 @@ class ARView: UIViewController, ARSCNViewDelegate {
         let location = sender.location(in: sceneView)
         switch sender.state {
           case .began:
-            //if(lastPanLocation == nil){ return}
-            // existing logic from previous approach. Keep this.
+            //if last Pan loc is null
+            if (lastPanLocation == nil) { return}
+            
             guard let hitNodeResult = sceneView.hitTest(location, options: nil).first else { return }
             panStartZ = CGFloat(sceneView.projectPoint(lastPanLocation ?? SCNVector3(0,0,0)).z)
+            
+          //  moveBy(target_loc: SCNVector3( lastPanLocation!.x,lastPanLocation!.y + 0.5,lastPanLocation!.z), node: planeNode!)
             
             // lastPanLocation is new
             lastPanLocation = hitNodeResult.worldCoordinates
           case .changed:
-            // This entire case has been replaced
-            
+
             let worldTouchPosition = sceneView.unprojectPoint(SCNVector3(location.x, location.y, panStartZ))
             let movementVector = SCNVector3(
                 worldTouchPosition.x - (lastPanLocation?.x ?? 0) ,
                 (worldTouchPosition.y - (lastPanLocation?.y ?? 0)),
                 0)
-            //print("moved ", movementVector)
-            planeNode?.localTranslate(by: movementVector)
+            
+            planeNode?.isHidden = true
+            shadowNode?.localTranslate(by: movementVector)
             self.lastPanLocation = worldTouchPosition
         case .ended:
-           // planeNode?.geometry?.materials.removeAll()
-          //  addMaterial(image: texture_image ?? UIImage(), image_plane: planeNode?.geometry as! SCNPlane)
-           // planeNode?.localTranslate(by: SCNVector3(0, -0.05, 0))
+            planeNode?.isHidden = false
+            moveBy(target_loc: shadowNode!.position, node: planeNode!)
+            shadowNode?.simdPosition += simd_float3(SCNVector3(0,-0.01,0))
             instructions.isHidden = true
           default:
             break
@@ -143,7 +146,7 @@ class ARView: UIViewController, ARSCNViewDelegate {
     }
     
     //first tap to drop shadow , second tap to drop material
-    @objc func tapGesture(sender: UITapGestureRecognizer){
+    @objc func pressGesture(sender: UILongPressGestureRecognizer){
         let location = sender.location(in: sceneView)
         let hittest = sceneView.hitTest(location, types: .estimatedHorizontalPlane)
 
@@ -154,32 +157,29 @@ class ARView: UIViewController, ARSCNViewDelegate {
         else {
             let columns = hittest.first?.worldTransform.columns.3
 
+            //clear scene
             arscene!.rootNode.enumerateChildNodes { (node, stop) in node.removeFromParentNode() }
-            
+            if (targetNode != nil){
+                targetNode?.isHidden = true
+            }
             sceneView.debugOptions = []
-            planeNode!.position = SCNVector3(x:columns!.x, y:columns!.y, z:columns!.z)
-            shadowNode!.position = planeNode!.position
-            if (isFirstTap){
-                addMaterial(image: texture_image ?? UIImage(), image_plane: planeNode?.geometry as! SCNPlane)
-
-                isFirstTap = false
-                instructions.text = "drag shadow to position object"
-            }
-            else{
-                planeNode!.position = SCNVector3(x:columns!.x, y:columns!.y, z:columns!.z)
-                planeNode?.geometry?.materials.removeAll()
-                addMaterial(image: texture_image ?? UIImage(), image_plane: planeNode?.geometry as! SCNPlane)
-                planeNode!.position = SCNVector3(x:columns!.x, y:columns!.y, z:columns!.z)
-                instructions.isHidden = true
-            }
-
-            lastPanLocation = planeNode!.position
+            instructions.text = "drag image to move"
             
-            //adding a shadow
-            arscene!.rootNode.addChildNode(dirNode!)
-            arscene!.rootNode.addChildNode(planeNode!)
+            //animate plane
+            planeNode!.position = SCNVector3(x:columns!.x, y:columns!.y + 0.5, z:columns!.z)
+            shadowNode!.position = SCNVector3(x:columns!.x, y:columns!.y - 0.01, z:columns!.z)
+            moveBy(target_loc: SCNVector3(x:columns!.x, y:columns!.y, z:columns!.z), node: planeNode!)
 
+            //add materials
+            addMaterial(image: texture_image ?? UIImage(), image_plane: planeNode?.geometry as! SCNPlane)
+            shadowNode?.geometry?.materials = [shadow_mat!]
+            
+            //add nodes to scene
+            arscene!.rootNode.addChildNode(shadowNode!)
+            arscene!.rootNode.addChildNode(planeNode!)
             sceneView.scene = arscene!
+            
+            lastPanLocation = SCNVector3(x:columns!.x, y:columns!.y, z:columns!.z)
         }
     }
     
@@ -190,6 +190,19 @@ class ARView: UIViewController, ARSCNViewDelegate {
             planeNode?.simdTransform *= rot_matrix
         }
     }
+    
+    //MARK: - ANIMATION
+    func moveBy(target_loc: SCNVector3, node: SCNNode){
+        
+        let moveUp = SCNAction.moveBy(x: 0, y: 1, z: 0, duration: 1)
+        moveUp.timingMode = .easeInEaseOut;
+        
+        let target_destination = SCNAction.move(to: target_loc, duration: 3)
+        let moveSequence = SCNAction.sequence([target_destination])
+        node.runAction(moveSequence)
+    }
+    
+    
     
     //MARK: - Rendering
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
