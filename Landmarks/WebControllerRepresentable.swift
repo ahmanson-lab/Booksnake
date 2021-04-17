@@ -73,4 +73,3 @@ struct WebViewRepresentable: UIViewRepresentable {
         Coordinator(viewModel)
     }
 }
-

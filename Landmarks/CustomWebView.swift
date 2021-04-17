@@ -59,14 +59,6 @@ struct CustomWebView:  View {
                                         
                                     }
                                 })
-                                
-                                if ( alertFlag.isInvalidManifest){
-                                    self.activeAlert = .first
-                                    isAlert = true
-                                }
-                                else{
-                                    presentedAsModal = false
-                                }
                             }
                             else{
                                 self.activeAlert = .first
@@ -108,7 +100,7 @@ struct CustomWebView:  View {
         
         let url_path = NSURL(string: path)
 
-        let html = try! String(contentsOf: url_filter!)
+        let html = try! String(contentsOf: url_filter!) 
        
         if !UIApplication.shared.canOpenURL(url_path! as URL){
             completion(false)

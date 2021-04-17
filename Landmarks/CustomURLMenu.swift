@@ -11,40 +11,47 @@ struct CustomURLMenu: View {
     @Environment(\.presentationMode) var presentation
     @Binding var presentedAsModal: Bool
     @Binding var progressPercent: CGFloat
-    //@ObservedObject var alertFlag: AlertHandler
+    
     @Binding var addDefaultURL: Bool
     var delegate: AssetRowProtocol?
     @State var google_view = false
     
-    @State var fieldValue = "something"
+    @State var fieldValue = ""
+    
+    var color1: Color = Color(red: 237/225, green: 30/225, blue: 52/225, opacity: 1)
+    var color2: Color = Color(red: 40/225, green: 115/225, blue: 172/225, opacity: 1)
+    var color3: Color = Color(red: 239/225, green: 79/225, blue: 38/225, opacity: 1)
+    
     var body: some View {
         ZStack{
             NavigationView {
                 List {
-                    Section(header: Text("A")){
                         NavigationLink(destination: InputView(showModal: $presentedAsModal,progressPercent: $progressPercent, delegate: delegate), label: {
-                            Text("Add from URL")
+                            Text("Add from IIIF Manifest")
+                                .fontWeight(.bold)
+                                .multilineTextAlignment(.center)
+                                .background(AngularGradient(gradient: Gradient(colors: [color1, color2]), center: .center, angle: .degrees(225))
+                                                .frame(width: UIScreen.main.bounds.width - 10, height: UIScreen.main.bounds.width / 3, alignment: .center)
+                                                .cornerRadius(10.0))
+                                                .padding(.all, 10.0)
+                                .font(.title)
+                                .foregroundColor(.white)
+                               .frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
                         })
-                    }
-                    Section(header: Text("D")){
-                        Button(action: {
-                            self.delegate?.onAddEntry(path: "https://www.loc.gov/item/2009579466/manifest.json",  completion: { success in
-                                if (success){
-                                    self.presentedAsModal = false
-                                }
-                                self.addDefaultURL = !success
-                            })
-                        }) {
-                            Text("Demo: Add example resource from Library of Congress")
-                        }
-                    }
-                    Section(header: Text("L")){
-                        NavigationLink(
-                            destination: CustomWebView(path: "http://www.loc.gov", delegate: delegate!, presentedAsModal: $presentedAsModal),
-                            label: {
-                                Text("Library of Congress")
-                            })
-                    }
+                    NavigationLink(
+                        destination: URLInputView(showModal: $presentedAsModal, progressPercent: $progressPercent),
+                        label: {
+                            Text("Library of Congress")
+                                .fontWeight(.bold)
+                                .multilineTextAlignment(.center)
+                                .background(color3
+                                                .frame(width: UIScreen.main.bounds.width - 10, height: UIScreen.main.bounds.width / 3, alignment: .center)
+                                                .cornerRadius(10.0))
+                                                .padding(.all, 10.0)
+                                .font(.title)
+                                .foregroundColor(.white)
+                               .frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
+                        })
                 }
                 .navigationBarTitle(Text("Add Item"), displayMode: NavigationBarItem.TitleDisplayMode.inline)
                 .navigationBarItems(trailing: HStack(){
@@ -62,12 +69,14 @@ struct CustomURLMenu: View {
 
 struct InputView: View {
     
-    @State var fieldValue:String = ""
+    @State var fieldValue: String = "something"
     @Binding var showModal: Bool
     @Binding var progressPercent: CGFloat
     @State private var isAlert: Bool = false
     @State private var activeAlert: ActiveAlert = .first
     @State private var isError: Bool = false
+    
+    @State var hasJP2: Bool = true
     
     var delegate: AssetRowProtocol?
     var body: some View {
@@ -75,17 +84,42 @@ struct InputView: View {
             ZStack(alignment: .top, content: {
                 Color.init(.systemGray5).edgesIgnoringSafeArea(.all)
 
-                TextField("Enter URL for item catalog page", text: $fieldValue)
-                    .multilineTextAlignment(.leading)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .foregroundColor(.gray)
-                    .padding(EdgeInsets(top: 25, leading: 0, bottom: 0, trailing: 0))
+                VStack{
+                    Text("Add from IIIF")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .multilineTextAlignment(.center)
+                        .padding(.vertical, 10.0)
+                        
+                    Text("Libraries, museums, and archives around the world use IIIF, the International Image Interoperability Framework, to share digitized archival materials.\n\nFor instructions on finding an item's IIIF manifest URL visit guides.iiif.io")
+                        .font(.subheadline)
+                        .fontWeight(.light)
+                        .multilineTextAlignment(.center)
+                        .padding(.all, 10.0)
+                    
+                    TextField("Enter IIIF manifest", text: $fieldValue)
+                        .padding(.horizontal, 10.0)
+                        .multilineTextAlignment(.leading)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .foregroundColor(.gray)
+                        .font(.body)
+                        .padding(EdgeInsets(top: 25, leading: 0, bottom: 0, trailing: 0))
+                     
+                        
+                    Text("Type of paste an item's IIIF manifest URL to add it to Booksnake")
+                        .font(.caption)
+                        .fontWeight(.regular)
+                        .foregroundColor(Color.gray)
+                        .multilineTextAlignment(.leading)
+                        .padding(.horizontal, 10.0)
+                    
+                }
                    
             })
             .navigationBarItems(trailing: HStack(){
                 Button(action: {
                     checkTextField(url: fieldValue, completion: { status in
-                        print("fieldvalue is ",fieldValue)
+                        //print("fieldvalue is ",fieldValue)
                             if (status) {
                                 if !fieldValue.hasSuffix("manifest.json"){
                                     fieldValue.append("/manifest.json")
@@ -93,6 +127,7 @@ struct InputView: View {
                                 self.delegate?.onAddEntry(path: fieldValue,  completion: {success in
                                     if (success){
                                         print("sucess in downloading")
+                                      //  hasJP2 = false
                                     }
                                     else{
                                         self.activeAlert = .third
@@ -105,9 +140,11 @@ struct InputView: View {
                             self.activeAlert = .first
                             isAlert = !status
                         })
-                    }){
-                        Text("Add")
-                    }.alert(isPresented: $isAlert){
+                }, label:{
+                    Text("Add")
+                })
+                //.disabled(hasJP2)
+                .alert(isPresented: $isAlert){
                         switch activeAlert{
                         case .first:
                             return Alert(title: Text("Unable to add item"), message: Text("The item catalog page doesn't have the necessary information"), dismissButton: .default(Text("OK")))
@@ -120,20 +157,32 @@ struct InputView: View {
                 })
     }
     
+    func urlChange(_ tag: String) {
+        checkTextField(url: tag, completion: {status in hasJP2 = !status})
+    }
+    
     func checkTextField(url : String, completion: @escaping (Bool) -> Void) {
         let checkSession = Foundation.URLSession.shared
         var path: String = url
+        //var path: String = url
         
+        let url_filter = URL(string: path + "?fo=json&at=item.mime_type")
         //only for loc.gov
-        if !path.hasSuffix("manifest.json"){
+        if (!path.hasSuffix("manifest.json")  && !path.contains("loc.gov")){
             path.append("/manifest.json")
         }
         
         let url_path = NSURL(string: path)
-        
-    
+
+        let html = try? String(contentsOf: url_filter!)
         if !UIApplication.shared.canOpenURL(url_path! as URL){
             completion(false)
+        }
+        //check that there is a jp2 tag
+        else if (html?.contains("jp2") != nil) {
+            if !html!.contains("jp2"){
+                completion(false)
+            }
         }
         else{
             var request = URLRequest(url: url_path! as URL)
@@ -150,5 +199,16 @@ struct InputView: View {
             })
             task.resume()
         }
+    }
+}
+
+extension Binding {
+    func onChange(_ handler: @escaping (Value) -> Void) -> Binding<Value> {
+        return Binding(
+            get: { self.wrappedValue },
+            set: { selection in
+                self.wrappedValue = selection
+                handler(selection)
+        })
     }
 }
