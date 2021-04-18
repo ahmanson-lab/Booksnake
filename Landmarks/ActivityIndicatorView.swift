@@ -20,5 +20,11 @@ struct ActivityIndicator: UIViewRepresentable {
 
     func updateUIView(_ uiView: UIActivityIndicatorView, context: UIViewRepresentableContext<ActivityIndicator>) {
         isAnimating ? uiView.startAnimating() : uiView.stopAnimating()
+        
+        let label = UILabel(frame: CGRect(x: -50, y: 0, width: 300, height: 100))
+        label.text = "Adding to Booksnake"
+        label.textColor = UIColor.gray
+        //label.textAlignment = .center
+        uiView.addSubview(label)
     }
 }

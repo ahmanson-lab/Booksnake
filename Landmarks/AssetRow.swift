@@ -173,7 +173,6 @@ struct AssetRow: View, AssetRowProtocol {
 
     //can move items around
     private func onMove(source: IndexSet, destination: Int) {
-        
         let contentToMove = contentTest[source.first!]
         contentToMove.index = Int16(destination)
         

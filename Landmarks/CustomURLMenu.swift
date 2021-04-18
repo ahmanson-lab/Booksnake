@@ -3,7 +3,7 @@
 //  Landmarks
 //
 //  Created by Christy Ye on 10/31/20.
-//  Copyright © 2020 Sean Fraga. All rights reserved.
+//  Copyright © 2020 Christy Ye . All rights reserved.
 
 import SwiftUI
 
@@ -39,7 +39,7 @@ struct CustomURLMenu: View {
                                .frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
                         })
                     NavigationLink(
-                        destination: URLInputView(showModal: $presentedAsModal, progressPercent: $progressPercent),
+                        destination: CustomWebView(delegate: delegate!, presentedAsModal: $presentedAsModal),
                         label: {
                             Text("Library of Congress")
                                 .fontWeight(.bold)
@@ -119,7 +119,7 @@ struct InputView: View {
             .navigationBarItems(trailing: HStack(){
                 Button(action: {
                     checkTextField(url: fieldValue, completion: { status in
-                        //print("fieldvalue is ",fieldValue)
+                        
                             if (status) {
                                 if !fieldValue.hasSuffix("manifest.json"){
                                     fieldValue.append("/manifest.json")
@@ -129,10 +129,10 @@ struct InputView: View {
                                         print("sucess in downloading")
                                       //  hasJP2 = false
                                     }
-                                    else{
-                                        self.activeAlert = .third
-                                        isAlert = true
-                                    }
+//                                    else{
+//                                        self.activeAlert = .third
+//                                        isAlert = true
+//                                    }
                                 })
                             }
                             isError = !status
@@ -148,8 +148,6 @@ struct InputView: View {
                         switch activeAlert{
                         case .first:
                             return Alert(title: Text("Unable to add item"), message: Text("The item catalog page doesn't have the necessary information"), dismissButton: .default(Text("OK")))
-                        case .second:
-                            return  Alert(title: Text("Unsupported Item"), message: Text("The item manifest is missing values and/or has incorrect metadata values"), dismissButton: .default(Text("OK")))
                         case .third:
                             return  Alert(title: Text("Website didn't load"), message: Text("This website did not load. Please wait or try another address"), dismissButton: .default(Text("OK")))
                         }
@@ -180,7 +178,7 @@ struct InputView: View {
         }
         //check that there is a jp2 tag
         else if (html?.contains("jp2") != nil) {
-            if !html!.contains("jp2"){
+            if !(html!.contains("jp2")) {
                 completion(false)
             }
         }

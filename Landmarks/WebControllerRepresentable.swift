@@ -28,15 +28,8 @@ struct WebViewRepresentable: UIViewRepresentable {
     func makeUIView(context: UIViewRepresentableContext<WebViewRepresentable>) -> WKWebView {
         self.webView.navigationDelegate = context.coordinator
         
-        
-
-        
         if let url = URL(string: viewModel.link) {
             self.webView.load(URLRequest(url: url))
-            
-            
-            
-           // self.webView.
         }
         return self.webView
     }
@@ -56,10 +49,14 @@ struct WebViewRepresentable: UIViewRepresentable {
             
             let link = webView.url!.absoluteString + "?fo=json&at=item.mime_type"
             if let url = URL (string: link){
-                let html = try! String(contentsOf: url)
-                if html.contains("jp2"){
+                let html = try? String(contentsOf: url)
+                if (html?.contains("jp2") == nil){
                     self.viewModel.didChange = false
-                }else{
+                }
+                else if html!.contains("jp2"){
+                    self.viewModel.didChange = false
+                }
+                else{
                     self.viewModel.didChange = true
                 }
             }

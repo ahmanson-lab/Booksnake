@@ -9,36 +9,30 @@ import Foundation
 import SwiftUI
 
 enum ActiveAlert{
-    case first, second, third
+    case first, third
 }
 
 struct CustomWebView:  View {
     @Environment(\.presentationMode) var presentation
-    @ObservedObject var model = WebViewModel(link: "https://www.google.com/")
+    @ObservedObject var model = WebViewModel(link: "http://www.loc.gov")
     @State private var isAlert: Bool = false
     @State private var activeAlert: ActiveAlert = .first
     
-    var url_string = ""
     var delegate: AssetRowProtocol?
     @State private var isError: Bool = true
     
     @Binding var presentedAsModal: Bool
-    @State var isLoading: Bool
+    @State var isLoading: Bool = false
     @ObservedObject var alertFlag: AlertHandler = AlertHandler()
     @State private var test_flag: Bool = false
-    
-    init(path: String, delegate: AssetRowProtocol, presentedAsModal: Binding<Bool>) {
-        _presentedAsModal = presentedAsModal
-        _isLoading = State<Bool>.init(initialValue: false)
-        url_string = path
-        model.link = url_string
-        
-        self.delegate = delegate
-    }
     
     var body: some View {
         ZStack(alignment: .center, content: {
             WebViewRepresentable(viewModel: model)
+            ActivityIndicator(isAnimating: $isLoading, style: .large)
+                .background(Color.white.frame(width: 200, height: 200, alignment: .center).opacity(0.2))
+                .hidden(!isLoading)
+                
         })
         .navigationBarItems(trailing: HStack(){
             Button(action: {
@@ -56,7 +50,6 @@ struct CustomWebView:  View {
                                     if (success){
                                         presentedAsModal = false
                                         isLoading = false
-                                        
                                     }
                                 })
                             }
@@ -79,13 +72,10 @@ struct CustomWebView:  View {
             switch activeAlert{
             case .first:
                 return Alert(title: Text("Unable to add item"), message: Text("The item catalog page doesn't have the necessary information"), dismissButton: .default(Text("OK")))
-            case .second:
-                return Alert(title: Text("Unsupported Item"), message: Text("The item manifest is missing values and/or has incorrect metadata values"), dismissButton: .default(Text("OK")))
             case .third:
                 return Alert(title: Text("Website didn't load"), message: Text("This website did not load. Please wait or try another address"), dismissButton: .default(Text("OK")))
             }
         }
-        ActivityIndicator(isAnimating: $isLoading, style: .large)
     }
     
     func checkTextField(url : String, completion: @escaping (Bool) -> Void) {
@@ -125,6 +115,15 @@ struct CustomWebView:  View {
                 }
             })
             task.resume()
+        }
+    }
+}
+
+extension View {
+    @ViewBuilder func hidden(_ shouldHide: Bool) -> some View {
+        switch shouldHide {
+        case true: self.hidden()
+        case false: self
         }
     }
 }

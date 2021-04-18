@@ -22,7 +22,6 @@ public class ManifestData: ValueTransformer {
     var curr_json: Any?
     
     public static var supportsSecureCoding: Bool = true
-   // public var downloadProgress: CGFloat = 0.0
     
     public func getRemoteManifest(resource_name: String) -> Bool{
        
@@ -99,10 +98,7 @@ public class ManifestData: ValueTransformer {
         return image
     }
     
-    /* Load a URL to get a json file
-     1. test library of congress https://www.loc.gov/item/2009579466/manifest.json
-     2. test library of congress webpage https://www.loc.gov/item/2009579466
-     */
+    /* Load a URL to get a json file */
     func fetchData(resource_path: String){
         
         let url = URL(string: resource_path)!
