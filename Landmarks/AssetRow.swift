@@ -60,7 +60,7 @@ struct AssetRow: View, AssetRowProtocol {
                         //item label
                         Text("\(item.item_label ?? "")")
                            .lineLimit(2)
-                           .truncationMode(.middle)
+                           .truncationMode(.tail)
                     }
                 }
                 .onDelete(perform: onDelete)

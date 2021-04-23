@@ -22,7 +22,7 @@ struct ContentView: View {
     
     var body: some View {
         RectangularImage(image: image!)
-            .padding(EdgeInsets(top: 0, leading: 20, bottom: 20, trailing: 20))
+            .padding(EdgeInsets(top: -20, leading: 20, bottom: 20, trailing: 20))
         
         NavigationLink(
             destination: ARViewControllerRepresentable(image: image!, width:width, length: length)
@@ -37,7 +37,7 @@ struct ContentView: View {
                         .foregroundColor(.white)
                         .font(.system(size: 18, weight: .medium, design: .default))
                 }
-                .padding(EdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 0))
+                .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
         }
            
         VStack (alignment: .leading, spacing:10) {
@@ -50,15 +50,12 @@ struct ContentView: View {
                                 .lineLimit(1)
                             Text("\(values[item])")
                                 .font(.headline)
-                                .lineLimit(1)
-                                .truncationMode(.tail)
                         }
                     }
                 }
             
         }.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 20))
         
-        Spacer()
     }
 }
 
