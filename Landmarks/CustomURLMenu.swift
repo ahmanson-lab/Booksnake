@@ -82,20 +82,20 @@ struct InputView: View {
     var body: some View {
 
             ZStack(alignment: .top, content: {
-                Color.init(.systemGray5).edgesIgnoringSafeArea(.all)
+                Color.init(.systemGray6).edgesIgnoringSafeArea(.all)
 
                 VStack{
-                    Text("Add from IIIF")
+                    Text("Add from IIIF Manifest")
                         .font(.title)
                         .fontWeight(.bold)
                         .multilineTextAlignment(.center)
-                        .padding(.vertical, 10.0)
+                        .padding(.top, 25)
                         
-                    Text("Libraries, museums, and archives around the world use IIIF, the International Image Interoperability Framework, to share digitized archival materials.\n\nFor instructions on finding an item's IIIF manifest URL visit guides.iiif.io")
+                    Text("Libraries, museums, and archives around the world use IIIF, the International Image Interoperability Framework, to share digitized archival materials.\n\nFor instructions on finding an item's IIIF manifest URL, visit guides.iiif.io.")
                         .font(.subheadline)
-                        .fontWeight(.light)
+                        .fontWeight(.regular)
                         .multilineTextAlignment(.center)
-                        .padding(.all, 10.0)
+                        .padding(EdgeInsets(top: 5, leading: 20, bottom: 10, trailing: 20))
                     
                     TextField("Enter IIIF manifest", text: $fieldValue)
                         .padding(.horizontal, 10.0)
@@ -106,7 +106,7 @@ struct InputView: View {
                         .padding(EdgeInsets(top: 25, leading: 0, bottom: 0, trailing: 0))
                      
                         
-                    Text("Type of paste an item's IIIF manifest URL to add it to Booksnake")
+                    Text("Type or paste an item's IIIF manifest URL to add it to Booksnake.")
                         .font(.caption)
                         .fontWeight(.regular)
                         .foregroundColor(Color.gray)
