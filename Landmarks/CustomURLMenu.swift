@@ -7,14 +7,18 @@
 
 import SwiftUI
 
+enum ActiveAlert{
+    case first, third
+}
+
 struct CustomURLMenu: View {
     @Environment(\.presentationMode) var presentation
     @Binding var presentedAsModal: Bool
-    @Binding var progressPercent: CGFloat
+  //  @Binding var progressPercent: CGFloat
     
     @Binding var addDefaultURL: Bool
     var delegate: AssetRowProtocol?
-    @State var google_view = false
+  //  @State var google_view = false
     
     @State var fieldValue = ""
     
@@ -26,7 +30,7 @@ struct CustomURLMenu: View {
         ZStack{
             NavigationView {
                 List {
-                        NavigationLink(destination: InputView(showModal: $presentedAsModal,progressPercent: $progressPercent, delegate: delegate), label: {
+                        NavigationLink(destination: InputView(showModal: $presentedAsModal,delegate: delegate), label: {
                             Text("Add from IIIF Manifest")
                                 .fontWeight(.bold)
                                 .multilineTextAlignment(.center)
@@ -39,7 +43,8 @@ struct CustomURLMenu: View {
                                .frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
                         })
                     NavigationLink(
-                        destination: CustomWebView(delegate: delegate!, presentedAsModal: $presentedAsModal),
+
+                        destination: URLInputView(presentedAsModal: $presentedAsModal),
                         label: {
                             Text("Library of Congress")
                                 .fontWeight(.bold)
@@ -71,7 +76,7 @@ struct InputView: View {
     
     @State var fieldValue: String = "something"
     @Binding var showModal: Bool
-    @Binding var progressPercent: CGFloat
+ //  @Binding var progressPercent: CGFloat
     @State private var isAlert: Bool = false
     @State private var activeAlert: ActiveAlert = .first
     @State private var isError: Bool = false

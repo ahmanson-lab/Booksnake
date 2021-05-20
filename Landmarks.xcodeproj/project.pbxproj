@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1119FE4C2651A22200807C94 /* UIWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FE4B2651A22200807C94 /* UIWebView.swift */; };
 		119334FE2582FE7B00CA19A2 /* ContentData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 119334FD2582FE7B00CA19A2 /* ContentData.swift */; };
 		1193352A25830ED900CA19A2 /* ContentDataContainer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1193352825830ED900CA19A2 /* ContentDataContainer.xcdatamodeld */; };
-		11AA0958256B83E300216AB5 /* CustomWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11AA0957256B83E300216AB5 /* CustomWebView.swift */; };
 		11B208562537C90900704F40 /* MultiProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B208552537C90900704F40 /* MultiProperty.swift */; };
 		11B208592537C9AF00704F40 /* IIIFManifest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B208582537C9AF00704F40 /* IIIFManifest.swift */; };
 		11B2085C2537C9EB00704F40 /* IIIFSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B2085B2537C9EB00704F40 /* IIIFSequence.swift */; };
@@ -37,7 +37,6 @@
 		56CD50AA24C7CA1C00EF8C3E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CD50A924C7CA1C00EF8C3E /* SceneDelegate.swift */; };
 		56CD50AC24C7CA1C00EF8C3E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CD50AB24C7CA1C00EF8C3E /* ContentView.swift */; };
 		56CD50AE24C7CA1F00EF8C3E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56CD50AD24C7CA1F00EF8C3E /* Assets.xcassets */; };
-		56CD50B124C7CA1F00EF8C3E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56CD50B024C7CA1F00EF8C3E /* Preview Assets.xcassets */; };
 		56CD50B424C7CA1F00EF8C3E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56CD50B224C7CA1F00EF8C3E /* LaunchScreen.storyboard */; };
 		56CD50C024C7CEA000EF8C3E /* RectangularImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CD50BF24C7CEA000EF8C3E /* RectangularImage.swift */; };
 		56EBA8C024C92FDF00A23A87 /* ARQuickLook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56EBA8BF24C92FDF00A23A87 /* ARQuickLook.swift */; };
@@ -57,9 +56,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1119FE4B2651A22200807C94 /* UIWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWebView.swift; sourceTree = "<group>"; };
 		119334FD2582FE7B00CA19A2 /* ContentData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentData.swift; sourceTree = "<group>"; };
 		1193352925830ED900CA19A2 /* ContentDataContainer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ContentDataContainer.xcdatamodel; sourceTree = "<group>"; };
-		11AA0957256B83E300216AB5 /* CustomWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomWebView.swift; sourceTree = "<group>"; };
 		11B208552537C90900704F40 /* MultiProperty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiProperty.swift; sourceTree = "<group>"; };
 		11B208582537C9AF00704F40 /* IIIFManifest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IIIFManifest.swift; sourceTree = "<group>"; };
 		11B2085B2537C9EB00704F40 /* IIIFSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IIIFSequence.swift; sourceTree = "<group>"; };
@@ -88,7 +87,6 @@
 		56CD50A924C7CA1C00EF8C3E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		56CD50AB24C7CA1C00EF8C3E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		56CD50AD24C7CA1F00EF8C3E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		56CD50B024C7CA1F00EF8C3E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		56CD50B324C7CA1F00EF8C3E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		56CD50B524C7CA1F00EF8C3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		56CD50BF24C7CEA000EF8C3E /* RectangularImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangularImage.swift; sourceTree = "<group>"; };
@@ -106,6 +104,38 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1119FE502651E45100807C94 /* jsons */ = {
+			isa = PBXGroup;
+			children = (
+				11C73CD925F1733200FB66DA /* Hollywood.json */,
+				11C73CD325F172BE00FB66DA /* AutomobileLA.json */,
+				11C73CD225F172BE00FB66DA /* LA1909.json */,
+				11C73CD425F172BE00FB66DA /* TopographicLA.json */,
+				11C73CCF25F16FC300FB66DA /* MapOfLosAngeles.json */,
+				11C73CCC25F1662900FB66DA /* MapOfCalifornia.json */,
+			);
+			name = jsons;
+			path = Landmarks;
+			sourceTree = "<group>";
+		};
+		1119FE522651E5EB00807C94 /* IIIFContainers */ = {
+			isa = PBXGroup;
+			children = (
+				11B2086A2537CE7900704F40 /* IIIFImage.swift */,
+				11DF87A72548955D00A1E5BD /* ManifestData.swift */,
+				11B208672537CE4200704F40 /* IIIFAnnotation.swift */,
+				11B2086D2537CE9600704F40 /* IIIFService.swift */,
+				11B208582537C9AF00704F40 /* IIIFManifest.swift */,
+				11B2085B2537C9EB00704F40 /* IIIFSequence.swift */,
+				11B2085E2537CA0F00704F40 /* IIIFCanvas.swift */,
+				11B208612537CA3300704F40 /* Metadata.swift */,
+				11B208642537CA5F00704F40 /* MetadataItem.swift */,
+				11B208552537C90900704F40 /* MultiProperty.swift */,
+				56CD50BF24C7CEA000EF8C3E /* RectangularImage.swift */,
+			);
+			name = IIIFContainers;
+			sourceTree = "<group>";
+		};
 		1193351F25830D9000CA19A2 /* Content Data */ = {
 			isa = PBXGroup;
 			children = (
@@ -119,6 +149,7 @@
 			isa = PBXGroup;
 			children = (
 				56CD50A624C7CA1C00EF8C3E /* Landmarks */,
+				1119FE502651E45100807C94 /* jsons */,
 				56CD50A524C7CA1C00EF8C3E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -134,50 +165,25 @@
 		56CD50A624C7CA1C00EF8C3E /* Landmarks */ = {
 			isa = PBXGroup;
 			children = (
-				1193351F25830D9000CA19A2 /* Content Data */,
-				11C73CD925F1733200FB66DA /* Hollywood.json */,
-				11C73CD325F172BE00FB66DA /* AutomobileLA.json */,
-				11C73CD225F172BE00FB66DA /* LA1909.json */,
-				11C73CD425F172BE00FB66DA /* TopographicLA.json */,
-				11C73CCF25F16FC300FB66DA /* MapOfLosAngeles.json */,
-				11C73CCC25F1662900FB66DA /* MapOfCalifornia.json */,
 				11FC2AA9255B0BFD00AC21EA /* WebControllerRepresentable.swift */,
-				11AA0957256B83E300216AB5 /* CustomWebView.swift */,
+				1119FE4B2651A22200807C94 /* UIWebView.swift */,
 				11DF87C1254E8DDB00A1E5BD /* CustomURLMenu.swift */,
 				11E6F9BE262B9AA1001F0722 /* URLInputView.swift */,
 				5616C5BB24CA7C8D00F1C1EE /* AssetRow.swift */,
 				56CD50AB24C7CA1C00EF8C3E /* ContentView.swift */,
-				11B2ADEB2593E6B500A54488 /* ActivityIndicatorView.swift */,
-				56CD50A924C7CA1C00EF8C3E /* SceneDelegate.swift */,
-				11DF87A72548955D00A1E5BD /* ManifestData.swift */,
 				11DB8428254373BE004882F4 /* ARViewControllerRepresentable.swift */,
 				11DB842525436116004882F4 /* ARView.swift */,
-				56CD50AD24C7CA1F00EF8C3E /* Assets.xcassets */,
-				56CD50BF24C7CEA000EF8C3E /* RectangularImage.swift */,
 				56CD50B224C7CA1F00EF8C3E /* LaunchScreen.storyboard */,
 				56CD50B524C7CA1F00EF8C3E /* Info.plist */,
+				56CD50A924C7CA1C00EF8C3E /* SceneDelegate.swift */,
 				56CD50A724C7CA1C00EF8C3E /* AppDelegate.swift */,
 				56EBA8BF24C92FDF00A23A87 /* ARQuickLook.swift */,
-				56CD50AF24C7CA1F00EF8C3E /* Preview Content */,
-				11B2086A2537CE7900704F40 /* IIIFImage.swift */,
-				11B208672537CE4200704F40 /* IIIFAnnotation.swift */,
-				11B2086D2537CE9600704F40 /* IIIFService.swift */,
-				11B208582537C9AF00704F40 /* IIIFManifest.swift */,
-				11B2085B2537C9EB00704F40 /* IIIFSequence.swift */,
-				11B2085E2537CA0F00704F40 /* IIIFCanvas.swift */,
-				11B208612537CA3300704F40 /* Metadata.swift */,
-				11B208642537CA5F00704F40 /* MetadataItem.swift */,
-				11B208552537C90900704F40 /* MultiProperty.swift */,
+				11B2ADEB2593E6B500A54488 /* ActivityIndicatorView.swift */,
+				1193351F25830D9000CA19A2 /* Content Data */,
+				1119FE522651E5EB00807C94 /* IIIFContainers */,
+				56CD50AD24C7CA1F00EF8C3E /* Assets.xcassets */,
 			);
 			path = Landmarks;
-			sourceTree = "<group>";
-		};
-		56CD50AF24C7CA1F00EF8C3E /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				56CD50B024C7CA1F00EF8C3E /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -241,7 +247,6 @@
 			files = (
 				11C73CD625F172BE00FB66DA /* AutomobileLA.json in Resources */,
 				56CD50B424C7CA1F00EF8C3E /* LaunchScreen.storyboard in Resources */,
-				56CD50B124C7CA1F00EF8C3E /* Preview Assets.xcassets in Resources */,
 				56CD50AE24C7CA1F00EF8C3E /* Assets.xcassets in Resources */,
 				11C73CDA25F1733200FB66DA /* Hollywood.json in Resources */,
 				11C73CD525F172BE00FB66DA /* LA1909.json in Resources */,
@@ -261,6 +266,7 @@
 				11B208622537CA3300704F40 /* Metadata.swift in Sources */,
 				11DF87C2254E8DDB00A1E5BD /* CustomURLMenu.swift in Sources */,
 				11FC2AAA255B0BFD00AC21EA /* WebControllerRepresentable.swift in Sources */,
+				1119FE4C2651A22200807C94 /* UIWebView.swift in Sources */,
 				11B2086B2537CE7900704F40 /* IIIFImage.swift in Sources */,
 				56CD50C024C7CEA000EF8C3E /* RectangularImage.swift in Sources */,
 				56EBA8C024C92FDF00A23A87 /* ARQuickLook.swift in Sources */,
@@ -275,7 +281,6 @@
 				11DB842625436116004882F4 /* ARView.swift in Sources */,
 				11B208652537CA5F00704F40 /* MetadataItem.swift in Sources */,
 				11B2ADEC2593E6B500A54488 /* ActivityIndicatorView.swift in Sources */,
-				11AA0958256B83E300216AB5 /* CustomWebView.swift in Sources */,
 				56CD50AA24C7CA1C00EF8C3E /* SceneDelegate.swift in Sources */,
 				11B2085C2537C9EB00704F40 /* IIIFSequence.swift in Sources */,
 				11B208682537CE4200704F40 /* IIIFAnnotation.swift in Sources */,
@@ -423,7 +428,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"Landmarks/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 2ARS5NMQTK;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Landmarks/Info.plist;
@@ -448,7 +453,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Landmarks/Booksnake DemoRelease.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"Landmarks/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 2ARS5NMQTK;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Landmarks/Info.plist;

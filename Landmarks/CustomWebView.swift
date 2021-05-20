@@ -14,7 +14,7 @@ enum ActiveAlert{
 
 struct CustomWebView:  View {
     @Environment(\.presentationMode) var presentation
-    @ObservedObject var model = WebViewModel(link: "http://www.loc.gov")
+    @ObservedObject var model = WebViewModel(link: "http://www.google.com")
     @State private var isAlert: Bool = false
     @State private var activeAlert: ActiveAlert = .first
     

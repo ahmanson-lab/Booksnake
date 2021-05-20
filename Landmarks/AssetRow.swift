@@ -40,7 +40,7 @@ struct AssetRow: View, AssetRowProtocol {
     
     @State var test_flag: Bool = false
     @State var numCells: Int = 0
-    @State var progressPercent: CGFloat = 0.0
+  //  @State var progressPercent: CGFloat = 0.0
     
     @State private var counter: Int = 0
 
@@ -78,7 +78,7 @@ struct AssetRow: View, AssetRowProtocol {
                     .resizable()
                     .frame(width: 20, height: 20)})
                 .sheet(isPresented: $modalDisplayed){
-                    CustomURLMenu(presentedAsModal: self.$modalDisplayed, progressPercent: self.$progressPercent, addDefaultURL:    $addDefaultURL, delegate: self)
+                    CustomURLMenu(presentedAsModal: self.$modalDisplayed, addDefaultURL:    $addDefaultURL, delegate: self)
             })
             .environment(\.editMode, $editMode)
         }.onAppear(perform: {

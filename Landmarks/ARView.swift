@@ -31,8 +31,7 @@ class ARView: UIViewController, ARSCNViewDelegate {
     }
     
     override func loadView() {
-        self.view = ARSCNView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
-        
+        self.view = ARSCNView(frame: CGRect.zero)
         self.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
     }
     
@@ -172,7 +171,7 @@ class ARView: UIViewController, ARSCNViewDelegate {
             lastPanLocation = planeNode!.position
             
             //adding a shadow
-            arscene!.rootNode.addChildNode(dirNode!)
+            arscene!.rootNode.addChildNode(shadowNode ?? SCNNode(geometry: SCNPlane(width: 1, height: 1)))
             arscene!.rootNode.addChildNode(planeNode!)
 
             sceneView.scene = arscene!

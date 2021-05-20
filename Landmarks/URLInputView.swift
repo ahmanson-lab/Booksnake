@@ -12,14 +12,14 @@ struct URLInputView: View {
     
     @State var fieldValue: String = ""
     @Binding var presentedAsModal: Bool
-    @Binding var progressPercent: CGFloat
+ //   @Binding var progressPercent: CGFloat
     @State private var isAlert: Bool = false
     @State private var activeAlert: ActiveAlert = .first
     @State private var isError: Bool = false
     
-    @State var hasJP2: Bool = true
+    @ObservedObject var model = WebViewModel()
     
-    //CustomWebView(path: "http://www.loc.gov", delegate: delegate!, presentedAsModal: $presentedAsModal)
+    @State var hasJP2: Bool = true
     
     var delegate: AssetRowProtocol?
     var body: some View {
@@ -40,7 +40,7 @@ struct URLInputView: View {
                         .multilineTextAlignment(.center)
                         .padding(.all, 10.0)
                     
-                    TextField("Search titles, authors, places, and more", text: $fieldValue.onChange(findReturn))
+                    TextField("Search titles, authors, places, and more", text: $fieldValue) //, text: $fieldValue.onChange(findReturn))
                         .padding(.horizontal, 10.0)
                         .multilineTextAlignment(.leading)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -54,15 +54,18 @@ struct URLInputView: View {
                         .foregroundColor(Color.gray)
                         .multilineTextAlignment(.leading)
                         .padding(.horizontal, 10.0)
+                    
+                 
+                    Spacer()
+                    
+                    NavigationLink(
+                        destination: FullWebView(delegate: delegate, hasJP2: $hasJP2, webview: WebViewRepresentable(flagModel:model)),
+                        label: {
+                            Text("Add")
+                        })
+                    Spacer()
+                    
                 }
             })
-    }
-    
-    
-    func findReturn(_ tag: String) {
-        if (tag.contains("\n")){
-//            CustomWebView(path: tag.remove(at: tag.index(before: tag.endIndex - 1)), delegate: delegate!, presentedAsModal: $presentedAsModal)
-        }
-        
     }
 }
