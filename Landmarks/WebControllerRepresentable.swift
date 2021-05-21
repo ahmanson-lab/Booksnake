@@ -9,50 +9,75 @@
 import WebKit
 import UIKit
 import SwiftUI
+import Combine
 
 class WebViewModel: ObservableObject {
-    @Published var isJP2: Bool
-    init() {
-        isJP2 = false
-    }
+    var webViewNavigationPublisher = PassthroughSubject<WebViewNavigation, Never>()
+    var path: String = ""
+}
+
+enum WebViewNavigation {
+    case backward, forward
 }
 
 struct WebViewRepresentable: UIViewRepresentable {
-    @ObservedObject var flagModel: WebViewModel
-    @State var link2: URL = URL(string: "https://www.loc.gov")!
+
+    @State var search: String
+    @State var path: String = ""
+    @Binding var isJP2: Bool
     
     let webView = WKWebView()
-
+    @ObservedObject var viewModel: WebViewModel
+    
     func makeUIView(context: UIViewRepresentableContext<WebViewRepresentable>) -> WKWebView {
         self.webView.navigationDelegate = context.coordinator
         self.webView.allowsBackForwardNavigationGestures = true
         
-        if let url = URL(string: "https://www.loc.gov") {
+        isJP2 = false
+        
+        if let url = URL(string: search) {
             self.webView.load(URLRequest(url: url))
         }
         return self.webView
     }
 
     func updateUIView(_ uiView: WKWebView, context: UIViewRepresentableContext<WebViewRepresentable>) {
-        link2 = uiView.url!
         return
     }
     
     func goBack(){
         webView.goBack()
+        self.viewModel.webViewNavigationPublisher.send(.backward)
     }
 
     func goForward() {
         webView.goForward()
+        self.viewModel.webViewNavigationPublisher.send(.forward)
     }
 
     class Coordinator: NSObject, WKNavigationDelegate {
-        private var flagModel: WebViewModel
+        let view: WebViewRepresentable
+        var webViewNavigationSubscriber: AnyCancellable? = nil
         
-        init(_ viewModel: WebViewModel) {
-            self.flagModel = viewModel
+        init( _ view: WebViewRepresentable) {
+            self.view = view
         }
         
+        func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+            //something
+            self.webViewNavigationSubscriber = self.view.viewModel.webViewNavigationPublisher.receive(on: RunLoop.main).sink(receiveValue: { navigation in
+                switch navigation {
+                    case .backward:
+                        if webView.canGoBack {
+                            webView.goBack()
+                        }
+                    case .forward:
+                        if webView.canGoForward {
+                            webView.goForward()
+                        }
+                }
+            })
+        }
 
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
             
@@ -60,24 +85,37 @@ struct WebViewRepresentable: UIViewRepresentable {
             if let url = URL (string: link){
                 let html = try? String(contentsOf: url)
                 if (html?.contains("jp2") == nil){
-                   
-                    self.flagModel.isJP2 = false
+                    view.isJP2 = false
+                  
                 }
                 else if html!.contains("jp2"){
-                    self.flagModel.isJP2 = false
+                    view.isJP2 = false
+                  
                 }
                 else{
-                    self.flagModel.isJP2 = true
+                    view.isJP2 = true
+                  
                 }
             }
-           // link2 = webView.url
-//            self.viewModel.didFinishLoading = true
-//
-//            self.viewModel.link = webView.url!.absoluteString
+            
+            view.viewModel.path = webView.url!.absoluteString
+        }
+        
+        
+        // This function is essential for intercepting every navigation in the webview
+        func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+            // Suppose you don't want your user to go a restricted site
+            if let host = navigationAction.request.url?.host {
+                if host == "restricted.com" {
+                    decisionHandler(.cancel)
+                    return
+                }
+            }
+            decisionHandler(.allow)
         }
     }
 
-    func makeCoordinator() -> WebViewRepresentable.Coordinator {
-        Coordinator(flagModel)
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
     }
 }

@@ -44,7 +44,7 @@ struct CustomURLMenu: View {
                         })
                     NavigationLink(
 
-                        destination: URLInputView(presentedAsModal: $presentedAsModal),
+                        destination: URLInputView(presentedAsModal: $presentedAsModal, delegate: delegate),
                         label: {
                             Text("Library of Congress")
                                 .fontWeight(.bold)
@@ -74,7 +74,7 @@ struct CustomURLMenu: View {
 
 struct InputView: View {
     
-    @State var fieldValue: String = "something"
+    @State var fieldValue: String = ""
     @Binding var showModal: Bool
  //  @Binding var progressPercent: CGFloat
     @State private var isAlert: Bool = false
@@ -96,11 +96,17 @@ struct InputView: View {
                         .multilineTextAlignment(.center)
                         .padding(.top, 25)
                         
-                    Text("Libraries, museums, and archives around the world use IIIF, the International Image Interoperability Framework, to share digitized archival materials.\n\nFor instructions on finding an item's IIIF manifest URL, visit guides.iiif.io.")
+                    Text("Libraries, museums, and archives around the world use IIIF, the International Image Interoperability Framework, to share digitized archival materials.\n\nFor instructions on finding an item's IIIF manifest URL, visit")
                         .font(.subheadline)
                         .fontWeight(.regular)
                         .multilineTextAlignment(.center)
                         .padding(EdgeInsets(top: 5, leading: 20, bottom: 10, trailing: 20))
+                    
+                    Button(action: {
+                        UIApplication.shared.open(URL(string:"https://www.guides.iiif.io")!)
+                    }, label: {
+                        Text(" guides.iiif.io.")
+                    })
                     
                     TextField("Enter IIIF manifest", text: $fieldValue)
                         .padding(.horizontal, 10.0)

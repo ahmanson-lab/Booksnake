@@ -40,7 +40,9 @@ struct URLInputView: View {
                         .multilineTextAlignment(.center)
                         .padding(.all, 10.0)
                     
-                    TextField("Search titles, authors, places, and more", text: $fieldValue) //, text: $fieldValue.onChange(findReturn))
+                    TextField("Search titles, authors, places, and more", text: $fieldValue)
+                        .textContentType(.oneTimeCode)
+                        .keyboardType(.webSearch)
                         .padding(.horizontal, 10.0)
                         .multilineTextAlignment(.leading)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -59,7 +61,7 @@ struct URLInputView: View {
                     Spacer()
                     
                     NavigationLink(
-                        destination: FullWebView(delegate: delegate, hasJP2: $hasJP2, webview: WebViewRepresentable(flagModel:model)),
+                        destination: FullWebView(delegate: delegate, presentedAsModal:$presentedAsModal, hasJP2: $hasJP2, webview: WebViewRepresentable(search: "https://www.loc.gov/search/?in=&q=" + fieldValue + "&new=true&st=" + fieldValue, isJP2: $hasJP2, viewModel: model )),
                         label: {
                             Text("Add")
                         })
