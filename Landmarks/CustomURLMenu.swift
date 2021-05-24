@@ -34,7 +34,7 @@ struct CustomURLMenu: View {
                             Text("Add from IIIF Manifest")
                                 .fontWeight(.bold)
                                 .multilineTextAlignment(.center)
-                                .background(AngularGradient(gradient: Gradient(colors: [color1, color2]), center: .center, angle: .degrees(225))
+                                .background(LinearGradient(gradient: Gradient(colors: [color2, color1]), startPoint: .bottomLeading, endPoint: .topTrailing)
                                                 .frame(width: UIScreen.main.bounds.width - 10, height: UIScreen.main.bounds.width / 3, alignment: .center)
                                                 .cornerRadius(10.0))
                                                 .padding(.all, 10.0)
@@ -76,7 +76,6 @@ struct InputView: View {
     
     @State var fieldValue: String = ""
     @Binding var showModal: Bool
- //  @Binding var progressPercent: CGFloat
     @State private var isAlert: Bool = false
     @State private var activeAlert: ActiveAlert = .first
     @State private var isError: Bool = false
@@ -96,18 +95,20 @@ struct InputView: View {
                         .multilineTextAlignment(.center)
                         .padding(.top, 25)
                         
-                    Text("Libraries, museums, and archives around the world use IIIF, the International Image Interoperability Framework, to share digitized archival materials.\n\nFor instructions on finding an item's IIIF manifest URL, visit")
-                        .font(.subheadline)
-                        .fontWeight(.regular)
-                        .multilineTextAlignment(.center)
-                        .padding(EdgeInsets(top: 5, leading: 20, bottom: 10, trailing: 20))
-                    
-                    Button(action: {
-                        UIApplication.shared.open(URL(string:"https://www.guides.iiif.io")!)
-                    }, label: {
-                        Text(" guides.iiif.io.")
-                    })
-                    
+                   // HStack(){
+                        Text("Libraries, museums, and archives around the world use IIIF, the International Image Interoperability Framework, to share digitized archival materials.\n\nFor instructions on finding an item's IIIF manifest URL, visit")
+                            .font(.subheadline)
+                            .multilineTextAlignment(.center)
+                            .padding(EdgeInsets(top: 5, leading: 20, bottom: 10, trailing: 20))
+                        
+                        Button(action: {
+                            UIApplication.shared.open(URL(string:"https://guides.iiif.io")!)
+                        }, label: {
+                            Text(" guides.iiif.io.").font(.subheadline)
+                        })
+                        .buttonStyle(BorderlessButtonStyle())
+//                    }
+
                     TextField("Enter IIIF manifest", text: $fieldValue)
                         .padding(.horizontal, 10.0)
                         .multilineTextAlignment(.leading)

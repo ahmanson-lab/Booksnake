@@ -16,11 +16,13 @@ struct FullWebView : View {
     @Binding var presentedAsModal: Bool
     @Binding var hasJP2: Bool 
     @State private var isAlert: Bool = false
+    @State private var isActivity: Bool = false
     @State private var activeAlert: ActiveAlert = .first
     
     var webview: WebViewRepresentable
 
     var body: some View {
+        ZStack{
         VStack{
 
             webview
@@ -28,35 +30,46 @@ struct FullWebView : View {
             
             HStack{
                 Button(action: {
-                    //do something
                     self.webview.goBack()
                 }){
-                    Text("back")
+                    Text("<")
+                        .font(.title)
+                        .padding(.horizontal, 20.0)
                 }
-
                 Spacer()
-
                 Button(action: {
                     
                     self.webview.goForward()
                 }){
-                    Text("forward")
+                    Text(">")
+                        .font(.title)
+                        .padding(.horizontal, 20.0)
                 }
 
             }
             Spacer()
         }
+            Rectangle()
+                .fill(Color.gray)
+                .frame(width: 200, height: 200, alignment: .center)
+                .isHidden(!isActivity)
+                .blur(radius: 3.0)
+                .opacity(0.4)
+            ActivityIndicator(isAnimating: $isActivity, style: .large)
+        }
         .navigationBarItems(trailing: HStack(){
             Button(action: {
                 var path = self.webview.viewModel.path
-                
+                isActivity = true
                 checkTextField(url: path, completion: { status in
                     if (status){
                         if !path.hasSuffix("manifest.json"){
                             path.append("manifest.json")
                         }
                             self.delegate?.onAddEntry(path: path,  completion: {success in
+                                
                                 if (success){
+                                  // isActivity = false
                                     print("sucess in downloading")
                                 }
                             })
@@ -65,7 +78,7 @@ struct FullWebView : View {
                     else{
                         isAlert = true
                     }
-                    
+                    isActivity = false
                 })
 
             }, label: {
@@ -100,7 +113,7 @@ struct FullWebView : View {
             completion(false)
         }
         //check that there is a jp2 tag
-        else if (!html.contains("jp2")){
+        else if (!html.contains("image/jp2")){
             print("no jp2")
             completion(false)
         }
@@ -119,6 +132,18 @@ struct FullWebView : View {
                 }
             })
             task.resume()
+        }
+    }
+}
+
+extension View {
+    @ViewBuilder func isHidden(_ hidden: Bool, remove: Bool = false) -> some View {
+        if hidden {
+            if !remove {
+                self.hidden()
+            }
+        } else {
+            self
         }
     }
 }

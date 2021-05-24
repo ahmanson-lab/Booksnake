@@ -75,14 +75,16 @@ class ARView: UIViewController, ARSCNViewDelegate {
         planeNode = SCNNode(geometry: image_plane)
         //planeNode?.castsShadow = true
         
-        shadowNode = SCNNode(geometry: image_plane)
+        shadowNode = SCNNode(geometry: SCNPlane(width: length ?? 1, height: width ?? 1))
+        shadowNode?.geometry?.materials = [shadow_mat!]
         
-        planeNode?.geometry?.materials = [shadow_mat!]
+        //planeNode?.geometry?.materials = [shadow_mat!]
 
         //adjust object so it's parallel to floor
         let quat = simd_quatf(angle: GLKMathDegreesToRadians(-90), axis: simd_float3(1, 0, 0))
         let rot_matrix = float4x4(quat)
         planeNode?.simdTransform *= rot_matrix
+        shadowNode?.simdTransform *= rot_matrix
     }
     
     //add image as texture to 3d plane
@@ -126,11 +128,9 @@ class ARView: UIViewController, ARSCNViewDelegate {
                 0)
             
             planeNode?.localTranslate(by: movementVector)
+            shadowNode?.localTranslate(by: movementVector)
             self.lastPanLocation = worldTouchPosition
         case .ended:
-           // planeNode?.geometry?.materials.removeAll()
-          //  addMaterial(image: texture_image ?? UIImage(), image_plane: planeNode?.geometry as! SCNPlane)
-           // planeNode?.localTranslate(by: SCNVector3(0, -0.05, 0))
             instructions.isHidden = true
           default:
             break
@@ -154,6 +154,8 @@ class ARView: UIViewController, ARSCNViewDelegate {
             sceneView.debugOptions = []
             planeNode!.position = SCNVector3(x:columns!.x, y:columns!.y, z:columns!.z)
             shadowNode!.position = planeNode!.position
+            shadowNode!.localTranslate(by: SCNVector3(0, 0, -0.1))
+            
             if (isFirstTap){
                 addMaterial(image: texture_image ?? UIImage(), image_plane: planeNode?.geometry as! SCNPlane)
 

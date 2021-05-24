@@ -3,7 +3,7 @@
 //  Landmarks
 //
 //  Created by Christy Ye on 4/17/21.
-//  Copyright © 2021 Sean Fraga. All rights reserved.
+//  Created by Christy Ye,  © University of Southern California
 //
 
 import SwiftUI
@@ -20,6 +20,7 @@ struct URLInputView: View {
     @ObservedObject var model = WebViewModel()
     
     @State var hasJP2: Bool = true
+    @State private var active: Bool = false
     
     var delegate: AssetRowProtocol?
     var body: some View {
@@ -55,16 +56,18 @@ struct URLInputView: View {
                         .fontWeight(.regular)
                         .foregroundColor(Color.gray)
                         .multilineTextAlignment(.leading)
-                        .padding(.horizontal, 10.0)
+                        .padding([.leading, .bottom, .trailing], 10.0)
                     
                  
-                    Spacer()
-                    
+                    //Spacer()
                     NavigationLink(
-                        destination: FullWebView(delegate: delegate, presentedAsModal:$presentedAsModal, hasJP2: $hasJP2, webview: WebViewRepresentable(search: "https://www.loc.gov/search/?in=&q=" + fieldValue + "&new=true&st=" + fieldValue, isJP2: $hasJP2, viewModel: model )),
+                        destination: FullWebView(delegate: delegate, presentedAsModal:$presentedAsModal, hasJP2: $hasJP2, webview: WebViewRepresentable(search: "https://www.loc.gov/search/?q=" + fieldValue + "&fa=mime-type:image/jp2", isJP2: $hasJP2, viewModel: model )),  isActive: $active,
                         label: {
-                            Text("Add")
+                            Text("Search")
                         })
+                        .padding(.all, 10.0)
+                        .navigationBarTitle(active ? "Search" : "", displayMode: .inline)
+                        //.padding(/*@START_MENU_TOKEN@*/EdgeInsets()/*@END_MENU_TOKEN@*/)
                     Spacer()
                     
                 }
