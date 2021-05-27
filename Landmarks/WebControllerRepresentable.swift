@@ -92,6 +92,9 @@ struct WebViewRepresentable: UIViewRepresentable {
                     view.isJP2 = false
                   
                 }
+                else if html!.contains("mime-type:image/jp2"){
+                    view.isJP2 = false
+                }
                 else{
                     view.isJP2 = true
                   

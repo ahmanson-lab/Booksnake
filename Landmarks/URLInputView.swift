@@ -41,15 +41,17 @@ struct URLInputView: View {
                         .multilineTextAlignment(.center)
                         .padding(.all, 10.0)
                     
-                    TextField("Search titles, authors, places, and more", text: $fieldValue)
-                        .textContentType(.oneTimeCode)
-                        .keyboardType(.webSearch)
-                        .padding(.horizontal, 10.0)
-                        .multilineTextAlignment(.leading)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .foregroundColor(.gray)
-                        .font(.body)
-                        .padding(EdgeInsets(top: 25, leading: 0, bottom: 0, trailing: 0))
+                    TextField("Search titles, authors, places, and more", text: $fieldValue, onEditingChanged: {_ in }, onCommit: {
+                        active  = true
+                    })
+                    .textContentType(.oneTimeCode)
+                    .keyboardType(.webSearch)
+                    .padding(.horizontal, 10.0)
+                    .multilineTextAlignment(.leading)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .foregroundColor(.gray)
+                    .font(.body)
+                    .padding(EdgeInsets(top: 25, leading: 0, bottom: 0, trailing: 0))
                         
                     Text("Search results are limited to Library of Congress materials with an IIIF manifest, which Booksnake uses to add items")
                         .font(.caption)

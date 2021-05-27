@@ -108,14 +108,18 @@ struct InputView: View {
                         })
                         .buttonStyle(BorderlessButtonStyle())
 //                    }
-
-                    TextField("Enter IIIF manifest", text: $fieldValue)
-                        .padding(.horizontal, 10.0)
-                        .multilineTextAlignment(.leading)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .foregroundColor(.gray)
-                        .font(.body)
-                        .padding(EdgeInsets(top: 25, leading: 0, bottom: 0, trailing: 0))
+                        
+                    TextField("Enter IIIF manifest", text: $fieldValue, onEditingChanged: { edit in
+                      //  self.log.append("\n edit = \(edit)")
+                    }, onCommit: {
+                        urlEnter()
+                    })
+                    .padding(.horizontal, 10.0)
+                    .multilineTextAlignment(.leading)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .foregroundColor(.gray)
+                    .font(.body)
+                    .padding(EdgeInsets(top: 25, leading: 0, bottom: 0, trailing: 0))
                      
                         
                     Text("Type or paste an item's IIIF manifest URL to add it to Booksnake.")
@@ -126,32 +130,32 @@ struct InputView: View {
                         .padding(.horizontal, 10.0)
                     
                 }
-                   
             })
             .navigationBarItems(trailing: HStack(){
                 Button(action: {
-                    checkTextField(url: fieldValue, completion: { status in
-                        
-                            if (status) {
-                                if !fieldValue.hasSuffix("manifest.json"){
-                                    fieldValue.append("/manifest.json")
-                                }
-                                self.delegate?.onAddEntry(path: fieldValue,  completion: {success in
-                                    if (success){
-                                        print("sucess in downloading")
-                                      //  hasJP2 = false
-                                    }
-//                                    else{
-//                                        self.activeAlert = .third
-//                                        isAlert = true
+                    urlEnter()
+//                    checkTextField(url: fieldValue, completion: { status in
+//
+//                            if (status) {
+//                                if !fieldValue.hasSuffix("manifest.json"){
+//                                    fieldValue.append("/manifest.json")
+//                                }
+//                                self.delegate?.onAddEntry(path: fieldValue,  completion: {success in
+//                                    if (success){
+//                                        print("sucess in downloading")
+//                                      //  hasJP2 = false
 //                                    }
-                                })
-                            }
-                            isError = !status
-                            self.showModal = !status    
-                            self.activeAlert = .first
-                            isAlert = !status
-                        })
+////                                    else{
+////                                        self.activeAlert = .third
+////                                        isAlert = true
+////                                    }
+//                                })
+//                            }
+//                            isError = !status
+//                            self.showModal = !status
+//                            self.activeAlert = .first
+//                            isAlert = !status
+//                        })
                 }, label:{
                     Text("Add")
                 })
@@ -167,8 +171,29 @@ struct InputView: View {
                 })
     }
     
-    func urlChange(_ tag: String) {
-        checkTextField(url: tag, completion: {status in hasJP2 = !status})
+    func urlEnter() {
+        checkTextField(url: fieldValue, completion: { status in
+            
+                if (status) {
+                    if !fieldValue.hasSuffix("manifest.json"){
+                        fieldValue.append("/manifest.json")
+                    }
+                    self.delegate?.onAddEntry(path: fieldValue,  completion: {success in
+                        if (success){
+                            print("sucess in downloading")
+                          //  hasJP2 = false
+                        }
+//                                    else{
+//                                        self.activeAlert = .third
+//                                        isAlert = true
+//                                    }
+                    })
+                }
+                isError = !status
+                self.showModal = !status
+                self.activeAlert = .first
+                isAlert = !status
+            })
     }
     
     func checkTextField(url : String, completion: @escaping (Bool) -> Void) {

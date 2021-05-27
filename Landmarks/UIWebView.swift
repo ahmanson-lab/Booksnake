@@ -53,7 +53,7 @@ struct FullWebView : View {
                 .fill(Color.gray)
                 .frame(width: 200, height: 200, alignment: .center)
                 .isHidden(!isActivity)
-                .blur(radius: 3.0)
+               // .blur(radius: 3.0)
                 .opacity(0.4)
             ActivityIndicator(isAnimating: $isActivity, style: .large)
         }
