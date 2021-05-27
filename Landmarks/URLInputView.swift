@@ -12,7 +12,6 @@ struct URLInputView: View {
     
     @State var fieldValue: String = ""
     @Binding var presentedAsModal: Bool
- //   @Binding var progressPercent: CGFloat
     @State private var isAlert: Bool = false
     @State private var activeAlert: ActiveAlert = .first
     @State private var isError: Bool = false
@@ -60,8 +59,6 @@ struct URLInputView: View {
                         .multilineTextAlignment(.leading)
                         .padding([.leading, .bottom, .trailing], 10.0)
                     
-                 
-                    //Spacer()
                     NavigationLink(
                         destination: FullWebView(delegate: delegate, presentedAsModal:$presentedAsModal, hasJP2: $hasJP2, webview: WebViewRepresentable(search: "https://www.loc.gov/search/?q=" + fieldValue + "&fa=mime-type:image/jp2", isJP2: $hasJP2, viewModel: model )),  isActive: $active,
                         label: {
@@ -69,7 +66,7 @@ struct URLInputView: View {
                         })
                         .padding(.all, 10.0)
                         .navigationBarTitle(active ? "Search" : "", displayMode: .inline)
-                        //.padding(/*@START_MENU_TOKEN@*/EdgeInsets()/*@END_MENU_TOKEN@*/)
+                        
                     Spacer()
                     
                 }

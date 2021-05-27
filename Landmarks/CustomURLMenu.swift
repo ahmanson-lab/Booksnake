@@ -14,13 +14,10 @@ enum ActiveAlert{
 struct CustomURLMenu: View {
     @Environment(\.presentationMode) var presentation
     @Binding var presentedAsModal: Bool
-  //  @Binding var progressPercent: CGFloat
-    
     @Binding var addDefaultURL: Bool
-    var delegate: AssetRowProtocol?
-  //  @State var google_view = false
-    
     @State var fieldValue = ""
+    
+    var delegate: AssetRowProtocol?
     
     var color1: Color = Color(red: 237/225, green: 30/225, blue: 52/225, opacity: 1)
     var color2: Color = Color(red: 40/225, green: 115/225, blue: 172/225, opacity: 1)
@@ -134,32 +131,9 @@ struct InputView: View {
             .navigationBarItems(trailing: HStack(){
                 Button(action: {
                     urlEnter()
-//                    checkTextField(url: fieldValue, completion: { status in
-//
-//                            if (status) {
-//                                if !fieldValue.hasSuffix("manifest.json"){
-//                                    fieldValue.append("/manifest.json")
-//                                }
-//                                self.delegate?.onAddEntry(path: fieldValue,  completion: {success in
-//                                    if (success){
-//                                        print("sucess in downloading")
-//                                      //  hasJP2 = false
-//                                    }
-////                                    else{
-////                                        self.activeAlert = .third
-////                                        isAlert = true
-////                                    }
-//                                })
-//                            }
-//                            isError = !status
-//                            self.showModal = !status
-//                            self.activeAlert = .first
-//                            isAlert = !status
-//                        })
                 }, label:{
                     Text("Add")
                 })
-                //.disabled(hasJP2)
                 .alert(isPresented: $isAlert){
                         switch activeAlert{
                         case .first:
@@ -208,13 +182,13 @@ struct InputView: View {
         }
         
         let url_path = NSURL(string: path)
-
-        let html = try? String(contentsOf: url_filter!)
         if !UIApplication.shared.canOpenURL(url_path! as URL){
             completion(false)
         }
+        let html = try? String(contentsOf: url_filter!)
+   
         //check that there is a jp2 tag
-        else if (html?.contains("jp2") != nil) {
+        if (html?.contains("jp2") != nil) {
             if !(html!.contains("jp2")) {
                 completion(false)
             }
