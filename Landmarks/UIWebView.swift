@@ -36,6 +36,7 @@ struct FullWebView : View {
                         .font(.title)
                         .padding(.horizontal, 20.0)
                 }
+                .disabled(!self.webview.hasBackList)
                 Spacer()
                 Button(action: {
                     
@@ -45,16 +46,18 @@ struct FullWebView : View {
                         .font(.title)
                         .padding(.horizontal, 20.0)
                 }
+                .disabled(!self.webview.hasForwardList)
 
             }
             Spacer()
         }
             Rectangle()
-                .fill(Color.gray)
+                .fill(Color.init(white: 0.7))
                 .frame(width: 200, height: 200, alignment: .center)
                 .isHidden(!isActivity)
                // .blur(radius: 3.0)
-                .opacity(0.4)
+                .opacity(0.7)
+                .cornerRadius(5.0)
             ActivityIndicator(isAnimating: $isActivity, style: .large)
         }
         .navigationBarItems(trailing: HStack(){
@@ -99,7 +102,12 @@ struct FullWebView : View {
         let checkSession = Foundation.URLSession.shared
         var path: String = url
         
-        let url_filter = URL(string: path + "?fo=json&at=item.mime_type")
+        if (url.isEmpty){
+            completion(false)
+            return
+        }
+        
+        let url_filter = URL(string: path + "?fo=json&at=item.mime_type") ?? URL(string: "https://www.google.com")
         
         if !path.hasSuffix("manifest.json"){
             path.append("manifest.json")

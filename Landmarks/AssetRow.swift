@@ -63,9 +63,6 @@ struct AssetRow: View, AssetRowProtocol {
                     }
                 }
                 .onDelete(perform: onDelete)
-                .onMove(perform: { indices, newOffset in
-                    onMove(source: indices, destination: newOffset)
-                })
             }
             .navigationBarTitle(Text("Archival Material"))
             .navigationBarItems(leading: EditButton(), trailing: Button(action: {
@@ -166,19 +163,6 @@ struct AssetRow: View, AssetRowProtocol {
         do {
             try self.managedObjectContext.save()
         } catch {
-            print(error)
-        }
-    }
-
-    //can move items around
-    private func onMove(source: IndexSet, destination: Int) {
-        let contentToMove = contentTest[source.first!]
-        contentToMove.index = Int16(destination)
-        
-        do {
-            try self.managedObjectContext.save()
-        }
-        catch{
             print(error)
         }
     }

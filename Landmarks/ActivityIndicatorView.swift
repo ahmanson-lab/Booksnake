@@ -15,15 +15,17 @@ struct ActivityIndicator: UIViewRepresentable {
     let style: UIActivityIndicatorView.Style
 
     func makeUIView(context: UIViewRepresentableContext<ActivityIndicator>) -> UIActivityIndicatorView {
-        return UIActivityIndicatorView(style: style)
+        let temp = UIActivityIndicatorView(style: style)
+        temp.color = UIColor.white
+        return temp
     }
 
     func updateUIView(_ uiView: UIActivityIndicatorView, context: UIViewRepresentableContext<ActivityIndicator>) {
         isAnimating ? uiView.startAnimating() : uiView.stopAnimating()
         
-        let label = UILabel(frame: CGRect(x: -50, y: 0, width: 300, height: 100))
+        let label = UILabel(frame: CGRect(x: -60, y: 0, width: 300, height: 100))
         label.text = "Adding to Booksnake"
-        label.textColor = UIColor.gray
+        label.textColor = UIColor.white
 
         uiView.addSubview(label)
     }

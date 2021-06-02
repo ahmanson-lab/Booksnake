@@ -19,6 +19,8 @@ struct URLInputView: View {
     @ObservedObject var model = WebViewModel()
     
     @State var hasJP2: Bool = true
+    @State var hasBackList: Bool = false
+    @State var hasForwardList: Bool = false
     @State private var active: Bool = false
     
     var delegate: AssetRowProtocol?
@@ -60,9 +62,16 @@ struct URLInputView: View {
                         .padding([.leading, .bottom, .trailing], 10.0)
                     
                     NavigationLink(
-                        destination: FullWebView(delegate: delegate, presentedAsModal:$presentedAsModal, hasJP2: $hasJP2, webview: WebViewRepresentable(search: "https://www.loc.gov/search/?q=" + fieldValue + "&fa=mime-type:image/jp2", isJP2: $hasJP2, viewModel: model )),  isActive: $active,
+                        destination: FullWebView(delegate: delegate, presentedAsModal:$presentedAsModal, hasJP2: $hasJP2, webview: WebViewRepresentable(search: "https://www.loc.gov/search/?q=" + fieldValue + "&fa=mime-type:image/jp2", isJP2: $hasJP2, hasBackList: $hasBackList, hasForwardList: $hasForwardList, viewModel: model )),  isActive: $active,
                         label: {
-                            Text("Search")
+                            ZStack(){
+                                Color.init(.systemBlue)
+                                    .frame(width: UIScreen.main.bounds.width - 40, height: 50, alignment: .center)
+                                    .cornerRadius(10)
+                                Text("Search")
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 18, weight: .medium, design: .default))
+                            }
                         })
                         .padding(.all, 10.0)
                         .navigationBarTitle(active ? "Search" : "", displayMode: .inline)

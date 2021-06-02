@@ -40,7 +40,6 @@ struct CustomURLMenu: View {
                                .frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
                         })
                     NavigationLink(
-
                         destination: URLInputView(presentedAsModal: $presentedAsModal, delegate: delegate),
                         label: {
                             Text("Library of Congress")
@@ -70,19 +69,19 @@ struct CustomURLMenu: View {
 }
 
 struct InputView: View {
-    
     @State var fieldValue: String = ""
     @Binding var showModal: Bool
     @State private var isAlert: Bool = false
     @State private var activeAlert: ActiveAlert = .first
     @State private var isError: Bool = false
+    @State private var isActivity: Bool = false
     
     @State var hasJP2: Bool = true
     
     var delegate: AssetRowProtocol?
     var body: some View {
 
-            ZStack(alignment: .top, content: {
+        ZStack(alignment: .top, content: {
                 Color.init(.systemGray6).edgesIgnoringSafeArea(.all)
 
                 VStack{
@@ -92,7 +91,6 @@ struct InputView: View {
                         .multilineTextAlignment(.center)
                         .padding(.top, 25)
                         
-                   // HStack(){
                         Text("Libraries, museums, and archives around the world use IIIF, the International Image Interoperability Framework, to share digitized archival materials.\n\nFor instructions on finding an item's IIIF manifest URL, visit")
                             .font(.subheadline)
                             .multilineTextAlignment(.center)
@@ -104,12 +102,11 @@ struct InputView: View {
                             Text(" guides.iiif.io.").font(.subheadline)
                         })
                         .buttonStyle(BorderlessButtonStyle())
-//                    }
                         
                     TextField("Enter IIIF manifest", text: $fieldValue, onEditingChanged: { edit in
-                      //  self.log.append("\n edit = \(edit)")
-                    }, onCommit: {
-                        urlEnter()
+                        //if edit isn't empty
+                        }, onCommit: {
+                            urlEnter()
                     })
                     .padding(.horizontal, 10.0)
                     .multilineTextAlignment(.leading)
@@ -117,16 +114,24 @@ struct InputView: View {
                     .foregroundColor(.gray)
                     .font(.body)
                     .padding(EdgeInsets(top: 25, leading: 0, bottom: 0, trailing: 0))
-                     
-                        
+                      
                     Text("Type or paste an item's IIIF manifest URL to add it to Booksnake.")
                         .font(.caption)
                         .fontWeight(.regular)
                         .foregroundColor(Color.gray)
                         .multilineTextAlignment(.leading)
                         .padding(.horizontal, 10.0)
-                    
                 }
+            
+                VStack(alignment: .center, spacing: nil, content: {
+                    Rectangle()
+                        .fill(Color.init(white: 0.6))
+                        .frame(width: 200, height: 200, alignment: .center)
+                        .isHidden(!isActivity)
+                        .opacity(0.4)
+                    ActivityIndicator(isAnimating: $isActivity, style: .large)
+                })
+                    
             })
             .navigationBarItems(trailing: HStack(){
                 Button(action: {
@@ -135,39 +140,37 @@ struct InputView: View {
                     Text("Add")
                 })
                 .alert(isPresented: $isAlert){
-                        switch activeAlert{
+                        switch activeAlert {
                         case .first:
                             return Alert(title: Text("Unable to add item"), message: Text("The item catalog page doesn't have the necessary information"), dismissButton: .default(Text("OK")))
                         case .third:
                             return  Alert(title: Text("Website didn't load"), message: Text("This website did not load. Please wait or try another address"), dismissButton: .default(Text("OK")))
                         }
-                    }
-                })
+                }
+            })
     }
     
     func urlEnter() {
-        checkTextField(url: fieldValue, completion: { status in
-            
+        if (!fieldValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !fieldValue.trimmingCharacters(in: .urlHostAllowed).isEmpty){
+            checkTextField(url: fieldValue, completion: { status in
+                isActivity = true
                 if (status) {
                     if !fieldValue.hasSuffix("manifest.json"){
                         fieldValue.append("/manifest.json")
                     }
-                    self.delegate?.onAddEntry(path: fieldValue,  completion: {success in
+                    self.delegate?.onAddEntry(path: fieldValue,  completion: { success in
                         if (success){
                             print("sucess in downloading")
-                          //  hasJP2 = false
                         }
-//                                    else{
-//                                        self.activeAlert = .third
-//                                        isAlert = true
-//                                    }
                     })
                 }
                 isError = !status
                 self.showModal = !status
                 self.activeAlert = .first
                 isAlert = !status
+                isActivity = false
             })
+        }
     }
     
     func checkTextField(url : String, completion: @escaping (Bool) -> Void) {
@@ -182,7 +185,8 @@ struct InputView: View {
         }
         
         let url_path = NSURL(string: path)
-        if !UIApplication.shared.canOpenURL(url_path! as URL){
+        
+        if !UIApplication.shared.canOpenURL((url_path!) as URL){
             completion(false)
         }
         let html = try? String(contentsOf: url_filter!)
@@ -192,7 +196,7 @@ struct InputView: View {
             if !(html!.contains("jp2")) {
                 completion(false)
             }
-        }
+        
         else{
             var request = URLRequest(url: url_path! as URL)
             request.httpMethod = "HEAD"
@@ -208,6 +212,7 @@ struct InputView: View {
             })
             task.resume()
         }
+    }
     }
 }
 

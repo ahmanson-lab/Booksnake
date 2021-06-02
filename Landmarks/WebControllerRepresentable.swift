@@ -25,19 +25,31 @@ struct WebViewRepresentable: UIViewRepresentable {
     @State var search: String
     @State var path: String = ""
     @Binding var isJP2: Bool
+    @Binding var hasBackList: Bool
+    @Binding var hasForwardList: Bool
     
     let webView = WKWebView()
     @ObservedObject var viewModel: WebViewModel
     
     func makeUIView(context: UIViewRepresentableContext<WebViewRepresentable>) -> WKWebView {
         self.webView.navigationDelegate = context.coordinator
-        self.webView.allowsBackForwardNavigationGestures = true
+        self.webView.allowsBackForwardNavigationGestures = false
         
         isJP2 = false
+        var temp = ""
+        
+        if (search.contains(" ")){
+            temp = search.replacingOccurrences(of: " ", with: "%20")
+            
+        }
         
         if let url = URL(string: search) {
             self.webView.load(URLRequest(url: url))
         }
+        else if let url = URL(string: temp){
+            self.webView.load(URLRequest(url: url))
+        }
+        
         return self.webView
     }
 
@@ -102,6 +114,8 @@ struct WebViewRepresentable: UIViewRepresentable {
             }
             
             view.viewModel.path = webView.url!.absoluteString
+            view.hasBackList = webView.canGoBack
+            view.hasForwardList = webView.canGoForward
         }
         
         
