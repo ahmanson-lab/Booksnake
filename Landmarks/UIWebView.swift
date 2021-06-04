@@ -16,46 +16,44 @@ struct FullWebView : View {
     @Binding var presentedAsModal: Bool
     @Binding var hasJP2: Bool 
     @State private var isAlert: Bool = false
-    @State private var isActivity: Bool = false
+    @State private var isActivity: Bool = true
     @State private var activeAlert: ActiveAlert = .first
     
     var webview: WebViewRepresentable
 
     var body: some View {
         ZStack{
-        VStack{
-
-            webview
-            Spacer()
-            
-            HStack{
-                Button(action: {
-                    self.webview.goBack()
-                }){
-                    Text("<")
-                        .font(.title)
-                        .padding(.horizontal, 20.0)
-                }
-                .disabled(!self.webview.hasBackList)
+            VStack{
+                webview.onAppear(perform: {
+                    isActivity = false
+                })
                 Spacer()
-                Button(action: {
-                    
-                    self.webview.goForward()
-                }){
-                    Text(">")
-                        .font(.title)
-                        .padding(.horizontal, 20.0)
+                HStack{
+                    Button(action: {
+                        self.webview.goBack()
+                    }){
+                        Text("<")
+                            .font(.title)
+                            .padding(.horizontal, 20.0)
+                    }
+                    .disabled(!self.webview.hasBackList)
+                    Spacer()
+                    Button(action: {
+                        self.webview.goForward()
+                    }){
+                        Text(">")
+                            .font(.title)
+                            .padding(.horizontal, 20.0)
+                    }
+                    .disabled(!self.webview.hasForwardList)
                 }
-                .disabled(!self.webview.hasForwardList)
-
+                Spacer()
             }
-            Spacer()
-        }
+            
             Rectangle()
                 .fill(Color.init(white: 0.7))
                 .frame(width: 200, height: 200, alignment: .center)
                 .isHidden(!isActivity)
-               // .blur(radius: 3.0)
                 .opacity(0.7)
                 .cornerRadius(5.0)
             ActivityIndicator(isAnimating: $isActivity, style: .large)
@@ -69,10 +67,8 @@ struct FullWebView : View {
                         if !path.hasSuffix("manifest.json"){
                             path.append("manifest.json")
                         }
-                            self.delegate?.onAddEntry(path: path,  completion: {success in
-                                
-                                if (success){
-                                  // isActivity = false
+                            self.delegate?.onAddEntry(path: path,  completion: { success in
+                                if (success) {
                                     print("sucess in downloading")
                                 }
                             })
@@ -92,8 +88,10 @@ struct FullWebView : View {
             switch activeAlert{
                 case .first:
                     return Alert(title: Text("Unable to add item"), message: Text("The item catalog page doesn't have the necessary information"), dismissButton: .default(Text("OK")))
+                case .second:
+                    return Alert(title: Text("URL has spaces"), message: Text("Please remove spaces from URL address"), dismissButton: .default(Text("OK")))
                 case .third:
-                    return  Alert(title: Text("Website didn't load"), message: Text("This website did not load. Please wait or try another address"), dismissButton: .default(Text("OK")))
+                    return  Alert(title: Text("Cannot download from this page"), message: Text("This page does not contain a downloadable IIIF manifest item"), dismissButton: .default(Text("OK")))
             }
         })
     }
@@ -126,7 +124,6 @@ struct FullWebView : View {
             completion(false)
         }
         else {
-        
             var request = URLRequest(url: url_path! as URL)
             request.httpMethod = "HEAD"
             request.timeoutInterval = 1.0

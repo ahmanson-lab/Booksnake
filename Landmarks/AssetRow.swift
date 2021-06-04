@@ -77,7 +77,8 @@ struct AssetRow: View, AssetRowProtocol {
                     CustomURLMenu(presentedAsModal: self.$modalDisplayed, addDefaultURL: $addDefaultURL, delegate: self)
             })
             .environment(\.editMode, $editMode)
-        }.onAppear(perform: {
+        }
+        .onAppear(perform: {
             //enter init data
             if(contentTest.count <= 0){
                 addExamples()
@@ -109,7 +110,8 @@ struct AssetRow: View, AssetRowProtocol {
                 
                 do {
                     try self.managedObjectContext.save()
-                } catch {
+                }
+                catch {
                     print(error)
                 }
             }
@@ -152,8 +154,6 @@ struct AssetRow: View, AssetRowProtocol {
             completion(true)
         }
         completion(false)
-
-      //  self.alertFlag.isInvalidManifest = test_flag
     }
     
     //can delete items
@@ -162,7 +162,8 @@ struct AssetRow: View, AssetRowProtocol {
         self.managedObjectContext.delete(contentToDelete)
         do {
             try self.managedObjectContext.save()
-        } catch {
+        }
+        catch {
             print(error)
         }
     }

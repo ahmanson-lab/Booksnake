@@ -158,7 +158,6 @@ class ARView: UIViewController, ARSCNViewDelegate {
             
             if (isFirstTap){
                 addMaterial(image: texture_image ?? UIImage(), image_plane: planeNode?.geometry as! SCNPlane)
-
                 isFirstTap = false
              //   instructions.text = "drag shadow to position object"
             }

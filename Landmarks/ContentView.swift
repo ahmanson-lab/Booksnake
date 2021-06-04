@@ -10,16 +10,14 @@ import SwiftUI
 
 struct ContentView: View {
     @State var showingPreview = false
+    @State private var showText = false
     
     let image: UIImage?
-    
     var width: CGFloat
     var length: CGFloat
     var labels: [String]
     var values: [String]
-    
-    @State private var showText = false
-    
+
     var body: some View {
         RectangularImage(image: image!)
             .padding(EdgeInsets(top: -20, leading: 20, bottom: 20, trailing: 20))
@@ -53,8 +51,8 @@ struct ContentView: View {
                         }
                     }
                 }
-        }.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 20))
-        
+        }
+        .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 20))
     }
 }
 

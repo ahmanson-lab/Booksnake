@@ -24,6 +24,7 @@ struct WebViewRepresentable: UIViewRepresentable {
 
     @State var search: String
     @State var path: String = ""
+    @State var isLoading: Bool = true
     @Binding var isJP2: Bool
     @Binding var hasBackList: Bool
     @Binding var hasForwardList: Bool
@@ -40,13 +41,12 @@ struct WebViewRepresentable: UIViewRepresentable {
         
         if (search.contains(" ")){
             temp = search.replacingOccurrences(of: " ", with: "%20")
-            
         }
         
         if let url = URL(string: search) {
             self.webView.load(URLRequest(url: url))
         }
-        else if let url = URL(string: temp){
+        else if let url = URL(string: temp) {
             self.webView.load(URLRequest(url: url))
         }
         
@@ -69,6 +69,7 @@ struct WebViewRepresentable: UIViewRepresentable {
 
     class Coordinator: NSObject, WKNavigationDelegate {
         let view: WebViewRepresentable
+        var test: Bool = true
         var webViewNavigationSubscriber: AnyCancellable? = nil
         
         init( _ view: WebViewRepresentable) {
@@ -90,27 +91,29 @@ struct WebViewRepresentable: UIViewRepresentable {
                 }
             })
         }
+        
+        func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
+            test = webView.isLoading
+        }
 
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-            
+            test = webView.isLoading
             let link = webView.url!.absoluteString + "?fo=json&at=item.mime_type"
             if let url = URL (string: link){
                 let html = try? String(contentsOf: url)
                 if (html?.contains("jp2") == nil){
                     view.isJP2 = false
-                  
                 }
                 else if html!.contains("jp2"){
                     view.isJP2 = false
-                  
                 }
-                else if html!.contains("mime-type:image/jp2"){
-                    view.isJP2 = false
-                }
-                else{
-                    view.isJP2 = true
-                  
-                }
+            }
+            
+            if link.contains("gov/item"){
+                view.isJP2 = false
+            }
+            else {
+                view.isJP2 = true
             }
             
             view.viewModel.path = webView.url!.absoluteString
