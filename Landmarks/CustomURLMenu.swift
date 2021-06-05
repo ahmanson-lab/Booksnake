@@ -71,8 +71,8 @@ struct CustomURLMenu: View {
 struct InputView: View {
     @State var fieldValue: String = ""
     @Binding var showModal: Bool
-    @State private var isAlert: Bool = false
-    @State private var activeAlert: ActiveAlert = .first
+    @State var isAlert: Bool = false
+    @State var activeAlert: ActiveAlert = .first
     @State private var isError: Bool = false
     @State private var isActivity: Bool = false
     
@@ -152,7 +152,7 @@ struct InputView: View {
                         case .second:
                             return Alert(title: Text("URL has spaces"), message: Text("Please remove spaces from URL address"), dismissButton: .default(Text("OK")))
                         case .third:
-                            return  Alert(title: Text("Website didn't load"), message: Text("This website did not load. Please wait or try another address"), dismissButton: .default(Text("OK")))
+                            return Alert(title: Text("Download Complete!"), message: Text("Swipe down to return to main page."), dismissButton: .default(Text("OK")))
                         }
                 }
             })
@@ -169,13 +169,16 @@ struct InputView: View {
                     self.delegate?.onAddEntry(path: fieldValue,  completion: { success in
                         if (success){
                             print("sucess in downloading")
+                            activeAlert = .third
                         }
                     })
                 }
+                else{
+                    activeAlert = .first
+                }
                 isError = !status
-                self.showModal = !status
-                self.activeAlert = .first
-                isAlert = !status
+                isAlert = true
+             //   self.showModal = !status
                 isActivity = false
             })
         }

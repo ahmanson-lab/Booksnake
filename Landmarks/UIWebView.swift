@@ -17,7 +17,7 @@ struct FullWebView : View {
     @Binding var hasJP2: Bool 
     @State private var isAlert: Bool = false
     @State private var isActivity: Bool = true
-    @State private var activeAlert: ActiveAlert = .first
+    @State var activeAlert: ActiveAlert = .first
     
     var webview: WebViewRepresentable
 
@@ -70,9 +70,11 @@ struct FullWebView : View {
                             self.delegate?.onAddEntry(path: path,  completion: { success in
                                 if (success) {
                                     print("sucess in downloading")
+                                    activeAlert = .third
+                                    isAlert = true
                                 }
                             })
-                        self.presentedAsModal = !status
+                       // self.presentedAsModal = !status
                     }
                     else{
                         isAlert = true
@@ -91,7 +93,7 @@ struct FullWebView : View {
                 case .second:
                     return Alert(title: Text("URL has spaces"), message: Text("Please remove spaces from URL address"), dismissButton: .default(Text("OK")))
                 case .third:
-                    return  Alert(title: Text("Cannot download from this page"), message: Text("This page does not contain a downloadable IIIF manifest item"), dismissButton: .default(Text("OK")))
+                    return  Alert(title: Text("Download Complete!"), message: Text("Swipe down to return to main page."), dismissButton: .default(Text("OK")))
             }
         })
     }

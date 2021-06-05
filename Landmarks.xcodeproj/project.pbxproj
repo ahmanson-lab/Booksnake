@@ -147,8 +147,8 @@
 			isa = PBXGroup;
 			children = (
 				11E6F9BE262B9AA1001F0722 /* URLInputView.swift */,
-				11FC2AA9255B0BFD00AC21EA /* WebControllerRepresentable.swift */,
 				1119FE4B2651A22200807C94 /* UIWebView.swift */,
+				11FC2AA9255B0BFD00AC21EA /* WebControllerRepresentable.swift */,
 			);
 			name = Web;
 			sourceTree = "<group>";

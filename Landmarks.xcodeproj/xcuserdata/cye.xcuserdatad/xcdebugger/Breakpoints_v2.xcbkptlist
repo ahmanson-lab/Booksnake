@@ -3,4 +3,70 @@
    uuid = "12CB7F77-A1B8-4FE1-A1A1-66ED9939E202"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9E75D730-CA91-4415-996E-B02699F02684"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Landmarks/CustomURLMenu.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "163"
+            endingLineNumber = "163"
+            landmarkName = "urlEnter()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "9E75D730-CA91-4415-996E-B02699F02684 - 5fde8f09ca47fae"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Booksnake_Demo.InputView.urlEnter() -&gt; ()"
+                  moduleName = "Booksnake Demo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/cye/Desktop/BookSnake/booksnake/Landmarks/CustomURLMenu.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "163"
+                  endingLineNumber = "163"
+                  offsetFromSymbolStart = "753">
+               </Location>
+               <Location
+                  uuid = "9E75D730-CA91-4415-996E-B02699F02684 - 337c6260646ceaae"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Bool) -&gt; () in Booksnake_Demo.InputView.urlEnter() -&gt; ()"
+                  moduleName = "Booksnake Demo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/cye/Desktop/BookSnake/booksnake/Landmarks/CustomURLMenu.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "164"
+                  endingLineNumber = "164"
+                  offsetFromSymbolStart = "103">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3EFA8A18-A5E7-4BA9-AEBD-1E2657823D6B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Landmarks/CustomURLMenu.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "171"
+            endingLineNumber = "171"
+            landmarkName = "urlEnter()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>
