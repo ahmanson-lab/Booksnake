@@ -15,6 +15,7 @@ struct CustomURLMenu: View {
     @Environment(\.presentationMode) var presentation
     @Binding var presentedAsModal: Bool
     @Binding var addDefaultURL: Bool
+    @Binding var label: String
     @State var fieldValue = ""
     @State var hasText: Bool = false
     var delegate: AssetRowProtocol?
@@ -27,7 +28,7 @@ struct CustomURLMenu: View {
         ZStack {
             NavigationView {
                 List {
-                    NavigationLink(destination: InputView(showModal: $presentedAsModal,hasText: $hasText, delegate: delegate), label: {
+                    NavigationLink(destination: InputView(showModal: $presentedAsModal, label: $label,hasText: $hasText, delegate: delegate), label: {
                             Text("Add from IIIF Manifest")
                                 .fontWeight(.bold)
                                 .multilineTextAlignment(.center)
@@ -40,7 +41,7 @@ struct CustomURLMenu: View {
                                .frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
                         })
                     NavigationLink(
-                        destination: URLInputView(presentedAsModal: $presentedAsModal, delegate: delegate),
+                        destination: URLInputView(presentedAsModal: $presentedAsModal, label: $label, delegate: delegate),
                         label: {
                             Text("Library of Congress")
                                 .fontWeight(.bold)
@@ -69,8 +70,10 @@ struct CustomURLMenu: View {
 }
 
 struct InputView: View {
-    @State var fieldValue: String = ""
     @Binding var showModal: Bool
+    @Binding var label: String
+    
+    @State var fieldValue: String = ""
     @State var isAlert: Bool = false
     @State var activeAlert: ActiveAlert = .first
     @State private var isError: Bool = false
@@ -152,7 +155,7 @@ struct InputView: View {
                         case .second:
                             return Alert(title: Text("URL has spaces"), message: Text("Please remove spaces from URL address"), dismissButton: .default(Text("OK")))
                         case .third:
-                            return Alert(title: Text("Download Complete!"), message: Text("Swipe down to return to main page."), dismissButton: .default(Text("OK")))
+                            return Alert(title: Text(label + " Download Complete!"), message: Text("Swipe down to return to main page."), dismissButton: .default(Text("OK")))
                         }
                 }
             })

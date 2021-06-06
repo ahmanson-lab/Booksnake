@@ -37,10 +37,9 @@ struct AssetRow: View, AssetRowProtocol {
     
     @State var modalDisplayed = false
     @State var addDefaultURL = false
-    
     @State var test_flag: Bool = false
     @State var numCells: Int = 0
-    
+    @State var label: String = ""
     @State private var counter: Int = 0
 
     @State var new_labels: [String] =  [String]()
@@ -74,7 +73,7 @@ struct AssetRow: View, AssetRowProtocol {
                     .resizable()
                     .frame(width: 20, height: 20)})
                 .sheet(isPresented: $modalDisplayed){
-                    CustomURLMenu(presentedAsModal: self.$modalDisplayed, addDefaultURL: $addDefaultURL, delegate: self)
+                    CustomURLMenu(presentedAsModal: self.$modalDisplayed, addDefaultURL: $addDefaultURL, label: $label, delegate: self)
             })
             .environment(\.editMode, $editMode)
         }
@@ -144,6 +143,7 @@ struct AssetRow: View, AssetRowProtocol {
             
             //test
             contentdata.item_label = new_manifest.item.label
+            self.label = new_manifest.item.label
             
             do {
                 try self.managedObjectContext.save()

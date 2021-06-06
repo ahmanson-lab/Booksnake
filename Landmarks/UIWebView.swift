@@ -14,7 +14,8 @@ import SwiftUI
 struct FullWebView : View {
     var delegate: AssetRowProtocol?
     @Binding var presentedAsModal: Bool
-    @Binding var hasJP2: Bool 
+    @Binding var hasJP2: Bool
+    @Binding var label: String
     @State private var isAlert: Bool = false
     @State private var isActivity: Bool = true
     @State var activeAlert: ActiveAlert = .first
@@ -93,7 +94,7 @@ struct FullWebView : View {
                 case .second:
                     return Alert(title: Text("URL has spaces"), message: Text("Please remove spaces from URL address"), dismissButton: .default(Text("OK")))
                 case .third:
-                    return  Alert(title: Text("Download Complete!"), message: Text("Swipe down to return to main page."), dismissButton: .default(Text("OK")))
+                    return  Alert(title: Text(label + " Download Complete!"), message: Text("Swipe down to return to main page."), dismissButton: .default(Text("OK")))
             }
         })
     }

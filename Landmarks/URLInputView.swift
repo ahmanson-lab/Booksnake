@@ -9,9 +9,10 @@
 import SwiftUI
 
 struct URLInputView: View {
+    @Binding var presentedAsModal: Bool
+    @Binding var label: String
     
     @State var fieldValue: String = ""
-    @Binding var presentedAsModal: Bool
     @State private var isAlert: Bool = false
     @State private var activeAlert: ActiveAlert = .first
     @State private var isError: Bool = false
@@ -62,7 +63,7 @@ struct URLInputView: View {
                         .padding([.leading, .bottom, .trailing], 10.0)
                     
                     NavigationLink(
-                        destination: FullWebView(delegate: delegate, presentedAsModal:$presentedAsModal, hasJP2: $hasJP2, webview: WebViewRepresentable(search: "https://www.loc.gov/search/?q=" + fieldValue + "&fa=mime-type:image/jp2", isJP2: $hasJP2, hasBackList: $hasBackList, hasForwardList: $hasForwardList, viewModel: model )),  isActive: $active,
+                        destination: FullWebView(delegate: delegate, presentedAsModal:$presentedAsModal, hasJP2: $hasJP2, label: $label, webview: WebViewRepresentable(search: "https://www.loc.gov/search/?q=" + fieldValue + "&fa=mime-type:image/jp2", isJP2: $hasJP2, hasBackList: $hasBackList, hasForwardList: $hasForwardList, viewModel: model )),  isActive: $active,
                         label: {
                             ZStack(){
                                 Color.init(.systemBlue)
