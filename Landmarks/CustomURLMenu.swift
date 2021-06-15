@@ -3,7 +3,7 @@
 //  Landmarks
 //
 //  Created by Christy Ye on 10/31/20.
-//  Copyright © 2020 Christy Ye . All rights reserved.
+//  Copyright © 2020 University of Southern California. All rights reserved.
 
 import SwiftUI
 
@@ -82,7 +82,7 @@ struct InputView: View {
     var body: some View {
 
         ZStack(alignment: .top, content: {
-                Color.init(.systemGray6).edgesIgnoringSafeArea(.all)
+                Color.init(.systemGray6)
 
                 VStack{
                     Text("Add from IIIF Manifest")
@@ -91,19 +91,19 @@ struct InputView: View {
                         .multilineTextAlignment(.center)
                         .padding(.top, 25)
                         
-                        Text("Libraries, museums, and archives around the world use IIIF, the International Image Interoperability Framework, to share digitized archival materials.\n\nFor instructions on finding an item's IIIF manifest URL, visit")
+                        Text("Libraries, museums, and archives around the world use IIIF, the International Image Interoperability Framework, to share digitized archival materials.\n\nFor instructions on how to find an item's IIIF manifest URL in different archives, visit:")
                             .font(.subheadline)
                             .multilineTextAlignment(.center)
-                            .padding(EdgeInsets(top: 5, leading: 20, bottom: 10, trailing: 20))
+                            .padding(EdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20))
                         
                         Button(action: {
                                 UIApplication.shared.open(URL(string:"https://guides.iiif.io")!)
                             }, label: {
-                                Text(" guides.iiif.io.").font(.subheadline)
+                                Text("https://guides.iiif.io.").font(.subheadline)
                         })
                         .buttonStyle(BorderlessButtonStyle())
                         
-                    TextField("Enter IIIF manifest", text: $fieldValue, onEditingChanged: { _ in
+                    TextField("Enter IIIF manifest URL", text: $fieldValue, onEditingChanged: { _ in
                             if (!fieldValue.isEmpty){
                                 hasText = true
                             }
@@ -113,7 +113,7 @@ struct InputView: View {
                         }, onCommit: {
                             urlEnter()
                     })
-                    .padding(.horizontal, 10.0)
+                    .padding(.horizontal, 20.0)
                     .multilineTextAlignment(.leading)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .foregroundColor(.gray)
@@ -125,7 +125,7 @@ struct InputView: View {
                         .fontWeight(.regular)
                         .foregroundColor(Color.gray)
                         .multilineTextAlignment(.leading)
-                        .padding(.horizontal, 10.0)
+                        .padding(EdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0))
                 }
                 ZStack(alignment: .center, content: {
                         Rectangle()

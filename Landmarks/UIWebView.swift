@@ -3,7 +3,7 @@
 //  Landmarks
 //
 //  Created by Christy Ye on 5/16/21.
-//  Copyright © 2021 Sean Fraga. All rights reserved.
+//  Copyright © 2021 University of Southern California. All rights reserved.
 //
 
 import Foundation
@@ -32,19 +32,17 @@ struct FullWebView : View {
                     Button(action: {
                         self.webview.goBack()
                     }){
-                        Text("<")
-                            .font(.title)
-                            .padding(.horizontal, 20.0)
+                        Image(systemName: "chevron.left")
                     }
+                    .padding(.horizontal)
                     .disabled(!self.webview.hasBackList)
                     Spacer()
                     Button(action: {
                         self.webview.goForward()
                     }){
-                        Text(">")
-                            .font(.title)
-                            .padding(.horizontal, 20.0)
+                        Image(systemName: "chevron.right")
                     }
+                    .padding(.horizontal)
                     .disabled(!self.webview.hasForwardList)
                 }
                 Spacer()
