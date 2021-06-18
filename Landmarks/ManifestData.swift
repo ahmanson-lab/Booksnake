@@ -14,6 +14,8 @@ public class ManifestData: ValueTransformer {
     
     var label: String = ""
     var image: UIImage?
+    var width: Float?
+    var height: Float?
     
     var labels: [String]?
     var values: [String]?
@@ -27,6 +29,14 @@ public class ManifestData: ValueTransformer {
        
         fetchData(resource_path: resource_name)
 
+        //adding error check
+        if (labels == nil){
+            labels = [String]()
+        }
+        if (values == nil){
+            values = [String]()
+        }
+        
         return parseJson()
     }
     
@@ -52,6 +62,11 @@ public class ManifestData: ValueTransformer {
                 }
                 
                 let canvas = manifest_data[0]
+                
+                //get width and height
+                self.width = Float(canvas.width) / 3000
+                self.height = Float(canvas.height) / 3000
+                    
                 let annotation  = canvas.images
                 let path = annotation?[0].resource.id ?? ""
                 self.image = (downloadImage(path:path))

@@ -99,8 +99,8 @@ struct AssetRow: View, AssetRowProtocol {
                 contentdata.labels = new_manifest.item.labels
                 contentdata.values = new_manifest.item.values
                 contentdata.image = new_manifest.image
-                contentdata.width = Float( sizes[i][0])
-                contentdata.length = Float (sizes[i][1])
+                contentdata.width = Float(sizes[i][1])
+                contentdata.length = Float (sizes[i][0])
                 counter = counter + contentTest.count + 1
                 contentdata.index = Int16(counter)
                 
@@ -136,8 +136,8 @@ struct AssetRow: View, AssetRowProtocol {
             contentdata.labels = new_manifest.item.labels
             contentdata.values = new_manifest.item.values
             contentdata.image = new_manifest.image
-            contentdata.width = width
-            contentdata.length = length
+            contentdata.width = new_manifest.item.width ?? width
+            contentdata.length = new_manifest.item.height ?? length
             counter = counter + contentTest.count + 1
             contentdata.index = Int16(counter)
             

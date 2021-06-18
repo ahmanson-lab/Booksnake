@@ -162,11 +162,11 @@ struct InputView: View {
     }
     
     func urlEnter() {
-        if (!fieldValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !fieldValue.trimmingCharacters(in: .urlHostAllowed).isEmpty){
+        if (!fieldValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty){
             checkTextField(url: fieldValue, completion: { status in
                 isActivity = true
                 if (status) {
-                    if !fieldValue.hasSuffix("manifest.json") {
+                    if (!fieldValue.hasSuffix("manifest.json") && fieldValue.contains("loc.gov")) {
                         fieldValue.append("/manifest.json")
                     }
                     self.delegate?.onAddEntry(path: fieldValue,  completion: { success in
@@ -174,21 +174,27 @@ struct InputView: View {
                             print("sucess in downloading")
                             activeAlert = .third
                         }
+                        else {
+                            //activeAlert = .first
+                        }
+                        isAlert = true
                     })
                 }
-                else{
+                else {
                     activeAlert = .first
                 }
                 isError = !status
                 isAlert = true
+                //activeAlert = .first
              //   self.showModal = !status
                 isActivity = false
             })
         }
         else {
-            isAlert = true
             activeAlert = .second
+            isAlert = true
         }
+      //  isAlert = true
     }
     
     func checkTextField(url : String, completion: @escaping (Bool) -> Void) {
@@ -198,7 +204,7 @@ struct InputView: View {
         let url_filter = URL(string: path + "?fo=json&at=item.mime_type") ?? URL(string: "https://www.google.com")
         
         //only for loc.gov
-        if (!path.hasSuffix("manifest.json")  && !path.contains("loc.gov")){
+        if (!path.hasSuffix("manifest.json")  && path.contains("loc.gov")){
             path.append("/manifest.json")
         }
         
@@ -217,7 +223,7 @@ struct InputView: View {
    
         //check that there is a jp2 tag
         if (html?.contains("jp2") != nil) {
-            if !(html!.contains("jp2")) {
+            if (!(html!.contains("jp2")) && path.contains("loc.gov")) {
                 completion(false)
             }
             else {
