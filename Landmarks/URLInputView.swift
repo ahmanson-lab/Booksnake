@@ -16,6 +16,7 @@ struct URLInputView: View {
     @State private var isAlert: Bool = false
     @State private var activeAlert: ActiveAlert = .first
     @State private var isError: Bool = false
+    @State var isLoading: Bool = true
     
     @ObservedObject var model = WebViewModel()
     

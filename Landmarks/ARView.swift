@@ -73,7 +73,6 @@ class ARView: UIViewController, ARSCNViewDelegate {
         
         let image_plane = SCNPlane(width: width ?? 1, height: length ?? 1)
         planeNode = SCNNode(geometry: image_plane)
-        //planeNode?.castsShadow = true
         
 //        shadowNode = SCNNode(geometry: SCNPlane(width: length ?? 1, height: width ?? 1))
 //        shadowNode?.geometry?.materials = [shadow_mat!]

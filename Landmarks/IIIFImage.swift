@@ -39,7 +39,7 @@ struct IIIFImage {
     }
     
     func downloadImage(path:String) -> UIImage {
-        
+    
         var image = UIImage()
         do {
             let url = URL.init(string: path)!

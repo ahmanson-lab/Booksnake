@@ -16,8 +16,8 @@ public class ManifestData: ValueTransformer {
     var image: UIImage?
     var width: Float?
     var height: Float?
-    
     var labels: [String]?
+    
     var values: [String]?
     var metadata: Metadata?
     

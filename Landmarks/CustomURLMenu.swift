@@ -72,6 +72,7 @@ struct CustomURLMenu: View {
 struct InputView: View {
     @Binding var showModal: Bool
     @Binding var label: String
+    @State var text: String = "Adding to Booksnake"
     
     @State var fieldValue: String = ""
     @State var isAlert: Bool = false
@@ -137,7 +138,7 @@ struct InputView: View {
                             .isHidden(!isActivity)
                             .opacity(0.7)
                             .cornerRadius(5.0)
-                        ActivityIndicator(isAnimating: $isActivity, style: .large)
+                    ActivityIndicator(isAnimating: $isActivity, text: $text, style: .large)
                 }).position(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 3)
                     
             })
@@ -194,7 +195,6 @@ struct InputView: View {
             activeAlert = .second
             isAlert = true
         }
-      //  isAlert = true
     }
     
     func checkTextField(url : String, completion: @escaping (Bool) -> Void) {
