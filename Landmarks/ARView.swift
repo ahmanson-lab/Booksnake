@@ -158,7 +158,7 @@ class ARView: UIViewController, ARSCNViewDelegate {
             if (isFirstTap){
                 addMaterial(image: texture_image ?? UIImage(), image_plane: planeNode?.geometry as! SCNPlane)
                 isFirstTap = false
-             //   instructions.text = "drag shadow to position object"
+				instructions.isHidden = true
             }
             else{
                 planeNode!.position = SCNVector3(x:columns!.x, y:columns!.y, z:columns!.z)

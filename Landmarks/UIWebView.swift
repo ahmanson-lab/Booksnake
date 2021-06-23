@@ -28,7 +28,7 @@ struct FullWebView : View {
     @Binding var label: String
     @State private var isAlert: Bool = false
     @State private var isActivity: Bool = false
-    @State var text: String = ""
+    @State var text: String = "Adding to Booksnake"
     @State var activeAlert: ActiveAlert = .first
 	@State var width: CGFloat = 1
     
