@@ -37,10 +37,9 @@ struct AssetRow: View, AssetRowProtocol {
     
     @State var modalDisplayed = false
     @State var addDefaultURL = false
-    
     @State var test_flag: Bool = false
     @State var numCells: Int = 0
-    
+    @State var label: String = ""
     @State private var counter: Int = 0
 
     @State var new_labels: [String] =  [String]()
@@ -74,7 +73,7 @@ struct AssetRow: View, AssetRowProtocol {
                     .resizable()
                     .frame(width: 20, height: 20)})
                 .sheet(isPresented: $modalDisplayed){
-                    CustomURLMenu(presentedAsModal: self.$modalDisplayed, addDefaultURL: $addDefaultURL, delegate: self)
+                    CustomURLMenu(presentedAsModal: self.$modalDisplayed, addDefaultURL: $addDefaultURL, label: $label, delegate: self)
             })
             .environment(\.editMode, $editMode)
         }
@@ -100,8 +99,8 @@ struct AssetRow: View, AssetRowProtocol {
                 contentdata.labels = new_manifest.item.labels
                 contentdata.values = new_manifest.item.values
                 contentdata.image = new_manifest.image
-                contentdata.width = Float( sizes[i][0])
-                contentdata.length = Float (sizes[i][1])
+                contentdata.width = Float(sizes[i][1])
+                contentdata.length = Float (sizes[i][0])
                 counter = counter + contentTest.count + 1
                 contentdata.index = Int16(counter)
                 
@@ -137,13 +136,14 @@ struct AssetRow: View, AssetRowProtocol {
             contentdata.labels = new_manifest.item.labels
             contentdata.values = new_manifest.item.values
             contentdata.image = new_manifest.image
-            contentdata.width = width
-            contentdata.length = length
+            contentdata.width = new_manifest.item.width ?? width
+            contentdata.length = new_manifest.item.height ?? length
             counter = counter + contentTest.count + 1
             contentdata.index = Int16(counter)
             
             //test
             contentdata.item_label = new_manifest.item.label
+            self.label = new_manifest.item.label
             
             do {
                 try self.managedObjectContext.save()

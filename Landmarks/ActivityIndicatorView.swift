@@ -12,6 +12,7 @@ import SwiftUI
 struct ActivityIndicator: UIViewRepresentable {
 
     @Binding var isAnimating: Bool
+    @Binding var text: String
     let style: UIActivityIndicatorView.Style
 
     func makeUIView(context: UIViewRepresentableContext<ActivityIndicator>) -> UIActivityIndicatorView {
@@ -24,7 +25,7 @@ struct ActivityIndicator: UIViewRepresentable {
         isAnimating ? uiView.startAnimating() : uiView.stopAnimating()
         
         let label = UILabel(frame: CGRect(x: -60, y: 0, width: 300, height: 100))
-        label.text = "Adding to Booksnake"
+        label.text = text
         label.textColor = UIColor.white
 
         uiView.addSubview(label)

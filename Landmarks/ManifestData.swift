@@ -14,8 +14,10 @@ public class ManifestData: ValueTransformer {
     
     var label: String = ""
     var image: UIImage?
-    
+    var width: Float?
+    var height: Float?
     var labels: [String]?
+    
     var values: [String]?
     var metadata: Metadata?
     
@@ -27,6 +29,14 @@ public class ManifestData: ValueTransformer {
        
         fetchData(resource_path: resource_name)
 
+        //adding error check
+        if (labels == nil){
+            labels = [String]()
+        }
+        if (values == nil){
+            values = [String]()
+        }
+        
         return parseJson()
     }
     
@@ -51,11 +61,21 @@ public class ManifestData: ValueTransformer {
                     self.label = label
                 }
                 
-                for i in 0...(manifest_data.count) - 1 {
-                    let canvas = test_manifest?.sequences?[0].canvases[i]
-                    let annotation  = canvas?.images
-                    let path = annotation?[0].resource.id ?? ""
-                    self.image = (downloadImage(path:path))
+                let canvas = manifest_data[0]
+                
+                //get width and height
+                self.width = Float(canvas.width) / 3000
+                self.height = Float(canvas.height) / 3000
+                    
+                let annotation  = canvas.images
+                let path = annotation?[0].resource.id ?? ""
+                self.image = (downloadImage(path:path))
+                
+//                for i in 0...(manifest_data.count) - 1 {
+//                    let canvas = test_manifest?.sequences?[0].canvases[i]
+//                    let annotation  = canvas?.images
+//                    let path = annotation?[0].resource.id ?? ""
+//                    self.image = (downloadImage(path:path))
                     
                     if let metadata = test_manifest?.metadata {
                         self.metadata = metadata
@@ -78,7 +98,7 @@ public class ManifestData: ValueTransformer {
                         self.labels = l
                         self.values = v
                     }
-                }
+//                }
                 return true
             }
         }

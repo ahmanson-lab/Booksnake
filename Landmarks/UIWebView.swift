@@ -11,21 +11,47 @@ import UIKit
 import WebKit
 import SwiftUI
 
+struct ProgressView: View {
+	@Binding var width: CGFloat
+	var body: some View {
+		Rectangle()
+			.fill(Color.blue)
+			.frame(width: width, height: 10, alignment: .topLeading)
+			.position(.init(x: 0, y: 0))
+	}
+}
+
 struct FullWebView : View {
     var delegate: AssetRowProtocol?
     @Binding var presentedAsModal: Bool
-    @Binding var hasJP2: Bool 
+    @Binding var hasJP2: Bool
+    @Binding var label: String
     @State private var isAlert: Bool = false
-    @State private var isActivity: Bool = true
-    @State private var activeAlert: ActiveAlert = .first
+    @State private var isActivity: Bool = false
+    @State var text: String = "Adding to Booksnake"
+    @State var activeAlert: ActiveAlert = .first
+	@State var width: CGFloat = 1
     
     var webview: WebViewRepresentable
 
     var body: some View {
         ZStack{
             VStack{
-                webview.onAppear(perform: {
-                    isActivity = false
+                webview
+                .onAppear(perform: {
+//Option 1: progress bar
+					for i in 1...5 {
+						DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.5) {
+							width = ( (2 * UIScreen.main.bounds.width / 5.0) * CGFloat(i))
+						 }
+					}
+//Option 2: Spinning anim
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+//                        isActivity = webview.viewModel.isLoading
+//						if (!isActivity){
+//							text = "Adding to Booksnake"
+//						}
+//                    }
                 })
                 Spacer()
                 HStack{
@@ -49,6 +75,7 @@ struct FullWebView : View {
                 }
                 Spacer()
             }
+			ProgressView(width: $width)
             
             Rectangle()
                 .fill(Color.init(white: 0.7))
@@ -56,7 +83,7 @@ struct FullWebView : View {
                 .isHidden(!isActivity)
                 .opacity(0.7)
                 .cornerRadius(5.0)
-            ActivityIndicator(isAnimating: $isActivity, style: .large)
+            ActivityIndicator(isAnimating: $isActivity, text: $text, style: .large)
         }
         .navigationBarItems(trailing: HStack(){
             Button(action: {
@@ -70,9 +97,11 @@ struct FullWebView : View {
                             self.delegate?.onAddEntry(path: path,  completion: { success in
                                 if (success) {
                                     print("sucess in downloading")
+                                    activeAlert = .third
+                                    isAlert = true
                                 }
                             })
-                        self.presentedAsModal = !status
+                       // self.presentedAsModal = !status
                     }
                     else{
                         isAlert = true
@@ -91,7 +120,7 @@ struct FullWebView : View {
                 case .second:
                     return Alert(title: Text("URL has spaces"), message: Text("Please remove spaces from URL address"), dismissButton: .default(Text("OK")))
                 case .third:
-                    return  Alert(title: Text("Cannot download from this page"), message: Text("This page does not contain a downloadable IIIF manifest item"), dismissButton: .default(Text("OK")))
+                    return  Alert(title: Text(label + " Download Complete!"), message: Text("Swipe down to return to main page."), dismissButton: .default(Text("OK")))
             }
         })
     }

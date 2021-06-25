@@ -15,6 +15,7 @@ struct CustomURLMenu: View {
     @Environment(\.presentationMode) var presentation
     @Binding var presentedAsModal: Bool
     @Binding var addDefaultURL: Bool
+    @Binding var label: String
     @State var fieldValue = ""
     @State var hasText: Bool = false
     var delegate: AssetRowProtocol?
@@ -27,7 +28,7 @@ struct CustomURLMenu: View {
         ZStack {
             NavigationView {
                 List {
-                    NavigationLink(destination: InputView(showModal: $presentedAsModal,hasText: $hasText, delegate: delegate), label: {
+                    NavigationLink(destination: InputView(showModal: $presentedAsModal, label: $label,hasText: $hasText, delegate: delegate), label: {
                             Text("Add from IIIF Manifest")
                                 .fontWeight(.bold)
                                 .multilineTextAlignment(.center)
@@ -40,7 +41,7 @@ struct CustomURLMenu: View {
                                .frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
                         })
                     NavigationLink(
-                        destination: URLInputView(presentedAsModal: $presentedAsModal, delegate: delegate),
+                        destination: URLInputView(presentedAsModal: $presentedAsModal, label: $label, delegate: delegate),
                         label: {
                             Text("Library of Congress")
                                 .fontWeight(.bold)
@@ -69,10 +70,13 @@ struct CustomURLMenu: View {
 }
 
 struct InputView: View {
-    @State var fieldValue: String = ""
     @Binding var showModal: Bool
-    @State private var isAlert: Bool = false
-    @State private var activeAlert: ActiveAlert = .first
+    @Binding var label: String
+    @State var text: String = "Adding to Booksnake"
+    
+    @State var fieldValue: String = ""
+    @State var isAlert: Bool = false
+    @State var activeAlert: ActiveAlert = .first
     @State private var isError: Bool = false
     @State private var isActivity: Bool = false
     
@@ -134,7 +138,7 @@ struct InputView: View {
                             .isHidden(!isActivity)
                             .opacity(0.7)
                             .cornerRadius(5.0)
-                        ActivityIndicator(isAnimating: $isActivity, style: .large)
+                    ActivityIndicator(isAnimating: $isActivity, text: $text, style: .large)
                 }).position(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 3)
                     
             })
@@ -152,36 +156,44 @@ struct InputView: View {
                         case .second:
                             return Alert(title: Text("URL has spaces"), message: Text("Please remove spaces from URL address"), dismissButton: .default(Text("OK")))
                         case .third:
-                            return  Alert(title: Text("Website didn't load"), message: Text("This website did not load. Please wait or try another address"), dismissButton: .default(Text("OK")))
+                            return Alert(title: Text(label + " Download Complete!"), message: Text("Swipe down to return to main page."), dismissButton: .default(Text("OK")))
                         }
                 }
             })
     }
     
     func urlEnter() {
-        if (!fieldValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !fieldValue.trimmingCharacters(in: .urlHostAllowed).isEmpty){
+        if (!fieldValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty){
             checkTextField(url: fieldValue, completion: { status in
                 isActivity = true
                 if (status) {
-                    if !fieldValue.hasSuffix("manifest.json") {
+                    if (!fieldValue.hasSuffix("manifest.json") && fieldValue.contains("loc.gov")) {
                         fieldValue.append("/manifest.json")
                     }
                     self.delegate?.onAddEntry(path: fieldValue,  completion: { success in
                         if (success){
                             print("sucess in downloading")
+                            activeAlert = .third
                         }
+                        else {
+                            //activeAlert = .first
+                        }
+                        isAlert = true
                     })
                 }
+                else {
+                    activeAlert = .first
+                }
                 isError = !status
-                self.showModal = !status
-                self.activeAlert = .first
-                isAlert = !status
+                isAlert = true
+                //activeAlert = .first
+             //   self.showModal = !status
                 isActivity = false
             })
         }
         else {
-            isAlert = true
             activeAlert = .second
+            isAlert = true
         }
     }
     
@@ -192,7 +204,7 @@ struct InputView: View {
         let url_filter = URL(string: path + "?fo=json&at=item.mime_type") ?? URL(string: "https://www.google.com")
         
         //only for loc.gov
-        if (!path.hasSuffix("manifest.json")  && !path.contains("loc.gov")){
+        if (!path.hasSuffix("manifest.json")  && path.contains("loc.gov")){
             path.append("/manifest.json")
         }
         
@@ -211,7 +223,7 @@ struct InputView: View {
    
         //check that there is a jp2 tag
         if (html?.contains("jp2") != nil) {
-            if !(html!.contains("jp2")) {
+            if (!(html!.contains("jp2")) && path.contains("loc.gov")) {
                 completion(false)
             }
             else {

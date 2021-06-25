@@ -69,13 +69,11 @@ struct MetadataItem: Codable {
     //adding multiple values together into one string for ContentView
     func getValue(forLanguage lang: String) -> String? {
         var temp = ""
-        if (valueList?.count ?? 0 > 0){
-            print(valueList?.count)
-            temp = valueList?.joined(separator: ", ") ?? value as! String
+        if (valueList?.count ?? 0 > 0) {
+            temp = valueList?.joined(separator: ", ") ?? value!
         }
-         
         let search = valueTranslations?[lang] ?? temp
-        let def = valueTranslations?["en"] ?? valueTranslations?.values.first
-        return search ?? def
+        //let def = valueTranslations?["en"] ?? valueTranslations!.values.first
+        return search //?? def
     }
 }

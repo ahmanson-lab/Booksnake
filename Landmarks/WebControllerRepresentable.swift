@@ -14,6 +14,7 @@ import Combine
 class WebViewModel: ObservableObject {
     var webViewNavigationPublisher = PassthroughSubject<WebViewNavigation, Never>()
     var path: String = ""
+    var isLoading: Bool = true
 }
 
 enum WebViewNavigation {
@@ -24,7 +25,7 @@ struct WebViewRepresentable: UIViewRepresentable {
 
     @State var search: String
     @State var path: String = ""
-    @State var isLoading: Bool = true
+//    @Binding var isLoading: Bool
     @Binding var isJP2: Bool
     @Binding var hasBackList: Bool
     @Binding var hasForwardList: Bool
@@ -69,7 +70,7 @@ struct WebViewRepresentable: UIViewRepresentable {
 
     class Coordinator: NSObject, WKNavigationDelegate {
         let view: WebViewRepresentable
-        var test: Bool = true
+       // var test: Bool = true
         var webViewNavigationSubscriber: AnyCancellable? = nil
         
         init( _ view: WebViewRepresentable) {
@@ -92,12 +93,8 @@ struct WebViewRepresentable: UIViewRepresentable {
             })
         }
         
-        func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
-            test = webView.isLoading
-        }
-
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-            test = webView.isLoading
+			
             let link = webView.url!.absoluteString + "?fo=json&at=item.mime_type"
             if let url = URL (string: link){
                 let html = try? String(contentsOf: url)
@@ -116,6 +113,13 @@ struct WebViewRepresentable: UIViewRepresentable {
                 view.isJP2 = true
             }
             
+			webView.evaluateJavaScript("document.body.innerText"){ result, error in
+				if let resultString = result as? String,
+				   resultString.contains("the"){
+					self.view.viewModel.isLoading = false//webView.isLoading
+				}
+			}
+			
             view.viewModel.path = webView.url!.absoluteString
             view.hasBackList = webView.canGoBack
             view.hasForwardList = webView.canGoForward

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1119FE4C2651A22200807C94 /* UIWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FE4B2651A22200807C94 /* UIWebView.swift */; };
+		11664140267E786700CB6666 /* MetadataItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1166413F267E786700CB6666 /* MetadataItem.swift */; };
 		119334FE2582FE7B00CA19A2 /* ContentData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 119334FD2582FE7B00CA19A2 /* ContentData.swift */; };
 		1193352A25830ED900CA19A2 /* ContentDataContainer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1193352825830ED900CA19A2 /* ContentDataContainer.xcdatamodeld */; };
 		11B208562537C90900704F40 /* MultiProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B208552537C90900704F40 /* MultiProperty.swift */; };
@@ -15,7 +16,6 @@
 		11B2085C2537C9EB00704F40 /* IIIFSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B2085B2537C9EB00704F40 /* IIIFSequence.swift */; };
 		11B2085F2537CA0F00704F40 /* IIIFCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B2085E2537CA0F00704F40 /* IIIFCanvas.swift */; };
 		11B208622537CA3300704F40 /* Metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B208612537CA3300704F40 /* Metadata.swift */; };
-		11B208652537CA5F00704F40 /* MetadataItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B208642537CA5F00704F40 /* MetadataItem.swift */; };
 		11B208682537CE4200704F40 /* IIIFAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B208672537CE4200704F40 /* IIIFAnnotation.swift */; };
 		11B2086B2537CE7900704F40 /* IIIFImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B2086A2537CE7900704F40 /* IIIFImage.swift */; };
 		11B2086E2537CE9600704F40 /* IIIFService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B2086D2537CE9600704F40 /* IIIFService.swift */; };
@@ -56,6 +56,7 @@
 
 /* Begin PBXFileReference section */
 		1119FE4B2651A22200807C94 /* UIWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWebView.swift; sourceTree = "<group>"; };
+		1166413F267E786700CB6666 /* MetadataItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MetadataItem.swift; sourceTree = "<group>"; };
 		119334FD2582FE7B00CA19A2 /* ContentData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentData.swift; sourceTree = "<group>"; };
 		1193352925830ED900CA19A2 /* ContentDataContainer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ContentDataContainer.xcdatamodel; sourceTree = "<group>"; };
 		11B208552537C90900704F40 /* MultiProperty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiProperty.swift; sourceTree = "<group>"; };
@@ -63,7 +64,6 @@
 		11B2085B2537C9EB00704F40 /* IIIFSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IIIFSequence.swift; sourceTree = "<group>"; };
 		11B2085E2537CA0F00704F40 /* IIIFCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IIIFCanvas.swift; sourceTree = "<group>"; };
 		11B208612537CA3300704F40 /* Metadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Metadata.swift; sourceTree = "<group>"; };
-		11B208642537CA5F00704F40 /* MetadataItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataItem.swift; sourceTree = "<group>"; };
 		11B208672537CE4200704F40 /* IIIFAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IIIFAnnotation.swift; sourceTree = "<group>"; };
 		11B2086A2537CE7900704F40 /* IIIFImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IIIFImage.swift; sourceTree = "<group>"; };
 		11B2086D2537CE9600704F40 /* IIIFService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IIIFService.swift; sourceTree = "<group>"; };
@@ -120,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				11DF87A72548955D00A1E5BD /* ManifestData.swift */,
+				1166413F267E786700CB6666 /* MetadataItem.swift */,
 				11B2086A2537CE7900704F40 /* IIIFImage.swift */,
 				11B208672537CE4200704F40 /* IIIFAnnotation.swift */,
 				11B2086D2537CE9600704F40 /* IIIFService.swift */,
@@ -127,7 +128,6 @@
 				11B2085B2537C9EB00704F40 /* IIIFSequence.swift */,
 				11B2085E2537CA0F00704F40 /* IIIFCanvas.swift */,
 				11B208612537CA3300704F40 /* Metadata.swift */,
-				11B208642537CA5F00704F40 /* MetadataItem.swift */,
 				11B208552537C90900704F40 /* MultiProperty.swift */,
 				56CD50BF24C7CEA000EF8C3E /* RectangularImage.swift */,
 			);
@@ -147,8 +147,8 @@
 			isa = PBXGroup;
 			children = (
 				11E6F9BE262B9AA1001F0722 /* URLInputView.swift */,
-				11FC2AA9255B0BFD00AC21EA /* WebControllerRepresentable.swift */,
 				1119FE4B2651A22200807C94 /* UIWebView.swift */,
+				11FC2AA9255B0BFD00AC21EA /* WebControllerRepresentable.swift */,
 			);
 			name = Web;
 			sourceTree = "<group>";
@@ -281,6 +281,7 @@
 				11FC2AAA255B0BFD00AC21EA /* WebControllerRepresentable.swift in Sources */,
 				1119FE4C2651A22200807C94 /* UIWebView.swift in Sources */,
 				11B2086B2537CE7900704F40 /* IIIFImage.swift in Sources */,
+				11664140267E786700CB6666 /* MetadataItem.swift in Sources */,
 				56CD50C024C7CEA000EF8C3E /* RectangularImage.swift in Sources */,
 				11B2085F2537CA0F00704F40 /* IIIFCanvas.swift in Sources */,
 				11B2086E2537CE9600704F40 /* IIIFService.swift in Sources */,
@@ -291,7 +292,6 @@
 				11B208592537C9AF00704F40 /* IIIFManifest.swift in Sources */,
 				11B208562537C90900704F40 /* MultiProperty.swift in Sources */,
 				11DB842625436116004882F4 /* ARView.swift in Sources */,
-				11B208652537CA5F00704F40 /* MetadataItem.swift in Sources */,
 				11B2ADEC2593E6B500A54488 /* ActivityIndicatorView.swift in Sources */,
 				56CD50AA24C7CA1C00EF8C3E /* SceneDelegate.swift in Sources */,
 				11B2085C2537C9EB00704F40 /* IIIFSequence.swift in Sources */,
