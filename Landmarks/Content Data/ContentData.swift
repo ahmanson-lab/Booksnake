@@ -3,7 +3,7 @@
 //  Landmarks
 //
 //  Created by Christy Ye on 12/10/20.
-//  Copyright © 2020 Sean Fraga. All rights reserved.
+//  Copyright © 2021 University of Southern California. All rights reserved.
 //
 
 import Foundation
