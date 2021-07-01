@@ -107,7 +107,10 @@ struct InputView: View {
                         })
                         .buttonStyle(BorderlessButtonStyle())
                         
-                    TextField("Enter IIIF manifest URL", text: $fieldValue)
+					TextField("Enter IIIF manifest URL", text: $fieldValue, onEditingChanged: { _ in
+						  }, onCommit: {
+							  urlEnter()
+						})
                     .padding(.horizontal, 20.0)
                     .multilineTextAlignment(.leading)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -165,7 +168,7 @@ struct InputView: View {
                         if (success){
                             print("sucess in downloading")
                             //activeAlert = .third
-							SuccessView()
+						//	SuccessView()
                         }
                         else {
                             //activeAlert = .first
