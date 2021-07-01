@@ -72,8 +72,7 @@ struct MetadataItem: Codable {
         if (valueList?.count ?? 0 > 0) {
             temp = valueList?.joined(separator: ", ") ?? value!
         }
-        let search = valueTranslations?[lang] ?? temp
-        //let def = valueTranslations?["en"] ?? valueTranslations!.values.first
-        return search //?? def
+        let search = valueTranslations?[lang] ?? value
+        return search ?? temp
     }
 }

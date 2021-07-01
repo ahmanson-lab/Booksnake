@@ -17,7 +17,7 @@ struct CustomURLMenu: View {
     @Binding var addDefaultURL: Bool
     @Binding var label: String
     @State var fieldValue = ""
-    @State var hasText: Bool = false
+    @State var hasText: Bool = true
     var delegate: AssetRowProtocol?
     
     var color1: Color = Color(red: 237/225, green: 30/225, blue: 52/225, opacity: 1)
@@ -107,16 +107,7 @@ struct InputView: View {
                         })
                         .buttonStyle(BorderlessButtonStyle())
                         
-                    TextField("Enter IIIF manifest URL", text: $fieldValue, onEditingChanged: { _ in
-                            if (!fieldValue.isEmpty){
-                                hasText = true
-                            }
-                            else{
-                                hasText = false
-                            }
-                        }, onCommit: {
-                            urlEnter()
-                    })
+                    TextField("Enter IIIF manifest URL", text: $fieldValue)
                     .padding(.horizontal, 20.0)
                     .multilineTextAlignment(.leading)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -173,19 +164,21 @@ struct InputView: View {
                     self.delegate?.onAddEntry(path: fieldValue,  completion: { success in
                         if (success){
                             print("sucess in downloading")
-                            activeAlert = .third
+                            //activeAlert = .third
+							SuccessView()
                         }
                         else {
                             //activeAlert = .first
                         }
-                        isAlert = true
+                        //isAlert = true
                     })
                 }
                 else {
                     activeAlert = .first
+					isAlert = true
                 }
                 isError = !status
-                isAlert = true
+                
                 //activeAlert = .first
              //   self.showModal = !status
                 isActivity = false
@@ -243,6 +236,18 @@ struct InputView: View {
             }
         }
     }
+}
+
+struct SuccessView: View {
+	var body: some View {
+		HStack{
+			Rectangle()
+				.fill(Color.red)
+				.frame(width: 200, height: 200, alignment: .center)
+				.opacity(0.7)
+				.cornerRadius(5.0)
+		}
+	}
 }
 
 extension Binding {

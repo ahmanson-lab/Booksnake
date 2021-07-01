@@ -31,6 +31,8 @@ struct FullWebView : View {
     @State var text: String = "Adding to Booksnake"
     @State var activeAlert: ActiveAlert = .first
 	@State var width: CGFloat = 1
+	
+	@State var isSuccess = false
     
     var webview: WebViewRepresentable
 
@@ -45,13 +47,6 @@ struct FullWebView : View {
 							width = ( (2 * UIScreen.main.bounds.width / 5.0) * CGFloat(i))
 						 }
 					}
-//Option 2: Spinning anim
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-//                        isActivity = webview.viewModel.isLoading
-//						if (!isActivity){
-//							text = "Adding to Booksnake"
-//						}
-//                    }
                 })
                 Spacer()
                 HStack{
@@ -82,6 +77,18 @@ struct FullWebView : View {
                 .opacity(0.7)
                 .cornerRadius(5.0)
             ActivityIndicator(isAnimating: $isActivity, text: $text, style: .large)
+				.onDisappear(perform: {
+					isSuccess.toggle()
+				})
+			//DispatchQueue.main.async{
+				//SuccessView()
+					//.scaleEffect(isSuccess ? 1.5 : .zero )
+					
+					
+					//.animation(.easeInOut.repeatForever(autoreverses: isSuccess))
+			//}
+			
+				
         }
         .navigationBarItems(trailing: HStack(){
             Button(action: {
@@ -95,13 +102,14 @@ struct FullWebView : View {
                             self.delegate?.onAddEntry(path: path,  completion: { success in
                                 if (success) {
                                     print("sucess in downloading")
-                                    activeAlert = .third
-                                    isAlert = true
+                                   // activeAlert = .third
+                                   // isAlert = true
+									//isSuccess.toggle()
                                 }
                             })
                        // self.presentedAsModal = !status
                     }
-                    else{
+                    else {
                         isAlert = true
                     }
                     isActivity = false
@@ -109,7 +117,8 @@ struct FullWebView : View {
 
             }, label: {
                 Text("Add")
-            }).disabled(self.webview.isJP2)
+            })
+			.disabled(self.webview.isJP2)
         })
         .alert(isPresented: $isAlert, content: {
             switch activeAlert{

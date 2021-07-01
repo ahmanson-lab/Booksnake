@@ -91,7 +91,7 @@ public class ManifestData: ValueTransformer {
 
                             if !(j.getLabel(forLanguage: "English")!.contains("Citation") || j.getLabel(forLanguage: "English")!.contains("item Url")){
                                 l.append(j.getLabel(forLanguage: "English")!)
-                                v.append(j.getValue(forLanguage: "English")!)
+								v.append(j.getValue(forLanguage: "English")!)
                             }
                         }
                         

@@ -116,7 +116,7 @@ struct WebViewRepresentable: UIViewRepresentable {
 			webView.evaluateJavaScript("document.body.innerText"){ result, error in
 				if let resultString = result as? String,
 				   resultString.contains("the"){
-					self.view.viewModel.isLoading = false//webView.isLoading
+					self.view.viewModel.isLoading = false
 				}
 			}
 			

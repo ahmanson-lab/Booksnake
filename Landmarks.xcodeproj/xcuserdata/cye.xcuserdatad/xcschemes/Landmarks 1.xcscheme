@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "56CD50A324C7CA1C00EF8C3E"
-               BuildableName = "Booksnake Demo.app"
+               BuildableName = "Booksnake.app"
                BlueprintName = "Landmarks"
                ReferencedContainer = "container:Landmarks.xcodeproj">
             </BuildableReference>
@@ -45,7 +45,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "56CD50A324C7CA1C00EF8C3E"
-            BuildableName = "Booksnake Demo.app"
+            BuildableName = "Booksnake.app"
             BlueprintName = "Landmarks"
             ReferencedContainer = "container:Landmarks.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "56CD50A324C7CA1C00EF8C3E"
-            BuildableName = "Booksnake Demo.app"
+            BuildableName = "Booksnake.app"
             BlueprintName = "Landmarks"
             ReferencedContainer = "container:Landmarks.xcodeproj">
          </BuildableReference>
