@@ -148,7 +148,7 @@ struct InputView: View {
                         case .first:
                             return Alert(title: Text("Unable to add item"), message: Text("The item catalog page doesn't have the necessary information"), dismissButton: .default(Text("OK")))
                         case .second:
-                            return Alert(title: Text("URL has spaces"), message: Text("Please remove spaces from URL address"), dismissButton: .default(Text("OK")))
+                            return Alert(title: Text("URL has spaces and/or nothing is entered"), message: Text("Please remove spaces from URL address and/or type something"), dismissButton: .default(Text("OK")))
                         case .third:
                             return Alert(title: Text(label + " Download Complete!"), message: Text("Swipe down to return to main page."), dismissButton: .default(Text("OK")))
                         }
@@ -167,13 +167,13 @@ struct InputView: View {
                     self.delegate?.onAddEntry(path: fieldValue,  completion: { success in
                         if (success){
                             print("sucess in downloading")
-                            //activeAlert = .third
+                            activeAlert = .third
 						//	SuccessView()
                         }
-                        else {
-                            //activeAlert = .first
-                        }
-                        //isAlert = true
+//                        else {
+//                            activeAlert = .first
+//                        }
+                        isAlert = true
                     })
                 }
                 else {
@@ -242,15 +242,20 @@ struct InputView: View {
 }
 
 struct SuccessView: View {
+	@Binding var opacityValue: Double
+	//@ObservedObject var successModel: SuccessObserver
+	
 	var body: some View {
 		HStack{
 			Rectangle()
 				.fill(Color.red)
 				.frame(width: 200, height: 200, alignment: .center)
-				.opacity(0.7)
+				.opacity(opacityValue)
 				.cornerRadius(5.0)
+				
 		}
 	}
+	
 }
 
 extension Binding {

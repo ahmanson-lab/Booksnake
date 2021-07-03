@@ -21,6 +21,10 @@ struct ProgressView: View {
 	}
 }
 
+class SuccessObserver: ObservableObject {
+	@Published var isSuccess: Bool = false
+}
+
 struct FullWebView : View {
     var delegate: AssetRowProtocol?
     @Binding var presentedAsModal: Bool
@@ -32,8 +36,10 @@ struct FullWebView : View {
     @State var activeAlert: ActiveAlert = .first
 	@State var width: CGFloat = 1
 	
-	@State var isSuccess = false
-    
+	@ObservedObject var successModel: SuccessObserver
+	@State var opacityValue = 0.0
+	@State var temp:Bool = false
+
     var webview: WebViewRepresentable
 
     var body: some View {
@@ -71,28 +77,32 @@ struct FullWebView : View {
 			ProgressView(width: $width)
             
             Rectangle()
-                .fill(Color.init(white: 0.7))
+				.fill(temp ? Color.red : Color.init(white: 0.7))
                 .frame(width: 200, height: 200, alignment: .center)
-                .isHidden(!isActivity)
+				//.isHidden(!temp)
+                .isHidden(!isActivity, remove:!isActivity)
                 .opacity(0.7)
                 .cornerRadius(5.0)
+
             ActivityIndicator(isAnimating: $isActivity, text: $text, style: .large)
-				.onDisappear(perform: {
-					isSuccess.toggle()
-				})
-			//DispatchQueue.main.async{
-				//SuccessView()
-					//.scaleEffect(isSuccess ? 1.5 : .zero )
-					
-					
-					//.animation(.easeInOut.repeatForever(autoreverses: isSuccess))
-			//}
-			
-				
+		
+//			SuccessView(opacityValue: $opacityValue)
+//				.onReceive(successModel.$isSuccess, perform: { _ in
+//					if (temp && !isActivity){
+//						for i in stride(from: 5, through: 0, by: -1) {
+//						DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.5) {
+//								opacityValue = (1/5) * Double(i)
+//							}
+//						}
+//					}
+//				})
+//				.isHidden(opacityValue == 1.0, remove: opacityValue == 1.0)
         }
         .navigationBarItems(trailing: HStack(){
             Button(action: {
                 var path = self.webview.viewModel.path
+				
+				//var temp = false
                 isActivity = true
                 checkTextField(url: path, completion: { status in
                     if (status){
@@ -102,19 +112,21 @@ struct FullWebView : View {
                             self.delegate?.onAddEntry(path: path,  completion: { success in
                                 if (success) {
                                     print("sucess in downloading")
-                                   // activeAlert = .third
-                                   // isAlert = true
-									//isSuccess.toggle()
+									activeAlert = .third
+									isAlert = true
                                 }
+								
                             })
                        // self.presentedAsModal = !status
                     }
                     else {
+						activeAlert = .first
                         isAlert = true
                     }
                     isActivity = false
+				//	successModel.isSuccess = temp
                 })
-
+				
             }, label: {
                 Text("Add")
             })
