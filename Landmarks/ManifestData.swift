@@ -36,7 +36,6 @@ public class ManifestData: ValueTransformer {
         if (values == nil){
             values = [String]()
         }
-        
         return parseJson()
     }
     
@@ -61,6 +60,8 @@ public class ManifestData: ValueTransformer {
                     self.label = label
                 }
                 
+				if(manifest_data.isEmpty){ return false}
+				
                 let canvas = manifest_data[0]
                 
                 //get width and height

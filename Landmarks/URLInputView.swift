@@ -64,7 +64,7 @@ struct URLInputView: View {
                         .padding([.leading, .bottom, .trailing], 20.0)
                     
                     NavigationLink(
-						destination: FullWebView(delegate: delegate, presentedAsModal:$presentedAsModal, hasJP2: $hasJP2, label: $label, successModel: SuccessObserver(), webview: WebViewRepresentable(search: "https://www.loc.gov/search/?q=" + fieldValue + "&fa=mime-type:image/jp2", isJP2: $hasJP2, hasBackList: $hasBackList, hasForwardList: $hasForwardList, viewModel: model )),  isActive: $active,
+						destination: FullWebView(delegate: delegate, presentedAsModal:$presentedAsModal, hasJP2: $hasJP2, label: $label, webview: WebViewRepresentable(search: "https://www.loc.gov/search/?q=" + fieldValue + "&fa=mime-type:image/jp2", isJP2: $hasJP2, hasBackList: $hasBackList, hasForwardList: $hasForwardList, viewModel: model )),  isActive: $active,
                         label: {
                             ZStack(){
                                 Color.init(.systemBlue)

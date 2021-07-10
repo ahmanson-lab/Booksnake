@@ -122,7 +122,7 @@ struct AssetRow: View, AssetRowProtocol {
         onAdd(path: path, completion: completion)
     }
     
-    //add a default item from library of congress
+    //add a xdsf item from library of congress
     func onAdd(path: String, width: Float = 1, length: Float = 1, completion: (_ success: Bool) -> Void){
         print("here")
         test_flag = true
@@ -151,9 +151,9 @@ struct AssetRow: View, AssetRowProtocol {
                 print(error)
             }
             test_flag = false
-            completion(true)
+            return completion(true)			
         }
-        completion(false)
+       return completion(false)
     }
     
     //can delete items

@@ -20,10 +20,10 @@ struct ProgressView: View {
 			.position(.init(x: 0, y: 0))
 	}
 }
-
-class SuccessObserver: ObservableObject {
-	@Published var isSuccess: Bool = false
-}
+//
+//class SuccessObserver: ObservableObject {
+//	@Published var isSuccess: Bool = false
+//}
 
 struct FullWebView : View {
     var delegate: AssetRowProtocol?
@@ -36,7 +36,7 @@ struct FullWebView : View {
     @State var activeAlert: ActiveAlert = .first
 	@State var width: CGFloat = 1
 	
-	@ObservedObject var successModel: SuccessObserver
+//	@ObservedObject var successModel: SuccessObserver
 	@State var opacityValue = 0.0
 	@State var temp:Bool = false
 
@@ -85,18 +85,6 @@ struct FullWebView : View {
                 .cornerRadius(5.0)
 
             ActivityIndicator(isAnimating: $isActivity, text: $text, style: .large)
-		
-//			SuccessView(opacityValue: $opacityValue)
-//				.onReceive(successModel.$isSuccess, perform: { _ in
-//					if (temp && !isActivity){
-//						for i in stride(from: 5, through: 0, by: -1) {
-//						DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.5) {
-//								opacityValue = (1/5) * Double(i)
-//							}
-//						}
-//					}
-//				})
-//				.isHidden(opacityValue == 1.0, remove: opacityValue == 1.0)
         }
         .navigationBarItems(trailing: HStack(){
             Button(action: {
@@ -104,40 +92,47 @@ struct FullWebView : View {
 				
 				//var temp = false
                 isActivity = true
-                checkTextField(url: path, completion: { status in
-                    if (status){
-                        if !path.hasSuffix("manifest.json"){
-                            path.append("manifest.json")
-                        }
-                            self.delegate?.onAddEntry(path: path,  completion: { success in
-                                if (success) {
-                                    print("sucess in downloading")
-									activeAlert = .third
-									isAlert = true
-                                }
-								
-                            })
-                       // self.presentedAsModal = !status
-                    }
-                    else {
-						activeAlert = .first
-                        isAlert = true
-                    }
-                    isActivity = false
-				//	successModel.isSuccess = temp
-                })
-				
+				//DispatchQueue.main.asyncAfter(deadline: .now() + Double(5.0)){
+					checkTextField(url: path, completion: { status in
+						if (!status){
+							activeAlert = .first
+							isAlert = true
+						}
+						else {
+							if !path.hasSuffix("manifest.json"){
+								path.append("manifest.json")
+							}
+								self.delegate?.onAddEntry(path: path,  completion: { success in
+									if (success) {
+										print("sucess in downloading")
+										activeAlert = .third
+										isAlert = true
+										return
+									}
+									else {
+										activeAlert = .second
+										isAlert = true
+										return
+									}
+									
+								})
+						   // self.presentedAsModal = !status
+						}
+						isActivity = false
+					//	successModel.isSuccess = temp
+					})
+			//	}
             }, label: {
                 Text("Add")
             })
-			.disabled(self.webview.isJP2)
+			.disabled( self.webview.isJP2)
         })
         .alert(isPresented: $isAlert, content: {
             switch activeAlert{
                 case .first:
                     return Alert(title: Text("Unable to add item"), message: Text("The item catalog page doesn't have the necessary information"), dismissButton: .default(Text("OK")))
                 case .second:
-                    return Alert(title: Text("URL has spaces"), message: Text("Please remove spaces from URL address"), dismissButton: .default(Text("OK")))
+                    return Alert(title: Text("Download failed"), message: Text("Something went wrong during download process. Check that manifest has necessary information and/or internet is working"), dismissButton: .default(Text("OK")))
                 case .third:
                     return  Alert(title: Text(label + " Download Complete!"), message: Text("Swipe down to return to main page."), dismissButton: .default(Text("OK")))
             }
@@ -158,35 +153,35 @@ struct FullWebView : View {
         if !path.hasSuffix("manifest.json"){
             path.append("manifest.json")
         }
-        
-        let url_path = NSURL(string: path)
+		DispatchQueue.main.async {
+			let url_path = NSURL(string: path)
+			let html = try! String(contentsOf: url_filter!)
+		   
+			if !UIApplication.shared.canOpenURL(url_path! as URL){
+				completion(false)
+			}
+			//check that there is a jp2 tag
+			else if (!html.contains("image/jp2")){
+				print("no jp2")
+				completion(false)
+			}
+			else {
+				var request = URLRequest(url: url_path! as URL)
+				request.httpMethod = "HEAD"
+				request.timeoutInterval = 1.0
 
-        let html = try! String(contentsOf: url_filter!)
-       
-        if !UIApplication.shared.canOpenURL(url_path! as URL){
-            completion(false)
-        }
-        //check that there is a jp2 tag
-        else if (!html.contains("image/jp2")){
-            print("no jp2")
-            completion(false)
-        }
-        else {
-            var request = URLRequest(url: url_path! as URL)
-            request.httpMethod = "HEAD"
-            request.timeoutInterval = 1.0
-
-            let task = checkSession.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
-                if let httpResp: HTTPURLResponse = response as? HTTPURLResponse {
-                    completion(httpResp.statusCode == 200)
-                }
-                else{
-                    completion(false)
-                }
-            })
-            task.resume()
-        }
-    }
+				let task = checkSession.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
+					if let httpResp: HTTPURLResponse = response as? HTTPURLResponse {
+						completion(httpResp.statusCode == 200)
+					}
+					else{
+						completion(false)
+					}
+				})
+				task.resume()
+			}
+		}
+	}
 }
 
 extension View {

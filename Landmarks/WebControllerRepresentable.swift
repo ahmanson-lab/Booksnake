@@ -25,7 +25,6 @@ struct WebViewRepresentable: UIViewRepresentable {
 
     @State var search: String
     @State var path: String = ""
-//    @Binding var isLoading: Bool
     @Binding var isJP2: Bool
     @Binding var hasBackList: Bool
     @Binding var hasForwardList: Bool

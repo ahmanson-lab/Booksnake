@@ -168,11 +168,8 @@ struct InputView: View {
                         if (success){
                             print("sucess in downloading")
                             activeAlert = .third
-						//	SuccessView()
+							return
                         }
-//                        else {
-//                            activeAlert = .first
-//                        }
                         isAlert = true
                     })
                 }
@@ -181,9 +178,6 @@ struct InputView: View {
 					isAlert = true
                 }
                 isError = !status
-                
-                //activeAlert = .first
-             //   self.showModal = !status
                 isActivity = false
             })
         }
