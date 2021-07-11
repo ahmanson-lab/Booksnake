@@ -66,6 +66,10 @@ struct WebViewRepresentable: UIViewRepresentable {
         webView.goForward()
         self.viewModel.webViewNavigationPublisher.send(.forward)
     }
+	
+	func getPath() -> String {
+		return webView.url!.absoluteString
+	}
 
     class Coordinator: NSObject, WKNavigationDelegate {
         let view: WebViewRepresentable

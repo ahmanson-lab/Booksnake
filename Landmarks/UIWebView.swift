@@ -20,10 +20,6 @@ struct ProgressView: View {
 			.position(.init(x: 0, y: 0))
 	}
 }
-//
-//class SuccessObserver: ObservableObject {
-//	@Published var isSuccess: Bool = false
-//}
 
 struct FullWebView : View {
     var delegate: AssetRowProtocol?
@@ -33,7 +29,7 @@ struct FullWebView : View {
     @State private var isAlert: Bool = false
     @State private var isActivity: Bool = false
     @State var text: String = "Adding to Booksnake"
-    @State var activeAlert: ActiveAlert = .first
+    @State var activeAlert: ActiveAlert = .second
 	@State var width: CGFloat = 1
 	
 //	@ObservedObject var successModel: SuccessObserver
@@ -79,7 +75,6 @@ struct FullWebView : View {
             Rectangle()
 				.fill(temp ? Color.red : Color.init(white: 0.7))
                 .frame(width: 200, height: 200, alignment: .center)
-				//.isHidden(!temp)
                 .isHidden(!isActivity, remove:!isActivity)
                 .opacity(0.7)
                 .cornerRadius(5.0)
@@ -89,6 +84,10 @@ struct FullWebView : View {
         .navigationBarItems(trailing: HStack(){
             Button(action: {
                 var path = self.webview.viewModel.path
+				
+				if (path.isEmpty){
+					DispatchQueue.main.asyncAfter(deadline: .now() + Double(5.0), execute: { path = self.webview.getPath() })
+				}
 				
 				//var temp = false
                 isActivity = true
@@ -110,16 +109,13 @@ struct FullWebView : View {
 										return
 									}
 									else {
-										activeAlert = .second
+										activeAlert = .first
 										isAlert = true
-										return
 									}
 									
 								})
-						   // self.presentedAsModal = !status
 						}
 						isActivity = false
-					//	successModel.isSuccess = temp
 					})
 			//	}
             }, label: {
