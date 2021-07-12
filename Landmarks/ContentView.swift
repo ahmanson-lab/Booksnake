@@ -40,7 +40,7 @@ struct ContentView: View {
            
         VStack (alignment: .leading, spacing:10) {
             List{
-                ForEach(0..<(labels.count)){ item in
+				ForEach(0..<labels.count, id: \.self){ item in
                     VStack (alignment: .leading) {
                             Text("\(labels[item])")
                                 .font(.caption)
