@@ -41,7 +41,7 @@ struct CustomURLMenu: View {
                                .frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
                         })
                     NavigationLink(
-                        destination: URLInputView(presentedAsModal: $presentedAsModal, label: $label, delegate: delegate),
+                        destination: CatalogSearchView(presentedAsModal: $presentedAsModal, label: $label, delegate: delegate),
                         label: {
                             Text("Library of Congress")
                                 .fontWeight(.bold)
@@ -54,6 +54,23 @@ struct CustomURLMenu: View {
                                 .foregroundColor(.white)
                                .frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
                         })
+					
+					//Huntington Catalogue
+					NavigationLink(
+						destination: CatalogSearchView(presentedAsModal: $presentedAsModal, label: $label, title: "Huntington Digital Library", delegate: delegate),
+						label: {
+							Text("Huntington Digital Library")
+								.fontWeight(.bold)
+								.multilineTextAlignment(.center)
+								.background(color3
+												.frame(width: UIScreen.main.bounds.width - 10, height: UIScreen.main.bounds.width / 3, alignment: .center)
+												.cornerRadius(10.0))
+												.padding(.all, 10.0)
+								.font(.title)
+								.foregroundColor(.white)
+							   .frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
+						})
+					
                 }
                 .navigationBarTitle(Text("Add Item"), displayMode: NavigationBarItem.TitleDisplayMode.inline)
                 .navigationBarItems(trailing: HStack(){

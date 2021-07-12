@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1119FE4C2651A22200807C94 /* UIWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FE4B2651A22200807C94 /* UIWebView.swift */; };
+		1147E689269CC81100BAECE1 /* CatalogSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1147E688269CC81100BAECE1 /* CatalogSearchView.swift */; };
 		11664140267E786700CB6666 /* MetadataItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1166413F267E786700CB6666 /* MetadataItem.swift */; };
 		119334FE2582FE7B00CA19A2 /* ContentData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 119334FD2582FE7B00CA19A2 /* ContentData.swift */; };
 		1193352A25830ED900CA19A2 /* ContentDataContainer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1193352825830ED900CA19A2 /* ContentDataContainer.xcdatamodeld */; };
@@ -30,7 +31,6 @@
 		11DB8429254373BE004882F4 /* ARViewControllerRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DB8428254373BE004882F4 /* ARViewControllerRepresentable.swift */; };
 		11DF87A82548955D00A1E5BD /* ManifestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DF87A72548955D00A1E5BD /* ManifestData.swift */; };
 		11DF87C2254E8DDB00A1E5BD /* CustomURLMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DF87C1254E8DDB00A1E5BD /* CustomURLMenu.swift */; };
-		11E6F9BF262B9AA1001F0722 /* URLInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E6F9BE262B9AA1001F0722 /* URLInputView.swift */; };
 		11FC2AAA255B0BFD00AC21EA /* WebControllerRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FC2AA9255B0BFD00AC21EA /* WebControllerRepresentable.swift */; };
 		5616C5BC24CA7C8D00F1C1EE /* AssetRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5616C5BB24CA7C8D00F1C1EE /* AssetRow.swift */; };
 		56CD50A824C7CA1C00EF8C3E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CD50A724C7CA1C00EF8C3E /* AppDelegate.swift */; };
@@ -56,6 +56,7 @@
 
 /* Begin PBXFileReference section */
 		1119FE4B2651A22200807C94 /* UIWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWebView.swift; sourceTree = "<group>"; };
+		1147E688269CC81100BAECE1 /* CatalogSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogSearchView.swift; sourceTree = "<group>"; };
 		1166413F267E786700CB6666 /* MetadataItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MetadataItem.swift; sourceTree = "<group>"; };
 		119334FD2582FE7B00CA19A2 /* ContentData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentData.swift; sourceTree = "<group>"; };
 		1193352925830ED900CA19A2 /* ContentDataContainer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ContentDataContainer.xcdatamodel; sourceTree = "<group>"; };
@@ -78,7 +79,6 @@
 		11DB8428254373BE004882F4 /* ARViewControllerRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerRepresentable.swift; sourceTree = "<group>"; };
 		11DF87A72548955D00A1E5BD /* ManifestData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManifestData.swift; sourceTree = "<group>"; };
 		11DF87C1254E8DDB00A1E5BD /* CustomURLMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomURLMenu.swift; sourceTree = "<group>"; };
-		11E6F9BE262B9AA1001F0722 /* URLInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLInputView.swift; sourceTree = "<group>"; };
 		11FC2AA9255B0BFD00AC21EA /* WebControllerRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebControllerRepresentable.swift; sourceTree = "<group>"; };
 		5616C5BB24CA7C8D00F1C1EE /* AssetRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetRow.swift; sourceTree = "<group>"; };
 		56CD50A424C7CA1C00EF8C3E /* Booksnake.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Booksnake.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -147,7 +147,7 @@
 			isa = PBXGroup;
 			children = (
 				11DF87C1254E8DDB00A1E5BD /* CustomURLMenu.swift */,
-				11E6F9BE262B9AA1001F0722 /* URLInputView.swift */,
+				1147E688269CC81100BAECE1 /* CatalogSearchView.swift */,
 				1119FE4B2651A22200807C94 /* UIWebView.swift */,
 				11FC2AA9255B0BFD00AC21EA /* WebControllerRepresentable.swift */,
 			);
@@ -298,7 +298,7 @@
 				11B208682537CE4200704F40 /* IIIFAnnotation.swift in Sources */,
 				56CD50AC24C7CA1C00EF8C3E /* ContentView.swift in Sources */,
 				5616C5BC24CA7C8D00F1C1EE /* AssetRow.swift in Sources */,
-				11E6F9BF262B9AA1001F0722 /* URLInputView.swift in Sources */,
+				1147E689269CC81100BAECE1 /* CatalogSearchView.swift in Sources */,
 				11DF87A82548955D00A1E5BD /* ManifestData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
