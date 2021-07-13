@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1119FE4C2651A22200807C94 /* UIWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FE4B2651A22200807C94 /* UIWebView.swift */; };
+		1147E68B269D1D5B00BAECE1 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1147E68A269D1D5B00BAECE1 /* Launch Screen.storyboard */; };
 		11664140267E786700CB6666 /* MetadataItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1166413F267E786700CB6666 /* MetadataItem.swift */; };
 		119334FE2582FE7B00CA19A2 /* ContentData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 119334FD2582FE7B00CA19A2 /* ContentData.swift */; };
 		1193352A25830ED900CA19A2 /* ContentDataContainer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1193352825830ED900CA19A2 /* ContentDataContainer.xcdatamodeld */; };
@@ -55,6 +56,7 @@
 
 /* Begin PBXFileReference section */
 		1119FE4B2651A22200807C94 /* UIWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWebView.swift; sourceTree = "<group>"; };
+		1147E68A269D1D5B00BAECE1 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		1166413F267E786700CB6666 /* MetadataItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MetadataItem.swift; sourceTree = "<group>"; };
 		119334FD2582FE7B00CA19A2 /* ContentData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentData.swift; sourceTree = "<group>"; };
 		1193352925830ED900CA19A2 /* ContentDataContainer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ContentDataContainer.xcdatamodel; sourceTree = "<group>"; };
@@ -192,6 +194,7 @@
 				1193351F25830D9000CA19A2 /* Content Data */,
 				1119FE522651E5EB00807C94 /* IIIFContainers */,
 				56CD50AD24C7CA1F00EF8C3E /* Assets.xcassets */,
+				1147E68A269D1D5B00BAECE1 /* Launch Screen.storyboard */,
 			);
 			path = Landmarks;
 			sourceTree = "<group>";
@@ -257,6 +260,7 @@
 			files = (
 				11C73CD625F172BE00FB66DA /* AutomobileLA.json in Resources */,
 				56CD50AE24C7CA1F00EF8C3E /* Assets.xcassets in Resources */,
+				1147E68B269D1D5B00BAECE1 /* Launch Screen.storyboard in Resources */,
 				11C73CDA25F1733200FB66DA /* Hollywood.json in Resources */,
 				11C73CD525F172BE00FB66DA /* LA1909.json in Resources */,
 				11C73CD025F16FC300FB66DA /* MapOfLosAngeles.json in Resources */,
