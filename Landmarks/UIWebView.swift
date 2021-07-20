@@ -105,8 +105,10 @@ struct FullWebView : View {
 								self.delegate?.onAddEntry(path: path,  completion: { success in
 									if (success) {
 										print("success in downloading")
-										activeAlert = .third
-										isAlert = true
+										//activeAlert = .third
+										//isAlert = true
+										self.presentedAsModal = false
+										//self.presentation.wrappedValue.dismiss()
 										return
 									}
 									else {

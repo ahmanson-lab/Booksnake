@@ -167,10 +167,11 @@ struct InputView: View {
                     self.delegate?.onAddEntry(path: fieldValue,  completion: { success in
                         if (success){
                             print("sucess in downloading")
-                            activeAlert = .third
+                          //  activeAlert = .third
+							self.showModal = false
 							return
                         }
-                        isAlert = true
+                     //   isAlert = true
                     })
                 }
                 else {
@@ -190,9 +191,7 @@ struct InputView: View {
     func checkTextField(url : String, completion: @escaping (Bool) -> Void) {
         let checkSession = Foundation.URLSession.shared
         var path: String = url
-        
-        let url_filter = URL(string: path + "?fo=json&at=item.mime_type") ?? URL(string: "https://www.google.com")
-        
+
         //only for loc.gov
         if (!path.hasSuffix("manifest.json")  && path.contains("loc.gov")){
             path.append("/manifest.json")
@@ -204,19 +203,20 @@ struct InputView: View {
             completion(false)
             return
         }
-        
         if !UIApplication.shared.canOpenURL((url_path!) as URL){
             completion(false)
+			return
         }
-        
+
+		let url_filter = URL(string: url + "?fo=json&at=item.mime_type") ?? URL(string: "https://www.google.com")
         let html = try? String(contentsOf: url_filter!)
    
         //check that there is a jp2 tag
         if (html?.contains("jp2") != nil) {
-            if (!(html!.contains("jp2")) && path.contains("loc.gov")) {
-                completion(false)
-            }
-            else {
+//            if (!(html!.contains("jp2")) && path.contains("loc.gov")) {
+//                completion(false)
+//            }
+//            else {
                 var request = URLRequest(url: url_path! as URL)
                 request.httpMethod = "HEAD"
                 request.timeoutInterval = 1.0
@@ -230,7 +230,7 @@ struct InputView: View {
                     }
                 })
                 task.resume()
-            }
+          //  }
         }
     }
 }
