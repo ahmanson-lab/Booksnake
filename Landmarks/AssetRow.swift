@@ -33,7 +33,7 @@ struct AssetRow: View, AssetRowProtocol {
     
     @Environment(\.presentationMode) var presentation
     
-    @FetchRequest(fetchRequest: ContentData.allIdeasFetchRequest()) var contentTest: FetchedResults<ContentData>
+	@FetchRequest(fetchRequest: ContentData.allIdeasFetchRequest()) var contentTest: FetchedResults<ContentData>
     
     @State var modalDisplayed = false
     @State var addDefaultURL = false
@@ -48,8 +48,8 @@ struct AssetRow: View, AssetRowProtocol {
     var body: some View {
         NavigationView{
             List{
-                ForEach(contentTest){ item in
-                    NavigationLink(destination: ContentView(image: item.image, width: CGFloat(item.width), length: CGFloat(item.length), labels: item.labels!, values: item.values!)){
+				ForEach(contentTest, id: \.self){ item in
+					NavigationLink(destination: ContentView(image: item.image, width: CGFloat(item.width), length: CGFloat(item.length), labels: item.labels! , values: item.values! )){
                         Image(uiImage: item.image ?? UIImage() )
                             .resizable()
                             .aspectRatio(contentMode: .fit)
@@ -63,6 +63,7 @@ struct AssetRow: View, AssetRowProtocol {
                 }
                 .onDelete(perform: onDelete)
             }
+			.id(UUID())
             .navigationBarTitle(Text("Archival Material"))
             .navigationBarItems(leading: EditButton(), trailing: Button(action: {
                 self.modalDisplayed = true
@@ -79,7 +80,7 @@ struct AssetRow: View, AssetRowProtocol {
         }
         .onAppear(perform: {
             //enter init data
-            if(contentTest.count <= 0){
+            if(contentTest.count < 1){
                 addExamples()
             }
         })

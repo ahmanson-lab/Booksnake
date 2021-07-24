@@ -68,7 +68,7 @@ struct WebViewRepresentable: UIViewRepresentable {
     }
 	
 	func getPath() -> String {
-		return webView.url!.absoluteString
+		return webView.url?.absoluteString ?? ""
 	}
 
     class Coordinator: NSObject, WKNavigationDelegate {

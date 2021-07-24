@@ -34,7 +34,8 @@ struct FullWebView : View {
 	
 //	@ObservedObject var successModel: SuccessObserver
 	@State var opacityValue = 0.0
-	@State var temp:Bool = false
+	@State var temp: Bool = false
+	@State var path: String = ""
 
     var webview: WebViewRepresentable
 
@@ -83,9 +84,9 @@ struct FullWebView : View {
         }
         .navigationBarItems(trailing: HStack(){
             Button(action: {
-                var path = self.webview.viewModel.path
+				if (path == "") {path = self.webview.viewModel.path}
 				
-				if (path.isEmpty){
+				else if (path.isEmpty){
 					DispatchQueue.main.asyncAfter(deadline: .now() + Double(5.0), execute: { path = self.webview.getPath() })
 				}
 				
@@ -103,9 +104,11 @@ struct FullWebView : View {
 							}
 								self.delegate?.onAddEntry(path: path,  completion: { success in
 									if (success) {
-										print("sucess in downloading")
-										activeAlert = .third
-										isAlert = true
+										print("success in downloading")
+										//activeAlert = .third
+										//isAlert = true
+										self.presentedAsModal = false
+										//self.presentation.wrappedValue.dismiss()
 										return
 									}
 									else {
@@ -151,13 +154,13 @@ struct FullWebView : View {
         }
 		DispatchQueue.main.async {
 			let url_path = NSURL(string: path)
-			let html = try! String(contentsOf: url_filter!)
+			guard let html = try? String(contentsOf: url_filter!) else { return completion(false)}
 		   
 			if !UIApplication.shared.canOpenURL(url_path! as URL){
 				completion(false)
 			}
 			//check that there is a jp2 tag
-			else if (!html.contains("image/jp2")){
+			else if (!html.contains("image/jp2") && !html.contains("@context")){
 				print("no jp2")
 				completion(false)
 			}
