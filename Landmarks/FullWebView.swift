@@ -26,6 +26,7 @@ struct FullWebView : View {
     @Binding var hasJP2: Bool
     @Binding var label: String
 	@State var filter: String
+	@State var type: String
 	
     @State private var isAlert: Bool = false
     @State private var isActivity: Bool = false
@@ -83,38 +84,7 @@ struct FullWebView : View {
         }
         .navigationBarItems(trailing: HStack(){
             Button(action: {
-				//if (path == "")
-					path = self.webview.viewModel.path
-				 if (path.isEmpty || path == ""){
-					DispatchQueue.main.asyncAfter(deadline: .now() + Double(5.0), execute: { path = self.webview.getPath() })
-				}
-				checkTextField(url: path, filter: filter, completion: { status in
-						if (!status){
-							activeAlert = .first
-							isAlert = true
-						}
-						else {
-							//treat URL depending on Catalogue
-							if !path.hasSuffix("manifest.json"){
-								path.append("manifest.json")
-							}
-							self.delegate?.onAddEntry(path: path,  completion: { success in
-								if (success) {
-									print("success in downloading")
-									//activeAlert = .third
-									//isAlert = true
-//									self.presentedAsModal = false
-									//self.presentation.wrappedValue.dismiss()
-									return
-								}
-								else {
-									activeAlert = .first
-									isAlert = true
-								}
-								
-							})
-						}
-					})
+				downloadItem(type: type)
             }, label: {
                 Text("Add")
             })
@@ -134,7 +104,36 @@ struct FullWebView : View {
 	
 	func downloadItem(type: String = "LOC"){
 		if (type == "LOC"){
-			
+			//if (path == ""){
+			path = self.webview.viewModel.path
+			 if (path.isEmpty){
+				DispatchQueue.main.asyncAfter(deadline: .now() + Double(5.0), execute: { path = self.webview.getPath() })
+			}
+			checkTextField(url: path, filter: "?fo=json&at=item.mime_type", completion: { status in
+					if (!status){
+						activeAlert = .first
+						isAlert = true
+					}
+					else {
+						//treat URL depending on Catalogue
+						if !path.hasSuffix("manifest.json"){
+							path.append("manifest.json")
+						}
+						self.delegate?.onAddEntry(path: path,  completion: { success in
+							if (success) {
+								print("success in downloading")
+								activeAlert = .third
+								isAlert = true
+								return
+							}
+							else {
+								activeAlert = .first
+								isAlert = true
+							}
+							
+						})
+					}
+				})
 		}
 		else if (type == "HDL"){
 			

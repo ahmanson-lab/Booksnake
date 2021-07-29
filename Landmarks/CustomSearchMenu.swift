@@ -44,7 +44,7 @@ struct CustomSearchMenu: View {
 					
 					//LOC Catalogue
                     NavigationLink(
-						destination: CatalogSearchView(label: $label, title: "Library of Congress", instructions: "Search results are limited to Library of Congress materials with an IIIF manifest, which Booksnake uses to add items.", filter: "gov/item", fieldURL: ["https://www.loc.gov/search/?q=", "&fa=mime-type:image/jp2"], delegate: delegate),
+						destination: CatalogSearchView(label: $label, title: "Library of Congress", type: "LOC", instructions: "Search results are limited to Library of Congress materials with an IIIF manifest, which Booksnake uses to add items.", filter: "gov/item", fieldURL: ["https://www.loc.gov/search/?q=", "&fa=mime-type:image/jp2"], delegate: delegate),
                         label: {
                             Text("Library of Congress")
                                 .fontWeight(.bold)
@@ -60,7 +60,7 @@ struct CustomSearchMenu: View {
 					
 					//Huntington Catalogue
 					NavigationLink(
-						destination: CatalogSearchView(label: $label, title: "Huntington Digital Library", instructions: "Search results are limited to Huntington Digital Library materials with an IIIF manifest, which Booksnake uses to add items.", filter: "/id/", fieldURL: ["https://hdl.huntington.org/digital/search/searchterm/"], delegate: delegate),
+						destination: CatalogSearchView(label: $label, title: "Huntington Digital Library", type: "HDL", instructions: "Search results are limited to Huntington Digital Library materials with an IIIF manifest, which Booksnake uses to add items.", filter: "/id/", fieldURL: ["https://hdl.huntington.org/digital/search/searchterm/"], delegate: delegate),
 						label: {
 							Text("Huntington Digital Library")
 								.fontWeight(.bold)
