@@ -9,18 +9,19 @@
 import SwiftUI
 
 struct CatalogSearchView: View {
-	@Binding var presentedAsModal: Bool
+//	@Binding var presentedAsModal: Bool
 	@Binding var label: String
 	
 	//text in catalogue
-	@State var title: String = "Library of Congress"
+	@State var title: String
 	@State var description: String = "Search hundreds of thousands of historical manuscripts, maps, newpapers, and more."
 	@State var fieldDescription: String = "Search titles, authors, places..."
-	@State var instructions: String = "Search results are limited to Library of Congress materials with an IIIF manifest, which Booksnake uses to add items."
-	
-	@State var fieldURL: [String] = ["https://www.loc.gov/search/?q=", "&fa=mime-type:image/jp2"]
+	@State var instructions: String
+	@State var filter: String
+	@State var fieldURL: [String]
 	
 	@State private var fieldValue: String = ""
+	@State var urlPath: String = ""
 	@State private var isAlert: Bool = false
 	@State private var activeAlert: ActiveAlert = .first
 	@State private var isError: Bool = false
@@ -69,9 +70,8 @@ struct CatalogSearchView: View {
 						.foregroundColor(Color.gray)
 						.multilineTextAlignment(.leading)
 						.padding([.leading, .bottom, .trailing], 20.0)
-					
 					NavigationLink(
-						destination: FullWebView(delegate: delegate, presentedAsModal:$presentedAsModal, hasJP2: $hasJP2, label: $label, webview: WebViewRepresentable(search: fieldURL.joined(separator: fieldValue), isJP2: $hasJP2, hasBackList: $hasBackList, hasForwardList: $hasForwardList, viewModel: model )),  isActive: $active,
+						destination: FullWebView(hasJP2: $hasJP2, label: $label, filter: filter, delegate: delegate, webview: WebViewRepresentable(search: fieldURL.joined(separator: fieldValue), path: $urlPath, isJP2: $hasJP2, filter: filter, hasBackList: $hasBackList, hasForwardList: $hasForwardList, viewModel: model)) , isActive: $active,
 						label: {
 							ZStack(){
 								Color.init(.systemBlue)

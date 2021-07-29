@@ -24,15 +24,23 @@ enum WebViewNavigation {
 struct WebViewRepresentable: UIViewRepresentable {
 
     @State var search: String
-    @State var path: String = ""
+    @Binding var path: String
     @Binding var isJP2: Bool
+	@State var filter: String
     @Binding var hasBackList: Bool
     @Binding var hasForwardList: Bool
-    
+
+	var loadStatusChanged: ((Bool, Error?) -> Void)? = nil
     let webView = WKWebView()
     @ObservedObject var viewModel: WebViewModel
+	
+	var url: URL{
+		get{
+			return URL(string: search)!
+		}
+	}
     
-    func makeUIView(context: UIViewRepresentableContext<WebViewRepresentable>) -> WKWebView {
+    func makeUIView(context: Context) -> WKWebView {
         self.webView.navigationDelegate = context.coordinator
         self.webView.allowsBackForwardNavigationGestures = false
         
@@ -47,15 +55,22 @@ struct WebViewRepresentable: UIViewRepresentable {
             self.webView.load(URLRequest(url: url))
         }
         else if let url = URL(string: temp) {
+			search = temp
             self.webView.load(URLRequest(url: url))
         }
         
         return self.webView
     }
 
-    func updateUIView(_ uiView: WKWebView, context: UIViewRepresentableContext<WebViewRepresentable>) {
-        return
+    func updateUIView(_ uiView: WKWebView, context: Context) {
+		self.viewModel.path	 = uiView.url!.absoluteString
     }
+	
+	func onLoadStatusChanged(perform: ((Bool, Error?) -> Void)?) -> some View {
+		var copy = self
+		copy.loadStatusChanged = perform
+		return copy
+	}
     
     func goBack(){
         webView.goBack()
@@ -72,17 +87,17 @@ struct WebViewRepresentable: UIViewRepresentable {
 	}
 
     class Coordinator: NSObject, WKNavigationDelegate {
-        let view: WebViewRepresentable
+        let parent: WebViewRepresentable
        // var test: Bool = true
         var webViewNavigationSubscriber: AnyCancellable? = nil
         
-        init( _ view: WebViewRepresentable) {
-            self.view = view
+        init( _ parent: WebViewRepresentable) {
+            self.parent = parent
         }
         
         func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
             //something
-            self.webViewNavigationSubscriber = self.view.viewModel.webViewNavigationPublisher.receive(on: RunLoop.main).sink(receiveValue: { navigation in
+            self.webViewNavigationSubscriber = self.parent.viewModel.webViewNavigationPublisher.receive(on: RunLoop.main).sink(receiveValue: { navigation in
                 switch navigation {
                     case .backward:
                         if webView.canGoBack {
@@ -97,38 +112,41 @@ struct WebViewRepresentable: UIViewRepresentable {
         }
         
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-			
-            let link = webView.url!.absoluteString + "?fo=json&at=item.mime_type"
-            if let url = URL (string: link){
-                let html = try? String(contentsOf: url)
-                if (html?.contains("jp2") == nil){
-                    view.isJP2 = false
-                }
-                else if html!.contains("jp2"){
-                    view.isJP2 = false
-                }
-            }
+			let link = webView.url!.absoluteString
+//            if let url = URL (string: link){
+//                let html = try? String(contentsOf: url)
+//                if (html?.contains("jp2") == nil){
+//                    view.isJP2 = false
+//                }
+//                else if html!.contains("jp2"){
+//                    view.isJP2 = false
+//                }
+//            }
             
-            if link.contains("gov/item"){
-                view.isJP2 = false
-            }
-            else {
-                view.isJP2 = true
-            }
+//			if link.contains(view.filter){
+//                view.isJP2 = false
+//            }
+//            else {
+//                view.isJP2 = true
+//            }
             
 			webView.evaluateJavaScript("document.body.innerText"){ result, error in
 				if let resultString = result as? String,
 				   resultString.contains("the"){
-					self.view.viewModel.isLoading = false
+					self.parent.viewModel.isLoading = false
 				}
 			}
 			
-            view.viewModel.path = webView.url!.absoluteString
-            view.hasBackList = webView.canGoBack
-            view.hasForwardList = webView.canGoForward
+			parent.viewModel.path = webView.url!.absoluteString
+			parent.hasBackList = webView.canGoBack
+			parent.hasForwardList = webView.canGoForward
         }
         
         
+		func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+				parent.loadStatusChanged?(false, error)
+			}
+		
         // This function is essential for intercepting every navigation in the webview
         func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
             // Suppose you don't want your user to go a restricted site
@@ -139,10 +157,16 @@ struct WebViewRepresentable: UIViewRepresentable {
                 }
             }
             decisionHandler(.allow)
+			parent.viewModel.path = webView.url!.absoluteString
+			parent.hasBackList = webView.canGoBack
+			parent.hasForwardList = webView.canGoForward
+			
+			
         }
+		
     }
 
-    func makeCoordinator() -> Coordinator {
+	func makeCoordinator() -> WebViewRepresentable.Coordinator {
         Coordinator(self)
     }
 }

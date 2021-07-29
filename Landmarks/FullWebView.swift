@@ -22,21 +22,21 @@ struct ProgressView: View {
 }
 
 struct FullWebView : View {
-    var delegate: AssetRowProtocol?
-    @Binding var presentedAsModal: Bool
+//    @Binding var presentedAsModal: Bool
     @Binding var hasJP2: Bool
     @Binding var label: String
+	@State var filter: String
+	
     @State private var isAlert: Bool = false
     @State private var isActivity: Bool = false
     @State var text: String = "Adding to Booksnake"
     @State var activeAlert: ActiveAlert = .second
 	@State var width: CGFloat = 1
-	
-//	@ObservedObject var successModel: SuccessObserver
 	@State var opacityValue = 0.0
 	@State var temp: Bool = false
 	@State var path: String = ""
-
+	
+	var delegate: AssetRowProtocol?
     var webview: WebViewRepresentable
 
     var body: some View {
@@ -44,7 +44,6 @@ struct FullWebView : View {
             VStack{
                 webview
                 .onAppear(perform: {
-//Option 1: progress bar
 					for i in 1...5 {
 						DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.5) {
 							width = ( (2 * UIScreen.main.bounds.width / 5.0) * CGFloat(i))
@@ -84,47 +83,42 @@ struct FullWebView : View {
         }
         .navigationBarItems(trailing: HStack(){
             Button(action: {
-				if (path == "") {path = self.webview.viewModel.path}
-				
-				else if (path.isEmpty){
+				//if (path == "")
+					path = self.webview.viewModel.path
+				 if (path.isEmpty || path == ""){
 					DispatchQueue.main.asyncAfter(deadline: .now() + Double(5.0), execute: { path = self.webview.getPath() })
 				}
-				
-				//var temp = false
-                isActivity = true
-				//DispatchQueue.main.asyncAfter(deadline: .now() + Double(5.0)){
-					checkTextField(url: path, completion: { status in
+				checkTextField(url: path, filter: filter, completion: { status in
 						if (!status){
 							activeAlert = .first
 							isAlert = true
 						}
 						else {
+							//treat URL depending on Catalogue
 							if !path.hasSuffix("manifest.json"){
 								path.append("manifest.json")
 							}
-								self.delegate?.onAddEntry(path: path,  completion: { success in
-									if (success) {
-										print("success in downloading")
-										//activeAlert = .third
-										//isAlert = true
-										self.presentedAsModal = false
-										//self.presentation.wrappedValue.dismiss()
-										return
-									}
-									else {
-										activeAlert = .first
-										isAlert = true
-									}
-									
-								})
+							self.delegate?.onAddEntry(path: path,  completion: { success in
+								if (success) {
+									print("success in downloading")
+									//activeAlert = .third
+									//isAlert = true
+//									self.presentedAsModal = false
+									//self.presentation.wrappedValue.dismiss()
+									return
+								}
+								else {
+									activeAlert = .first
+									isAlert = true
+								}
+								
+							})
 						}
-						isActivity = false
 					})
-			//	}
             }, label: {
                 Text("Add")
             })
-			.disabled( self.webview.isJP2)
+			.disabled(self.webview.isJP2)
         })
         .alert(isPresented: $isAlert, content: {
             switch activeAlert{
@@ -137,8 +131,17 @@ struct FullWebView : View {
             }
         })
     }
+	
+	func downloadItem(type: String = "LOC"){
+		if (type == "LOC"){
+			
+		}
+		else if (type == "HDL"){
+			
+		}
+	}
     
-    func checkTextField(url : String, completion: @escaping (Bool) -> Void) {
+	func checkTextField(url : String, filter: String, completion: @escaping (Bool) -> Void) {
         let checkSession = Foundation.URLSession.shared
         var path: String = url
         
@@ -147,7 +150,7 @@ struct FullWebView : View {
             return
         }
         
-        let url_filter = URL(string: path + "?fo=json&at=item.mime_type") ?? URL(string: "https://www.google.com")
+        let url_filter = URL(string: path + filter) ?? URL(string: "https://www.google.com")
         
         if !path.hasSuffix("manifest.json"){
             path.append("manifest.json")
@@ -189,7 +192,8 @@ extension View {
             if !remove {
                 self.hidden()
             }
-        } else {
+        }
+		else {
             self
         }
     }

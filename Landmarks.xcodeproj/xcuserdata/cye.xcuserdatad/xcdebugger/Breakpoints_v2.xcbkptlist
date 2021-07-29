@@ -7,87 +7,33 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "3998DA87-73D6-4EDA-BE5D-952C5308B92F"
-            shouldBeEnabled = "No"
+            uuid = "C43E2BBD-CF19-4557-80D1-D33AA4C6F446"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Landmarks/MetadataItem.swift"
+            filePath = "Landmarks/WebControllerRepresentable.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "72"
-            endingLineNumber = "72"
-            landmarkName = "getValue(forLanguage:)"
+            startingLineNumber = "115"
+            endingLineNumber = "115"
+            landmarkName = "webView(_:didFinish:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "7EB33EA5-0A1D-4E67-A1B5-7E43272C9289"
-            shouldBeEnabled = "No"
+            uuid = "C3856115-0380-40B6-8F51-A6FC3EF146AE"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Landmarks/WebControllerRepresentable.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-<<<<<<< HEAD
-            startingLineNumber = "187"
-            endingLineNumber = "187"
-            landmarkName = "urlEnter()"
-=======
-            startingLineNumber = "71"
-            endingLineNumber = "71"
-            landmarkName = "getPath()"
->>>>>>> e6902441620ddde63362ae2220a182e629a44466
+            startingLineNumber = "152"
+            endingLineNumber = "152"
+            landmarkName = "webView(_:decidePolicyFor:decisionHandler:)"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "AEFFF0AC-D433-4B2B-A27D-561C79167422"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Landmarks/WebControllerRepresentable.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "85"
-            endingLineNumber = "85"
-            landmarkName = "webView(_:didStartProvisionalNavigation:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "AEFFF0AC-D433-4B2B-A27D-561C79167422 - 4ae2af99e815304e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Booksnake.WebViewRepresentable.Coordinator.webView(_: __C.WKWebView, didStartProvisionalNavigation: Swift.Optional&lt;__C.WKNavigation&gt;) -&gt; ()"
-                  moduleName = "Booksnake"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/cye/Desktop/BookSnake/booksnake/Landmarks/WebControllerRepresentable.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "85"
-                  endingLineNumber = "85"
-                  offsetFromSymbolStart = "193">
-               </Location>
-               <Location
-                  uuid = "AEFFF0AC-D433-4B2B-A27D-561C79167422 - 3bbda838ca749aea"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Booksnake.WebViewNavigation) -&gt; () in Booksnake.WebViewRepresentable.Coordinator.webView(_: __C.WKWebView, didStartProvisionalNavigation: Swift.Optional&lt;__C.WKNavigation&gt;) -&gt; ()"
-                  moduleName = "Booksnake"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/cye/Desktop/BookSnake/booksnake/Landmarks/WebControllerRepresentable.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "88"
-                  endingLineNumber = "88"
-                  offsetFromSymbolStart = "90">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
