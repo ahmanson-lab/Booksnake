@@ -104,7 +104,6 @@ struct FullWebView : View {
 	
 	func downloadItem(type: String = "LOC"){
 		if (type == "LOC"){
-			//if (path == ""){
 			path = self.webview.viewModel.path
 			 if (path.isEmpty){
 				DispatchQueue.main.asyncAfter(deadline: .now() + Double(5.0), execute: { path = self.webview.getPath() })

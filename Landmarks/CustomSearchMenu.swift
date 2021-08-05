@@ -27,7 +27,6 @@ struct CustomSearchMenu: View {
     
     var body: some View {
         ZStack {
-        //    NavigationView {
                 List {
                     NavigationLink(destination: InputView( label: $label,hasText: $hasText, delegate: delegate), label: {
                             Text("Add from IIIF Manifest")
@@ -57,34 +56,7 @@ struct CustomSearchMenu: View {
                                 .foregroundColor(.white)
                                .frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
                         })
-					
-					//Huntington Catalogue
-					NavigationLink(
-						destination: CatalogSearchView(label: $label, title: "Huntington Digital Library", type: "HDL", instructions: "Search results are limited to Huntington Digital Library materials with an IIIF manifest, which Booksnake uses to add items.", filter: "/id/", fieldURL: ["https://hdl.huntington.org/digital/"], delegate: delegate),
-						label: {
-							Text("Huntington Digital Library")
-								.fontWeight(.bold)
-								.multilineTextAlignment(.center)
-								.background(color3
-												.frame(width: UIScreen.main.bounds.width - 10, height: UIScreen.main.bounds.width / 3, alignment: .center)
-												.cornerRadius(10.0))
-												.padding(.all, 10.0)
-								.font(.title)
-								.foregroundColor(.white)
-							   .frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
-						})
-					
                 }
-//                .navigationBarTitle(Text("Add Item"), displayMode: NavigationBarItem.TitleDisplayMode.inline)
-//                .navigationBarItems(trailing: HStack(){
-//                    Button(action: {
-//                        //self.presentedAsModal = false
-//                     //   self.presentation.wrappedValue.dismiss()
-//                    }) {
-//                        Text("Cancel").foregroundColor(.red)
-//                    }
-//                })
- //           }
         }
     }
 }
