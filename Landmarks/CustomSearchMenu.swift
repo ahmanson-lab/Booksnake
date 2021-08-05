@@ -60,7 +60,7 @@ struct CustomSearchMenu: View {
 					
 					//Huntington Catalogue
 					NavigationLink(
-						destination: CatalogSearchView(label: $label, title: "Huntington Digital Library", type: "HDL", instructions: "Search results are limited to Huntington Digital Library materials with an IIIF manifest, which Booksnake uses to add items.", filter: "/id/", fieldURL: ["https://hdl.huntington.org/digital/search/searchterm/"], delegate: delegate),
+						destination: CatalogSearchView(label: $label, title: "Huntington Digital Library", type: "HDL", instructions: "Search results are limited to Huntington Digital Library materials with an IIIF manifest, which Booksnake uses to add items.", filter: "/id/", fieldURL: ["https://hdl.huntington.org/digital/"], delegate: delegate),
 						label: {
 							Text("Huntington Digital Library")
 								.fontWeight(.bold)

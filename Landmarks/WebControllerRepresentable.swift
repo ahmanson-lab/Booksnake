@@ -122,13 +122,13 @@ struct WebViewRepresentable: UIViewRepresentable {
 //                    view.isJP2 = false
 //                }
 //            }
-            
-			if link.contains(parent.filter){
-				parent.isJP2 = false
-            }
-            else {
-				parent.isJP2 = true
-            }
+//            
+//			if link.contains(parent.filter){
+//				parent.isJP2 = false
+//            }
+//            else {
+//				parent.isJP2 = true
+//            }
             
 			webView.evaluateJavaScript("document.body.innerText"){ result, error in
 				if let resultString = result as? String,

@@ -70,7 +70,7 @@ struct AssetRow: View, AssetRowProtocol {
 			}
 			.environment(\.editMode, $editMode)
 			.id(UUID())
-			.navigationBarItems(leading: EditButton())
+	//		.navigationBarItems(leading: EditButton()) 
            // .navigationBarTitle(Text("Archival Material"))
             
         }
