@@ -12,8 +12,6 @@ enum ActiveAlert {
 }
 
 struct CustomSearchMenu: View {
-//    @Environment(\.presentationMode) var presentation
-//    @Binding var presentedAsModal: Bool
     @Binding var addDefaultURL: Bool
     @Binding var label: String
     @State var fieldValue = ""
@@ -26,38 +24,36 @@ struct CustomSearchMenu: View {
     var color3: Color = Color(red: 239/225, green: 79/225, blue: 38/225, opacity: 1)
     
     var body: some View {
-        ZStack {
-                List {
-                    NavigationLink(destination: InputView( label: $label,hasText: $hasText, delegate: delegate), label: {
-                            Text("Add from IIIF Manifest")
-                                .fontWeight(.bold)
-                                .multilineTextAlignment(.center)
-                                .background(LinearGradient(gradient: Gradient(colors: [color2, color1]), startPoint: .bottomLeading, endPoint: .topTrailing)
-                                                .frame(width: UIScreen.main.bounds.width - 10, height: UIScreen.main.bounds.width / 3, alignment: .center)
-                                                .cornerRadius(10.0))
-                                                .padding(.all, 10.0)
-                                .font(.title)
-                                .foregroundColor(.white)
-                               .frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
-                        })
-					
-					//LOC Catalogue
-                    NavigationLink(
-						destination: CatalogSearchView(label: $label, title: "Library of Congress", type: "LOC", instructions: "Search results are limited to Library of Congress materials with an IIIF manifest, which Booksnake uses to add items.", filter: "gov/item", fieldURL: ["https://www.loc.gov/search/?q=", "&fa=mime-type:image/jp2"], delegate: delegate),
-                        label: {
-                            Text("Library of Congress")
-                                .fontWeight(.bold)
-                                .multilineTextAlignment(.center)
-                                .background(color3
-                                                .frame(width: UIScreen.main.bounds.width - 10, height: UIScreen.main.bounds.width / 3, alignment: .center)
-                                                .cornerRadius(10.0))
-                                                .padding(.all, 10.0)
-                                .font(.title)
-                                .foregroundColor(.white)
-                               .frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
-                        })
-                }
-        }
+		List {
+			NavigationLink(destination: InputView( label: $label,hasText: $hasText, delegate: delegate), label: {
+					Text("Add from IIIF Manifest")
+						.fontWeight(.bold)
+						.multilineTextAlignment(.center)
+						.background(LinearGradient(gradient: Gradient(colors: [color2, color1]), startPoint: .bottomLeading, endPoint: .topTrailing)
+										.frame(width: UIScreen.main.bounds.width - 10, height: UIScreen.main.bounds.width / 3, alignment: .center)
+										.cornerRadius(10.0))
+										.padding(.all, 10.0)
+						.font(.title)
+					   .foregroundColor(.white)
+					   .frame(width: UIScreen.main.bounds.width - 50, height: UIScreen.main.bounds.width / 3, alignment: .center)
+				})
+			
+				//LOC Catalogue
+				NavigationLink(
+					destination: CatalogSearchView(label: $label, title: "Library of Congress", type: "LOC", instructions: "Search results are limited to Library of Congress materials with an IIIF manifest, which Booksnake uses to add items.", filter: "gov/item", fieldURL: ["https://www.loc.gov/search/?q=", "&fa=mime-type:image/jp2"], delegate: delegate),
+					label: {
+						Text("Library of Congress")
+							.fontWeight(.bold)
+							.multilineTextAlignment(.center)
+							.background(color3
+											.frame(width: UIScreen.main.bounds.width - 25, height: UIScreen.main.bounds.width / 3, alignment: .center)
+											.cornerRadius(10.0))
+							.font(.title)
+					})
+					.padding(EdgeInsets(top: 10, leading: 50, bottom: 10, trailing: 40))
+					.foregroundColor(.white)
+					.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width / 3, alignment: .leading)
+			}
     }
 }
 

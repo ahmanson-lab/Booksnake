@@ -129,13 +129,12 @@ struct FullWebView : View {
 								activeAlert = .first
 								isAlert = true
 							}
-							
 						})
 					}
 				})
 		}
 		else if (type == "HDL"){
-			
+			//download process for Huntington
 		}
 	}
     

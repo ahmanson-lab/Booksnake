@@ -19,6 +19,7 @@ struct ContentView: View {
     var values: [String]
 
     var body: some View {
+		List{
         RectangularImage(image: image!)
             .padding(EdgeInsets(top: -20, leading: 20, bottom: 20, trailing: 20))
         
@@ -29,30 +30,29 @@ struct ContentView: View {
             isActive: $showingPreview){
                 ZStack(){
                     Color.init(.systemBlue)
-                        .frame(width: UIScreen.main.bounds.width - 40, height: 50, alignment: .center)
+                        .frame(width: UIScreen.main.bounds.width - 50, height: 50, alignment: .center)
                         .cornerRadius(10)
                     Text("View in AR")
                         .foregroundColor(.white)
                         .font(.system(size: 18, weight: .medium, design: .default))
                 }
-                .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
+                //.padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
         }
-           
-        VStack (alignment: .leading, spacing:10) {
-            List{
-				ForEach(0..<labels.count, id: \.self){ item in
-                    VStack (alignment: .leading) {
-                            Text("\(labels[item])")
-                                .font(.caption)
-                                .foregroundColor(Color.gray)
-                                .lineLimit(1)
-                            Text("\(values[item])")
-                                .font(.headline)
-                        }
-                    }
-                }
-        }
+		
+		
+			ForEach(0..<labels.count, id: \.self){ item in
+				VStack (alignment: .leading) {
+						Text("\(labels[item])")
+							.font(.caption)
+							.foregroundColor(Color.gray)
+							.lineLimit(1)
+						Text("\(values[item])")
+							.font(.headline)
+					}
+				}
+			}
         .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 20))
+		
     }
 }
 

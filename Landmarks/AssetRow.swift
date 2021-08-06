@@ -41,8 +41,8 @@ struct AssetRow: View, AssetRowProtocol {
     @State var new_values: [String] =  [String]()
     
     var body: some View {
-		NavigationView{
-			TabView{
+		TabView {
+			NavigationView {
 				List{
 					ForEach(contentTest, id: \.self){ item in
 						NavigationLink(destination: ContentView(image: item.image, width: CGFloat(item.width), length: CGFloat(item.length), labels: item.labels! , values: item.values! )){
@@ -58,21 +58,23 @@ struct AssetRow: View, AssetRowProtocol {
 						}
 					}
 					.onDelete(perform: onDelete)
-				}
-				.tabItem {
-					Text("Menu")
-				}
-				
+				}.navigationBarTitle("Library")
+			}
+			.tabItem {
+				Image(systemName: "scroll")
+				Text("Library")
+			}
+			
+			NavigationView {
 				CustomSearchMenu(addDefaultURL: $addDefaultURL, label: $label, delegate: self)
-				.tabItem {
-					Text("Search")
-				}
+					.navigationBarTitle("Explore")
+			}
+			.tabItem {
+				Image(systemName: "magnifyingglass")
+				Text("Explore")
 			}
 			.environment(\.editMode, $editMode)
 			.id(UUID())
-	//		.navigationBarItems(leading: EditButton()) 
-           // .navigationBarTitle(Text("Archival Material"))
-            
         }
         .onAppear(perform: {
             //enter init data
