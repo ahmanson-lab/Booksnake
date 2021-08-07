@@ -30,13 +30,13 @@ struct CustomSearchMenu: View {
 						.fontWeight(.bold)
 						.multilineTextAlignment(.center)
 						.background(LinearGradient(gradient: Gradient(colors: [color2, color1]), startPoint: .bottomLeading, endPoint: .topTrailing)
-										.frame(width: UIScreen.main.bounds.width - 10, height: UIScreen.main.bounds.width / 3, alignment: .center)
+										.frame(width: UIScreen.main.bounds.width - 40, height: UIScreen.main.bounds.width / 3, alignment: .center)
 										.cornerRadius(10.0))
-										.padding(.all, 10.0)
 						.font(.title)
-					   .foregroundColor(.white)
-					   .frame(width: UIScreen.main.bounds.width - 50, height: UIScreen.main.bounds.width / 3, alignment: .center)
-				})
+						.frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
+			})
+			.foregroundColor(.white)
+			
 			
 				//LOC Catalogue
 				NavigationLink(
@@ -46,13 +46,14 @@ struct CustomSearchMenu: View {
 							.fontWeight(.bold)
 							.multilineTextAlignment(.center)
 							.background(color3
-											.frame(width: UIScreen.main.bounds.width - 25, height: UIScreen.main.bounds.width / 3, alignment: .center)
+											.frame(width: UIScreen.main.bounds.width - 40, height: UIScreen.main.bounds.width / 3, alignment: .center)
 											.cornerRadius(10.0))
 							.font(.title)
+							.frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
 					})
-					.padding(EdgeInsets(top: 10, leading: 50, bottom: 10, trailing: 40))
+					//.padding(EdgeInsets(top: 10, leading: 50, bottom: 10, trailing: 40))
 					.foregroundColor(.white)
-					.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width / 3, alignment: .leading)
+					
 			}
     }
 }
