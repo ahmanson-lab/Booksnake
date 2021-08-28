@@ -12,8 +12,6 @@ enum ActiveAlert {
 }
 
 struct CustomSearchMenu: View {
-//    @Environment(\.presentationMode) var presentation
-//    @Binding var presentedAsModal: Bool
     @Binding var addDefaultURL: Bool
     @Binding var label: String
     @State var fieldValue = ""
@@ -72,19 +70,8 @@ struct CustomSearchMenu: View {
 								.font(.title)
 								.foregroundColor(.white)
 							   .frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
-						})
-					
+						})	
                 }
-//                .navigationBarTitle(Text("Add Item"), displayMode: NavigationBarItem.TitleDisplayMode.inline)
-//                .navigationBarItems(trailing: HStack(){
-//                    Button(action: {
-//                        //self.presentedAsModal = false
-//                     //   self.presentation.wrappedValue.dismiss()
-//                    }) {
-//                        Text("Cancel").foregroundColor(.red)
-//                    }
-//                })
- //           }
         }
     }
 }

@@ -95,6 +95,23 @@ struct WebViewRepresentable: UIViewRepresentable {
             self.parent = parent
         }
         
+		override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+			if let key = change?[NSKeyValueChangeKey.newKey]{
+
+				parent.viewModel.path = parent.webView.url!.absoluteString
+				//let link = webView.url!.absoluteString
+				if parent.viewModel.path.contains(parent.filter) {
+					parent.isJP2 = false
+				}
+				else {
+					parent.isJP2 = true
+				}
+				
+				print(parent.viewModel.path)
+				//print (key)
+			}
+		}
+		
         func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
             //something
             self.webViewNavigationSubscriber = self.parent.viewModel.webViewNavigationPublisher.receive(on: RunLoop.main).sink(receiveValue: { navigation in
@@ -113,22 +130,12 @@ struct WebViewRepresentable: UIViewRepresentable {
         
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
 			let link = webView.url!.absoluteString
-//            if let url = URL (string: link){
-//                let html = try? String(contentsOf: url)
-//                if (html?.contains("jp2") == nil){
-//                    view.isJP2 = false
-//                }
-//                else if html!.contains("jp2"){
-//                    view.isJP2 = false
-//                }
-//            }
-//            
-//			if link.contains(parent.filter){
-//				parent.isJP2 = false
-//            }
-//            else {
-//				parent.isJP2 = true
-//            }
+			if link.contains(parent.filter) {
+				parent.isJP2 = false
+            }
+            else {
+				parent.isJP2 = true
+            }
             
 			webView.evaluateJavaScript("document.body.innerText"){ result, error in
 				if let resultString = result as? String,
@@ -141,14 +148,15 @@ struct WebViewRepresentable: UIViewRepresentable {
 			parent.hasBackList = webView.canGoBack
 			parent.hasForwardList = webView.canGoForward
         }
-        
-        
+
 		func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
 				parent.loadStatusChanged?(false, error)
-			}
+		}
 		
         // This function is essential for intercepting every navigation in the webview
         func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+			webView.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
+			
             // Suppose you don't want your user to go a restricted site
             if let host = navigationAction.request.url?.host {
                 if host == "restricted.com" {
@@ -160,10 +168,7 @@ struct WebViewRepresentable: UIViewRepresentable {
 			parent.viewModel.path = webView.url!.absoluteString
 			parent.hasBackList = webView.canGoBack
 			parent.hasForwardList = webView.canGoForward
-			
-			
         }
-		
     }
 
 	func makeCoordinator() -> WebViewRepresentable.Coordinator {

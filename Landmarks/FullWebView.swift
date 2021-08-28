@@ -22,7 +22,6 @@ struct ProgressView: View {
 }
 
 struct FullWebView : View {
-//    @Binding var presentedAsModal: Bool
     @Binding var hasJP2: Bool
     @Binding var label: String
 	@State var filter: String
@@ -102,13 +101,9 @@ struct FullWebView : View {
         })
     }
 	
-	func downloadItem(type: String = "LOC"){
+	func downloadItem(type: String){
 		if (type == "LOC"){
-			//if (path == ""){
 			path = self.webview.viewModel.path
-			 if (path.isEmpty){
-				DispatchQueue.main.asyncAfter(deadline: .now() + Double(5.0), execute: { path = self.webview.getPath() })
-			}
 			checkTextField(url: path, filter: "?fo=json&at=item.mime_type", completion: { status in
 					if (!status){
 						activeAlert = .first
@@ -136,7 +131,35 @@ struct FullWebView : View {
 				})
 		}
 		else if (type == "HDL"){
-			
+			path = self.webview.viewModel.path
+			checkTextField(url: path, filter: "/id/", completion: { status in
+				if (!status){
+					activeAlert = .first
+					isAlert = true
+				}
+				else{
+					if let collection = path.range(of: "collection/"){
+						let indexA = path[collection.upperBound...].firstIndex(of: "/")
+						let collection_id = path[collection.upperBound..<indexA!]
+						
+						let indexB = path[path.range(of: "id/")!.upperBound...].firstIndex(of: "/")
+						let item_id = path[path.range(of: "id/")!.upperBound..<indexB!]
+						
+						self.delegate?.onAddEntry(path: "https://hdl.huntington.org/iiif/info/" + collection_id + "/" + item_id + "/manifest.json",  completion: { success in
+							if (success) {
+								print("success in downloading")
+								activeAlert = .third
+								isAlert = true
+								return
+							}
+							else {
+								activeAlert = .first
+								isAlert = true
+							}
+						})
+					}
+				}
+			})
 		}
 	}
     
@@ -161,8 +184,9 @@ struct FullWebView : View {
 			if !UIApplication.shared.canOpenURL(url_path! as URL){
 				completion(false)
 			}
+			
 			//check that there is a jp2 tag
-			else if (!html.contains("image/jp2") && !html.contains("@context")){
+			else if (!html.contains("image/jp2") && !html.contains("@context") && type == "LOC"){
 				print("no jp2")
 				completion(false)
 			}
