@@ -12,34 +12,31 @@ struct ContentView: View {
     @State var showingPreview = false
     @State private var showText = false
     
-    let image: UIImage?
-    var width: CGFloat
+    @State var image: UIImage = UIImage()
+	@State var width: CGFloat = 5
     var length: CGFloat
     var labels: [String]
     var values: [String]
 
     var body: some View {
-		List{
-        RectangularImage(image: image!)
-            .padding(EdgeInsets(top: -20, leading: 20, bottom: 20, trailing: 20))
-        
-        NavigationLink(
-            destination: ARViewControllerRepresentable(image: image!, width:width, length: length)
-                .navigationBarTitle("")
-                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: .center),
-            isActive: $showingPreview){
-                ZStack(){
-                    Color.init(.systemBlue)
-                        .frame(width: UIScreen.main.bounds.width - 50, height: 50, alignment: .center)
-                        .cornerRadius(10)
-                    Text("View in AR")
-                        .foregroundColor(.white)
-                        .font(.system(size: 18, weight: .medium, design: .default))
-                }
-                //.padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
-        }
-		
-		
+		List {
+			RectangularImage(image: image)
+				.padding(EdgeInsets(top: -20, leading: 20, bottom: 20, trailing: 20))
+			
+			NavigationLink(
+				destination: ARViewControllerRepresentable(image: image, width:width, length: length)
+					.navigationBarTitle("")
+					.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: .center),
+				isActive: $showingPreview){
+					ZStack(){
+						Color.init(.systemBlue)
+							.frame(width: UIScreen.main.bounds.width - 50, height: 50, alignment: .center)
+							.cornerRadius(10)
+						Text("View in AR")
+							.foregroundColor(.white)
+							.font(.system(size: 18, weight: .medium, design: .default))
+					}
+			}
 			ForEach(0..<labels.count, id: \.self){ item in
 				VStack (alignment: .leading) {
 						Text("\(labels[item])")
@@ -52,7 +49,6 @@ struct ContentView: View {
 				}
 			}
         .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 20))
-		
     }
 }
 

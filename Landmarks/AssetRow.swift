@@ -25,12 +25,8 @@ struct AssetRow: View, AssetRowProtocol {
     
     @Environment(\.managedObjectContext) var managedObjectContext
     @State private var editMode = EditMode.inactive
-    
-//    @Environment(\.presentationMode) var presentation
-    
 	@FetchRequest(fetchRequest: ContentData.allIdeasFetchRequest()) var contentTest: FetchedResults<ContentData>
-    
-//    @State var modalDisplayed = false
+
     @State var addDefaultURL = false
     @State var test_flag: Bool = false
     @State var numCells: Int = 0
@@ -42,10 +38,10 @@ struct AssetRow: View, AssetRowProtocol {
     
     var body: some View {
 		TabView {
-			NavigationView {
+			NavigationView{
 				List{
 					ForEach(contentTest, id: \.self){ item in
-						NavigationLink(destination: ContentView(image: item.image, width: CGFloat(item.width), length: CGFloat(item.length), labels: item.labels! , values: item.values! )){
+						NavigationLink(destination: ContentView(image: item.image!, width: CGFloat(item.width), length: CGFloat(item.length), labels: item.labels! , values: item.values! )){
 							Image(uiImage: item.image ?? UIImage() )
 								.resizable()
 								.aspectRatio(contentMode: .fit)
@@ -60,6 +56,7 @@ struct AssetRow: View, AssetRowProtocol {
 					.onDelete(perform: onDelete)
 				}.navigationBarTitle("Library")
 			}
+			.navigationViewStyle(StackNavigationViewStyle())
 			.tabItem {
 				Image(systemName: "scroll")
 				Text("Library")
@@ -69,6 +66,7 @@ struct AssetRow: View, AssetRowProtocol {
 				CustomSearchMenu(addDefaultURL: $addDefaultURL, label: $label, delegate: self)
 					.navigationBarTitle("Explore")
 			}
+			.navigationViewStyle(StackNavigationViewStyle())
 			.tabItem {
 				Image(systemName: "magnifyingglass")
 				Text("Explore")
@@ -77,7 +75,6 @@ struct AssetRow: View, AssetRowProtocol {
 			.id(UUID())
         }
         .onAppear(perform: {
-            //enter init data
             if(contentTest.count < 1){
                 addExamples()
             }
@@ -89,7 +86,7 @@ struct AssetRow: View, AssetRowProtocol {
         onAdd(path: path, completion: completion)
     }
     
-    //add a xdsf item from library of congress
+    //add a iiif item from library of congress
     func onAdd(path: String, width: Float = 1, length: Float = 1, completion: (_ success: Bool) -> Void){
         print("here")
         test_flag = true
