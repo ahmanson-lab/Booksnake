@@ -36,25 +36,39 @@ struct CustomSearchMenu: View {
 						.frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
 			})
 			.foregroundColor(.white)
-			
-			
-				//LOC Catalogue
-				NavigationLink(
-					destination: CatalogSearchView(label: $label, title: "Library of Congress", type: "LOC", instructions: "Search results are limited to Library of Congress materials with an IIIF manifest, which Booksnake uses to add items.", filter: "gov/item", fieldURL: ["https://www.loc.gov/search/?q=", "&fa=mime-type:image/jp2"], delegate: delegate),
-					label: {
-						Text("Library of Congress")
-							.fontWeight(.bold)
-							.multilineTextAlignment(.center)
-							.background(color3
-											.frame(width: UIScreen.main.bounds.width - 40, height: UIScreen.main.bounds.width / 3, alignment: .center)
-											.cornerRadius(10.0))
-							.font(.title)
-							.frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
-					})
-					//.padding(EdgeInsets(top: 10, leading: 50, bottom: 10, trailing: 40))
-					.foregroundColor(.white)
+					//LOC Catalogue
+                    NavigationLink(
+						destination: CatalogSearchView(label: $label, title: "Library of Congress", type: "LOC", instructions: "Search results are limited to Library of Congress materials with an IIIF manifest, which Booksnake uses to add items.", filter: "gov/item", fieldURL: ["https://www.loc.gov/search/?q=", "&fa=mime-type:image/jp2"], delegate: delegate),
+                        label: {
+                            Text("Library of Congress")
+                                .fontWeight(.bold)
+                                .multilineTextAlignment(.center)
+                                .background(color3
+                                                .frame(width: UIScreen.main.bounds.width - 10, height: UIScreen.main.bounds.width / 3, alignment: .center)
+                                                .cornerRadius(10.0))
+                                                .padding(.all, 10.0)
+                                .font(.title)
+                                .foregroundColor(.white)
+                               .frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
+                        })
 					
-			}
+					//Huntington Catalogue
+					NavigationLink(
+						destination: CatalogSearchView(label: $label, title: "Huntington Digital Library", type: "HDL", instructions: "Search results are limited to Huntington Digital Library materials with an IIIF manifest, which Booksnake uses to add items.", filter: "/id/", fieldURL: ["https://hdl.huntington.org/digital/"], delegate: delegate),
+						label: {
+							Text("Huntington Digital Library")
+								.fontWeight(.bold)
+								.multilineTextAlignment(.center)
+								.background(color3
+												.frame(width: UIScreen.main.bounds.width - 10, height: UIScreen.main.bounds.width / 3, alignment: .center)
+												.cornerRadius(10.0))
+												.padding(.all, 10.0)
+								.font(.title)
+								.foregroundColor(.white)
+							   .frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
+						})	
+                }
+        }
     }
 }
 

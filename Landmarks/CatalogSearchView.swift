@@ -9,7 +9,6 @@
 import SwiftUI
 
 struct CatalogSearchView: View {
-//	@Binding var presentedAsModal: Bool
 	@Binding var label: String
 	
 	//text in catalogue
