@@ -96,8 +96,7 @@ struct WebViewRepresentable: UIViewRepresentable {
         }
         
 		override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-			if let key = change?[NSKeyValueChangeKey.newKey]{
-
+			if ((change?[NSKeyValueChangeKey.newKey]) != nil){
 				parent.viewModel.path = parent.webView.url!.absoluteString
 				//let link = webView.url!.absoluteString
 				if parent.viewModel.path.contains(parent.filter) {
@@ -108,7 +107,6 @@ struct WebViewRepresentable: UIViewRepresentable {
 				}
 				
 				print(parent.viewModel.path)
-				//print (key)
 			}
 		}
 		
