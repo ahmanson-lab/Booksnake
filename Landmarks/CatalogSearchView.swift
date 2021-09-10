@@ -20,7 +20,7 @@ struct CatalogSearchView: View {
 	@State var filter: String
 	@State var fieldURL: [String]
 	
-	@State private var fieldValue: String = ""
+	@State var fieldValue: String = ""
 	@State var urlPath: String = ""
 	@State private var isAlert: Bool = false
 	@State private var activeAlert: ActiveAlert = .first
