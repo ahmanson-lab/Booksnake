@@ -104,19 +104,16 @@ struct InputView: View {
 					self.delegate?.onAddEntry(path: fieldValue,  completion: { success in
 						if (success){
 							print("sucess in downloading")
-						  //  activeAlert = .third
-//							self.showModal = false
+							isActivity = false
 							return
 						}
-					 //   isAlert = true
 					})
 				}
 				else {
 					activeAlert = .first
 					isAlert = true
 				}
-				isError = !status
-				isActivity = false
+				isError = !status				
 			})
 		}
 		else {

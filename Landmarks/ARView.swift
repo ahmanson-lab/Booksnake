@@ -237,7 +237,7 @@ extension ARView: ARCoachingOverlayViewDelegate {
         coachingOverlay.goal = .horizontalPlane
         // Set the ARSession
         coachingOverlay.session = self.sceneView.session
-
+		
         // Set the delegate for any callbacks
         coachingOverlay.delegate = self
        // debugPrint("is coaching on, ", coachingOverlay.isActive)

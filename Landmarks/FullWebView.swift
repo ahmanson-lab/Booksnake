@@ -114,11 +114,14 @@ struct FullWebView : View {
 						if !path.hasSuffix("manifest.json"){
 							path.append("manifest.json")
 						}
+						isActivity = true
 						self.delegate?.onAddEntry(path: path,  completion: { success in
+							
 							if (success) {
 								print("success in downloading")
 								activeAlert = .third
 								isAlert = true
+								isActivity = false
 								return
 							}
 							else {
@@ -126,6 +129,7 @@ struct FullWebView : View {
 								isAlert = true
 							}
 						})
+					
 					}
 				})
 		}
@@ -145,17 +149,21 @@ struct FullWebView : View {
 						let indexB = path[path.range(of: "id/")!.upperBound...].firstIndex(of: "/")
 						let item_id = path[path.range(of: "id/")!.upperBound..<indexB!]
 						
+						isActivity = true
 						self.delegate?.onAddEntry(path: "https://hdl.huntington.org/iiif/info/" + collection_id + "/" + item_id + "/manifest.json",  completion: { success in
 							if (success) {
 								print("success in downloading")
 								activeAlert = .third
 								isAlert = true
+								//isActivity = false
 								return
 							}
 							else {
 								activeAlert = .first
 								isAlert = true
+								//isActivity = false
 							}
+							isActivity = false
 						})
 					}
 				}

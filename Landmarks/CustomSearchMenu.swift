@@ -6,6 +6,7 @@
 //  Copyright © 2020 University of Southern California. All rights reserved.
 
 import SwiftUI
+import UIKit
 
 enum ActiveAlert {
     case first, second, third
@@ -24,20 +25,27 @@ struct CustomSearchMenu: View {
     var color3: Color = Color(red: 239/225, green: 79/225, blue: 38/225, opacity: 1)
 	var color4: Color = Color(red: 51/225, green: 70/225, blue: 12/225, opacity: 1) //HDL
     
+	//ios 14+
+	var items: [GridItem] = Array(repeating: .init(.flexible(minimum: 300, maximum: 1000)), count: 2)
+	
     var body: some View {
-		List {
+	//	ScrollView (.vertical, showsIndicators: false) {
+		//	LazyVGrid(columns: items, alignment: .leading, spacing: 20) {
+		List{
 			NavigationLink( destination: InputView( label: $label,hasText: $hasText, delegate: delegate),
 				label: {
 					Text("Add from IIIF Manifest")
 						.fontWeight(.bold)
 						.multilineTextAlignment(.center)
 						.background(LinearGradient(gradient: Gradient(colors: [color2, color1]), startPoint: .bottomLeading, endPoint: .topTrailing)
+										//.frame(width: 300 - 10, height: 300 / 3, alignment: .center)
 										.frame(width: UIScreen.main.bounds.width - 10, height: UIScreen.main.bounds.width / 3, alignment: .center)
 										.cornerRadius(10.0))
 										.padding(.all, 10.0)
 						.font(.title)
 						.foregroundColor(.white)
 						.frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
+						//.frame(width: 300 - 30, height: 300 / 3, alignment: .center)
 				})
 			
 				//LOC Catalogue
@@ -58,7 +66,7 @@ struct CustomSearchMenu: View {
 				
 				//Huntington Catalogue
 				NavigationLink(
-					destination: CatalogSearchView(label: $label, title: "Huntington Digital Library", type: "HDL", instructions: "Search results are limited to Huntington Digital Library materials with an IIIF manifest, which Booksnake uses to add items.", filter: "/id/", fieldURL: ["https://hdl.huntington.org/digital/search/collection/p15150coll8!p15150coll7!p15150coll4!p15150coll2!p15150coll3!p9539coll1!p16003coll13!p16003coll11!p16003coll14!p16003coll12!p16003coll4!p16003coll7!p16003coll10!p16003coll5!p16003coll18!p16003coll15!p15150coll5!p16003coll17!p16003coll2!p16003coll16!p16003coll6!p16003coll9/searchterm/"], delegate: delegate),
+					destination: CatalogSearchView(label: $label, title: "Huntington Digital Library", type: "HDL", instructions: "Search results are limited to Huntington Digital Library materials with an IIIF manifest, which Booksnake uses to add items.", filter: "/id/", fieldURL: ["https://hdl.huntington.org/digital/search/collection/p15150coll8!p15150coll7!p15150coll4!p15150coll2!p15150coll3!p9539coll1!p16003coll13!p16003coll11!p16003coll14!p16003coll12!p16003coll4!p16003coll7!p16003coll10!p16003coll5!p16003coll18!p16003coll15!p15150coll5!p16003coll17!p16003coll2!p16003coll16!p16003coll6!p16003coll9/searchterm/", ""], delegate: delegate),
 					label: {
 						Text("Huntington Digital Library")
 							.fontWeight(.bold)
@@ -69,11 +77,13 @@ struct CustomSearchMenu: View {
 											.padding(.all, 10.0)
 							.font(.title)
 							.foregroundColor(.white)
-						   .frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
+						    .frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
 					})
 			}
-        }
-    }
+	//	.padding(.horizontal)
+		}
+//	}
+}
 
 extension Binding {
     func onChange(_ handler: @escaping (Value) -> Void) -> Binding<Value> {
