@@ -24,8 +24,12 @@ struct CustomSearchMenu: View {
     var color3: Color = Color(red: 239/225, green: 79/225, blue: 38/225, opacity: 1)
 	var color4: Color = Color(red: 51/225, green: 70/225, blue: 12/225, opacity: 1) //HDL
     
+	var items: [GridItem] = Array(repeating: .init(.flexible(minimum: 300, maximum: 1000)), count: 1)
+	
     var body: some View {
-		List {
+			ScrollView (.vertical, showsIndicators: false) {
+				LazyVGrid(columns: items, alignment: .leading, spacing: 20) {
+		//List {
 			NavigationLink( destination: InputView( label: $label,hasText: $hasText, delegate: delegate),
 				label: {
 					Text("Add from IIIF Manifest")
@@ -73,6 +77,7 @@ struct CustomSearchMenu: View {
 					})
 			}
         }
+	}
     }
 
 extension Binding {
