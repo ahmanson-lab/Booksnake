@@ -14,7 +14,6 @@ enum ActiveAlert {
 struct CustomSearchMenu: View {
     @Binding var addDefaultURL: Bool
     @Binding var label: String
-  //  @State var fieldValue = ""
     @State var hasText: Bool = true
 	
     var delegate: AssetRowProtocol?
@@ -24,37 +23,40 @@ struct CustomSearchMenu: View {
     var color3: Color = Color(red: 239/225, green: 79/225, blue: 38/225, opacity: 1)
 	var color4: Color = Color(red: 51/225, green: 70/225, blue: 12/225, opacity: 1) //HDL
     
+	let items = [GridItem(.adaptive(minimum: 300, maximum: 800))]
+	
     var body: some View {
-		List {
-			NavigationLink( destination: InputView( label: $label,hasText: $hasText, delegate: delegate),
-				label: {
-					Text("Add from IIIF Manifest")
-						.fontWeight(.bold)
-						.multilineTextAlignment(.center)
-						.background(LinearGradient(gradient: Gradient(colors: [color2, color1]), startPoint: .bottomLeading, endPoint: .topTrailing)
-										.frame(width: UIScreen.main.bounds.width - 10, height: UIScreen.main.bounds.width / 3, alignment: .center)
-										.cornerRadius(10.0))
-										.padding(.all, 10.0)
-						.font(.title)
-						.foregroundColor(.white)
-						.frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
-				})
-			
-				//LOC Catalogue
-				NavigationLink(
-					destination: CatalogSearchView(label: $label, title: "Library of Congress", type: "LOC", instructions: "Search results are limited to Library of Congress materials with an IIIF manifest, which Booksnake uses to add items.", filter: "gov/item", fieldURL: ["https://www.loc.gov/search/?q=", "&fa=mime-type:image/jp2"], delegate: delegate),
+		ScrollView (.vertical, showsIndicators: false) {
+			LazyVGrid(columns: items, alignment: .center, spacing: 50) {
+				NavigationLink( destination: InputView( label: $label,hasText: $hasText, delegate: delegate),
 					label: {
-						Text("Library of Congress")
+						Text("Add from IIIF Manifest")
 							.fontWeight(.bold)
 							.multilineTextAlignment(.center)
-							.background(color3
-											.frame(width: UIScreen.main.bounds.width - 10, height: UIScreen.main.bounds.width / 3, alignment: .center)
+							.background(LinearGradient(gradient: Gradient(colors: [color2, color1]), startPoint: .bottomLeading, endPoint: .topTrailing)
+											.frame(width: 360 - 10, height: 400 / 3, alignment: .center)
 											.cornerRadius(10.0))
 											.padding(.all, 10.0)
 							.font(.title)
 							.foregroundColor(.white)
-						    .frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
+							.frame(width: 360 - 30, height: 400 / 3, alignment: .center)
 					})
+				
+					//LOC Catalogue
+					NavigationLink(
+						destination: CatalogSearchView(label: $label, title: "Library of Congress", type: "LOC", instructions: "Search results are limited to Library of Congress materials with an IIIF manifest, which Booksnake uses to add items.", filter: "gov/item", fieldURL: ["https://www.loc.gov/search/?q=", "&fa=mime-type:image/jp2"], delegate: delegate),
+						label: {
+							Text("Library of Congress")
+								.fontWeight(.bold)
+								.multilineTextAlignment(.center)
+								.background(color3
+												.frame(width: 360 - 10, height: 400 / 3, alignment: .center)
+												.cornerRadius(10.0))
+												.padding(.all, 10.0)
+								.font(.title)
+								.foregroundColor(.white)
+								.frame(width: 360 - 10, height: 400 / 3, alignment: .center)
+						})
 				
 				//Huntington Catalogue
 //				NavigationLink(
@@ -72,6 +74,7 @@ struct CustomSearchMenu: View {
 //						   .frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
 //					})
 			}
+	}
         }
     }
 
