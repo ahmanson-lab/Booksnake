@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import CoreData
 
-public class ManifestData: ValueTransformer {
+public class ManifestData {
     
     var label: String = ""
     var image: UIImage?

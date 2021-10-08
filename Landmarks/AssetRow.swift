@@ -41,8 +41,8 @@ struct AssetRow: View, AssetRowProtocol {
 			NavigationView{
 				List{
 					ForEach(contentTest, id: \.self){ item in
-						NavigationLink(destination: ContentView(image: item.image!, width: CGFloat(item.width), length: CGFloat(item.length), labels: item.labels! , values: item.values! )){
-							Image(uiImage: item.image ?? UIImage() )
+						NavigationLink(destination: ContentView(image: UIImage(data: item.imageData!) ?? UIImage(), width: CGFloat(item.width), length: CGFloat(item.length), labels: item.labels! , values: item.values! )){
+                            Image(uiImage: UIImage(data: item.imageData!) ?? UIImage() )
 								.resizable()
 								.aspectRatio(contentMode: .fit)
 								.frame(width: 50, height: 50)
@@ -99,7 +99,7 @@ struct AssetRow: View, AssetRowProtocol {
             contentdata.id = new_manifest.id
             contentdata.labels = new_manifest.item.labels
             contentdata.values = new_manifest.item.values
-            contentdata.image = new_manifest.image
+            contentdata.imageData = new_manifest.image.jpegData(compressionQuality: 1.0)
             contentdata.width = new_manifest.item.width ?? width
             contentdata.length = new_manifest.item.height ?? length
             counter = counter + contentTest.count + 1
@@ -146,7 +146,7 @@ struct AssetRow: View, AssetRowProtocol {
 				contentdata.id = new_manifest.id
 				contentdata.labels = new_manifest.item.labels
 				contentdata.values = new_manifest.item.values
-				contentdata.image = new_manifest.image
+                contentdata.imageData = new_manifest.image.jpegData(compressionQuality: 1.0)
 				contentdata.width = Float(sizes[i][1])
 				contentdata.length = Float (sizes[i][0])
 				counter = counter + contentTest.count + 1

@@ -17,7 +17,7 @@ public class ContentData: NSManagedObject, Identifiable {
     @NSManaged public var labels: [String]?
     @NSManaged public var values: [String]?
     @NSManaged public var item_label: String?
-    @NSManaged public var image: UIImage?
+    @NSManaged public var imageData: Data?
     @NSManaged public var index: Int16
     
     //for init sizes
