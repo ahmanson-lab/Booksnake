@@ -26,26 +26,24 @@ struct CustomSearchMenu: View {
 	var color4: Color = Color(red: 51/225, green: 70/225, blue: 12/225, opacity: 1) //HDL
     
 	//ios 14+
-	var items: [GridItem] = Array(repeating: .init(.flexible(minimum: 300, maximum: 1000)), count: 2)
+	let items = [GridItem(.adaptive(minimum: 300, maximum: 800))]
 	
     var body: some View {
-	//	ScrollView (.vertical, showsIndicators: false) {
-		//	LazyVGrid(columns: items, alignment: .leading, spacing: 20) {
-		List{
+		ScrollView (.vertical, showsIndicators: false) {
+					LazyVGrid(columns: items, alignment: .center, spacing: 50) {
+		
 			NavigationLink( destination: InputView( label: $label,hasText: $hasText, delegate: delegate),
 				label: {
 					Text("Add from IIIF Manifest")
 						.fontWeight(.bold)
 						.multilineTextAlignment(.center)
 						.background(LinearGradient(gradient: Gradient(colors: [color2, color1]), startPoint: .bottomLeading, endPoint: .topTrailing)
-										//.frame(width: 300 - 10, height: 300 / 3, alignment: .center)
-										.frame(width: UIScreen.main.bounds.width - 10, height: UIScreen.main.bounds.width / 3, alignment: .center)
+										.frame(width: 360 - 10, height: 400 / 3, alignment: .center)
 										.cornerRadius(10.0))
 										.padding(.all, 10.0)
 						.font(.title)
 						.foregroundColor(.white)
-						.frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
-						//.frame(width: 300 - 30, height: 300 / 3, alignment: .center)
+						.frame(width: 360 - 30, height: 400 / 3, alignment: .center)
 				})
 			
 				//LOC Catalogue
@@ -56,12 +54,12 @@ struct CustomSearchMenu: View {
 							.fontWeight(.bold)
 							.multilineTextAlignment(.center)
 							.background(color3
-											.frame(width: UIScreen.main.bounds.width - 10, height: UIScreen.main.bounds.width / 3, alignment: .center)
+											.frame(width: 360 - 10, height: 400 / 3, alignment: .center)
 											.cornerRadius(10.0))
 											.padding(.all, 10.0)
 							.font(.title)
 							.foregroundColor(.white)
-						    .frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
+							.frame(width: 360 - 30, height: 400 / 3, alignment: .center)
 					})
 				
 				//Huntington Catalogue
@@ -72,17 +70,17 @@ struct CustomSearchMenu: View {
 							.fontWeight(.bold)
 							.multilineTextAlignment(.center)
 							.background(color4
-											.frame(width: UIScreen.main.bounds.width - 10, height: UIScreen.main.bounds.width / 3, alignment: .center)
+											.frame(width: 360 - 10, height: 400 / 3, alignment: .center)
 											.cornerRadius(10.0))
 											.padding(.all, 10.0)
 							.font(.title)
 							.foregroundColor(.white)
-						    .frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
+							.frame(width: 360 - 30, height: 400 / 3, alignment: .center)
 					})
-			}
-	//	.padding(.horizontal)
+			
 		}
-//	}
+		}
+	}
 }
 
 extension Binding {
