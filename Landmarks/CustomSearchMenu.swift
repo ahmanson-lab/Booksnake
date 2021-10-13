@@ -66,17 +66,17 @@ struct CustomSearchMenu: View {
 //							.fontWeight(.bold)
 //							.multilineTextAlignment(.center)
 //							.background(color4
-//											.frame(width: UIScreen.main.bounds.width - 10, height: UIScreen.main.bounds.width / 3, alignment: .center)
+//											.frame(width: 360 - 10, height: 400 / 3, alignment: .center)
 //											.cornerRadius(10.0))
 //											.padding(.all, 10.0)
 //							.font(.title)
 //							.foregroundColor(.white)
-//						   .frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width / 3, alignment: .center)
+//						   .frame(width: 360 - 30, height: 400 / 3, alignment: .center)
 //					})
 			}
+		}
 	}
-        }
-    }
+}
 
 extension Binding {
     func onChange(_ handler: @escaping (Value) -> Void) -> Binding<Value> {

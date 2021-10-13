@@ -84,9 +84,7 @@ struct CatalogSearchView: View {
 						})
 						.padding(.all, 10.0)
 						.navigationBarTitle(active ? "Search" : "", displayMode: .inline)
-						
 					Spacer()
-					
 				}
 			})
 	}

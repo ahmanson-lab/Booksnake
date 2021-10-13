@@ -12,7 +12,6 @@ class ARView: UIViewController, ARSCNViewDelegate {
     public var length: CGFloat?
     
     public var planeNode: SCNNode?
-  //  var shadowNode: SCNNode?
     var dirNode: SCNNode?
 
     var target_mat: SCNMaterial?
@@ -26,7 +25,8 @@ class ARView: UIViewController, ARSCNViewDelegate {
     
     let coachingOverlay = ARCoachingOverlayView()
     let instructions = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 21))
-    var sceneView: ARSCNView{
+    
+	var sceneView: ARSCNView {
         return self.view as! ARSCNView
     }
     
@@ -39,7 +39,7 @@ class ARView: UIViewController, ARSCNViewDelegate {
         super.viewDidLoad()
        
         let configuration = ARWorldTrackingConfiguration()
-        configuration.planeDetection = .horizontal
+        configuration.planeDetection = [.horizontal,.vertical]
         sceneView.session.run(configuration, options: [.resetTracking])
         
         sceneView.showsStatistics = true
@@ -73,17 +73,11 @@ class ARView: UIViewController, ARSCNViewDelegate {
         
         let image_plane = SCNPlane(width: width ?? 1, height: length ?? 1)
         planeNode = SCNNode(geometry: image_plane)
-        
-//        shadowNode = SCNNode(geometry: SCNPlane(width: length ?? 1, height: width ?? 1))
-//        shadowNode?.geometry?.materials = [shadow_mat!]
-        
-        //planeNode?.geometry?.materials = [shadow_mat!]
-
+		
         //adjust object so it's parallel to floor
         let quat = simd_quatf(angle: GLKMathDegreesToRadians(-90), axis: simd_float3(1, 0, 0))
         let rot_matrix = float4x4(quat)
         planeNode?.simdTransform *= rot_matrix
-    //    shadowNode?.simdTransform *= rot_matrix
     }
     
     //add image as texture to 3d plane
@@ -139,7 +133,7 @@ class ARView: UIViewController, ARSCNViewDelegate {
     //first tap to drop shadow , second tap to drop material
     @objc func tapGesture(sender: UITapGestureRecognizer){
         let location = sender.location(in: sceneView)
-        let hittest = sceneView.hitTest(location, types: .estimatedHorizontalPlane)
+		let hittest = sceneView.hitTest(location, types: [.estimatedHorizontalPlane, .estimatedVerticalPlane])
 
         if hittest.isEmpty {
             debugPrint("Cannot find plane")
@@ -152,9 +146,7 @@ class ARView: UIViewController, ARSCNViewDelegate {
             
             sceneView.debugOptions = []
             planeNode!.position = SCNVector3(x:columns!.x, y:columns!.y, z:columns!.z)
-//            shadowNode!.position = planeNode!.position
-//            shadowNode!.localTranslate(by: SCNVector3(0, 0, -0.1))
-//
+
             if (isFirstTap){
                 addMaterial(image: texture_image ?? UIImage(), image_plane: planeNode?.geometry as! SCNPlane)
                 isFirstTap = false
@@ -169,9 +161,6 @@ class ARView: UIViewController, ARSCNViewDelegate {
             }
 
             lastPanLocation = planeNode!.position
-            
-            //adding a shadow
-     //       arscene!.rootNode.addChildNode(shadowNode ?? SCNNode(geometry: SCNPlane(width: 1, height: 1)))
             arscene!.rootNode.addChildNode(planeNode!)
 
             sceneView.scene = arscene!
@@ -183,7 +172,6 @@ class ARView: UIViewController, ARSCNViewDelegate {
             let quat = simd_quatf(angle: Float(sender.rotation / 100.0), axis: simd_float3(0, 0, -1))
             let rot_matrix = float4x4(quat)
             planeNode?.simdTransform *= rot_matrix
-         //   shadowNode?.simdTransform *= rot_matrix
         }
     }
     
