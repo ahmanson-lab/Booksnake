@@ -75,9 +75,9 @@ class ARView: UIViewController, ARSCNViewDelegate {
         planeNode = SCNNode(geometry: image_plane)
 		
         //adjust object so it's parallel to floor
-        let quat = simd_quatf(angle: GLKMathDegreesToRadians(-90), axis: simd_float3(1, 0, 0))
-        let rot_matrix = float4x4(quat)
-        planeNode?.simdTransform *= rot_matrix
+//        let quat = simd_quatf(angle: GLKMathDegreesToRadians(-90), axis: simd_float3(1, 0, 0))
+//        let rot_matrix = float4x4(quat)
+//        planeNode?.simdTransform *= rot_matrix
     }
     
     //add image as texture to 3d plane
@@ -143,12 +143,18 @@ class ARView: UIViewController, ARSCNViewDelegate {
             let columns = hittest.first?.worldTransform.columns.3
 
             arscene!.rootNode.enumerateChildNodes { (node, stop) in node.removeFromParentNode() }
-            
             sceneView.debugOptions = []
             planeNode!.position = SCNVector3(x:columns!.x, y:columns!.y, z:columns!.z)
-
+			
             if (isFirstTap){
                 addMaterial(image: texture_image ?? UIImage(), image_plane: planeNode?.geometry as! SCNPlane)
+
+				if (hittest.first?.type == .estimatedHorizontalPlane){
+					let quat = simd_quatf(angle: GLKMathDegreesToRadians(-90), axis: simd_float3(1, 0, 0))
+					let rot_matrix = float4x4(quat)
+					planeNode?.simdTransform *= rot_matrix
+				}
+				
                 isFirstTap = false
 				instructions.isHidden = true
             }
