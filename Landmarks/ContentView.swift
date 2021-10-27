@@ -20,7 +20,6 @@ struct ContentView: View {
 
     var body: some View {
 		List {
-			
 			HStack{
 				Spacer()
 			RectangularImage(image: image)
