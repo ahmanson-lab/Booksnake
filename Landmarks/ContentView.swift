@@ -40,7 +40,7 @@ struct ContentView: View {
 							.font(.system(size: 18, weight: .medium, design: .default))
 					}
 					.frame(height: 50.0)
-					.padding(EdgeInsets(top: 10, leading: 50, bottom: 10, trailing: 50))
+					.padding(EdgeInsets(top: 10, leading: 30, bottom: 10, trailing: 30))
 			}
 			ForEach(0..<labels.count, id: \.self){ item in
 				VStack (alignment: .leading) {
