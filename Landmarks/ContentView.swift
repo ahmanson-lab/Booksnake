@@ -20,8 +20,12 @@ struct ContentView: View {
 
     var body: some View {
 		List {
+			HStack{
+				Spacer()
 			RectangularImage(image: image)
-				.padding(EdgeInsets(top: -20, leading: 20, bottom: 20, trailing: 20))
+				.frame(height: UIScreen.main.bounds.height / 2, alignment: .center)
+				Spacer()
+			}
 			
 			NavigationLink(
 				destination: ARViewControllerRepresentable(image: image, width:width, length: length)
@@ -30,12 +34,14 @@ struct ContentView: View {
 				isActive: $showingPreview){
 					ZStack(){
 						Color.init(.systemBlue)
-							.frame(width: UIScreen.main.bounds.width - 50, height: 50, alignment: .center)
+							//.frame(width: UIScreen.main.bounds.width - 50, height: 50, alignment: .center)
 							.cornerRadius(10)
 						Text("View in AR")
 							.foregroundColor(.white)
 							.font(.system(size: 18, weight: .medium, design: .default))
 					}
+					.frame(height: 50.0, alignment: .center)
+					.padding(EdgeInsets(top: 10, leading: 30, bottom: 10, trailing: 30))
 			}
 			ForEach(0..<labels.count, id: \.self){ item in
 				VStack (alignment: .leading) {

@@ -26,7 +26,7 @@ struct CustomSearchMenu: View {
 	var color4: Color = Color(red: 51/225, green: 70/225, blue: 12/225, opacity: 1) //HDL
     
 	//ios 14+
-	let items = [GridItem(.adaptive(minimum: 300, maximum: 800))]
+	let items = [GridItem(.adaptive(minimum: 390, maximum: 900))]
 	
     var body: some View {
 		ScrollView (.vertical, showsIndicators: false) {
