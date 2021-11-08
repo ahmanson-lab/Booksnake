@@ -39,11 +39,11 @@ class ARView: UIViewController, ARSCNViewDelegate {
         super.viewDidLoad()
        
         let configuration = ARWorldTrackingConfiguration()
-        configuration.planeDetection = [.horizontal,.vertical]
+        configuration.planeDetection = [.horizontal]
         sceneView.session.run(configuration, options: [.resetTracking])
         
-        sceneView.showsStatistics = true
-        sceneView.debugOptions = .showFeaturePoints
+        //sceneView.showsStatistics = true
+		sceneView.debugOptions = [.showFeaturePoints]
         sceneView.delegate = self
         
         addGestures()
@@ -133,8 +133,8 @@ class ARView: UIViewController, ARSCNViewDelegate {
     //first tap to drop shadow , second tap to drop material
     @objc func tapGesture(sender: UITapGestureRecognizer){
         let location = sender.location(in: sceneView)
-		let hittest = sceneView.hitTest(location, types: [.estimatedHorizontalPlane, .estimatedVerticalPlane])
-
+		let hittest = sceneView.hitTest(location, types: [.estimatedHorizontalPlane])
+		
         if hittest.isEmpty {
             debugPrint("Cannot find plane")
             return
