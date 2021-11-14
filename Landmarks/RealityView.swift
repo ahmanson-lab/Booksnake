@@ -36,10 +36,32 @@ class RealityView: UIViewController, ARSessionDelegate  {
 		
 	
 	func addGestures(){
-		
-		
+		let tap = UITapGestureRecognizer(target: self, action: #selector(self.tapGesture(_:)))
+		realityView.addGestureRecognizer(tap)
 	}
 	
+	
+	@objc func tapGesture( _ sender: UITapGestureRecognizer? = nil){
+		guard let touchInView = sender?.location(in: self.realityView) else { return }
+	//	guard let hitEntity = self.realityView.entity(at: touchInView) else {return}
+		guard let query = realityView.makeRaycastQuery(from: touchInView, allowing: .estimatedPlane, alignment: .horizontal) else {return}
+		
+		guard let hitResult = realityView.session.raycast(query).first	else {return}
+		
+		let raycastAnchor = AnchorEntity(raycastResult: hitResult)
+		
+//		if (hitEntity.name == "Ground Plane"){
+//			print("is plane")
+//		}
+		let plane = CustomPlane(image: textureImage ?? UIImage())
+		realityView.scene.anchors.append(plane)
+		
+		realityView.installGestures([.all], for: plane)
+		plane.generateCollisionShapes(recursive: true)
+			print("nothign ", hitResult)
+		//	print("nothign e ", hitEntity)
+		
+	}
 }
 
 extension RealityView: ARCoachingOverlayViewDelegate {
