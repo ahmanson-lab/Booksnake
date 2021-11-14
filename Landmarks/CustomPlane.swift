@@ -17,8 +17,10 @@ class CustomPlane: Entity, HasModel, HasCollision, HasAnchoring{
 		self.components[ModelComponent] = ModelComponent(
 			mesh: .generatePlane(width: 1, depth: 1),
 			materials: [SimpleMaterial(color: .init(patternImage: image), isMetallic: false)]
-				)
-				self.name = "custom_plane"
+			
+			)
+			self.name = "custom_plane"
+		
 	}
 	
 	required init() {

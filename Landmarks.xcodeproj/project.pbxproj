@@ -32,8 +32,7 @@
 		11C73CD625F172BE00FB66DA /* AutomobileLA.json in Resources */ = {isa = PBXBuildFile; fileRef = 11C73CD325F172BE00FB66DA /* AutomobileLA.json */; };
 		11C73CD725F172BE00FB66DA /* TopographicLA.json in Resources */ = {isa = PBXBuildFile; fileRef = 11C73CD425F172BE00FB66DA /* TopographicLA.json */; };
 		11C73CDA25F1733200FB66DA /* Hollywood.json in Resources */ = {isa = PBXBuildFile; fileRef = 11C73CD925F1733200FB66DA /* Hollywood.json */; };
-		11DB842625436116004882F4 /* ARView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DB842525436116004882F4 /* ARView.swift */; };
-		11DB8429254373BE004882F4 /* ARViewControllerRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DB8428254373BE004882F4 /* ARViewControllerRepresentable.swift */; };
+		11D0BCBF2741BF0500AD3B56 /* RealityViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D0BCBE2741BF0500AD3B56 /* RealityViewRepresentable.swift */; };
 		11DF87A82548955D00A1E5BD /* ManifestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DF87A72548955D00A1E5BD /* ManifestData.swift */; };
 		11FC2AAA255B0BFD00AC21EA /* WebControllerRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FC2AA9255B0BFD00AC21EA /* WebControllerRepresentable.swift */; };
 		5616C5BC24CA7C8D00F1C1EE /* AssetRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5616C5BB24CA7C8D00F1C1EE /* AssetRow.swift */; };
@@ -83,8 +82,7 @@
 		11C73CD325F172BE00FB66DA /* AutomobileLA.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AutomobileLA.json; sourceTree = "<group>"; };
 		11C73CD425F172BE00FB66DA /* TopographicLA.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TopographicLA.json; sourceTree = "<group>"; };
 		11C73CD925F1733200FB66DA /* Hollywood.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Hollywood.json; sourceTree = "<group>"; };
-		11DB842525436116004882F4 /* ARView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARView.swift; sourceTree = "<group>"; };
-		11DB8428254373BE004882F4 /* ARViewControllerRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerRepresentable.swift; sourceTree = "<group>"; };
+		11D0BCBE2741BF0500AD3B56 /* RealityViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealityViewRepresentable.swift; sourceTree = "<group>"; };
 		11DF87A72548955D00A1E5BD /* ManifestData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManifestData.swift; sourceTree = "<group>"; };
 		11FC2AA9255B0BFD00AC21EA /* WebControllerRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebControllerRepresentable.swift; sourceTree = "<group>"; };
 		5616C5BB24CA7C8D00F1C1EE /* AssetRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetRow.swift; sourceTree = "<group>"; };
@@ -164,10 +162,9 @@
 		11C70B3B266AE439008A4D38 /* AR */ = {
 			isa = PBXGroup;
 			children = (
-				11DB842525436116004882F4 /* ARView.swift */,
-				11DB8428254373BE004882F4 /* ARViewControllerRepresentable.swift */,
 				11929F5D2739D97F00EB2036 /* RealityView.swift */,
 				11929F5F2739DB9700EB2036 /* CustomPlane.swift */,
+				11D0BCBE2741BF0500AD3B56 /* RealityViewRepresentable.swift */,
 			);
 			name = AR;
 			sourceTree = "<group>";
@@ -285,6 +282,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				11D0BCBF2741BF0500AD3B56 /* RealityViewRepresentable.swift in Sources */,
 				117C02E926ACD638004197D3 /* FullWebView.swift in Sources */,
 				11B208622537CA3300704F40 /* Metadata.swift in Sources */,
 				11FC2AAA255B0BFD00AC21EA /* WebControllerRepresentable.swift in Sources */,
@@ -297,13 +295,11 @@
 				11B2086E2537CE9600704F40 /* IIIFService.swift in Sources */,
 				11929F5E2739D97F00EB2036 /* RealityView.swift in Sources */,
 				56CD50A824C7CA1C00EF8C3E /* AppDelegate.swift in Sources */,
-				11DB8429254373BE004882F4 /* ARViewControllerRepresentable.swift in Sources */,
 				119334FE2582FE7B00CA19A2 /* ContentData.swift in Sources */,
 				1193352A25830ED900CA19A2 /* ContentDataContainer.xcdatamodeld in Sources */,
 				11B208592537C9AF00704F40 /* IIIFManifest.swift in Sources */,
 				11B208562537C90900704F40 /* MultiProperty.swift in Sources */,
 				117C02ED26ACDE4D004197D3 /* CustomSearchMenu.swift in Sources */,
-				11DB842625436116004882F4 /* ARView.swift in Sources */,
 				117C02EB26ACDDEE004197D3 /* InputView.swift in Sources */,
 				11B2ADEC2593E6B500A54488 /* ActivityIndicatorView.swift in Sources */,
 				56CD50AA24C7CA1C00EF8C3E /* SceneDelegate.swift in Sources */,
@@ -451,7 +447,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 2.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.cye.personal;
+				PRODUCT_BUNDLE_IDENTIFIER = com.personal.cye;
 				PRODUCT_NAME = Booksnake;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
@@ -477,7 +473,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 2.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.cye.personal;
+				PRODUCT_BUNDLE_IDENTIFIER = com.personal.cye;
 				PRODUCT_NAME = Booksnake;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
