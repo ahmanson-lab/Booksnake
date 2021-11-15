@@ -15,11 +15,8 @@ public struct ManifestData {
     var width: Float?
     var height: Float?
     var labels: [String]?
-    
     var values: [String]?
     var metadata: Metadata?
-    
-    var curr_json: Any?
 }
 
 struct ManifestDataHandler {
