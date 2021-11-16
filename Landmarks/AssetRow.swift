@@ -41,8 +41,8 @@ struct AssetRow: View, AssetRowProtocol {
 			NavigationView{
 				List{
 					ForEach(contentTest, id: \.self){ item in
-						NavigationLink(destination: ContentView(image: item.image!, width: CGFloat(item.width), length: CGFloat(item.length), labels: item.labels! , values: item.values! )){
-							Image(uiImage: item.image ?? UIImage() )
+						NavigationLink(destination: ContentView(image: UIImage(data: item.imageData!) ?? UIImage(), width: CGFloat(item.width), length: CGFloat(item.length), labels: item.labels! , values: item.values! )){
+                            Image(uiImage: UIImage(data: item.imageData!) ?? UIImage() )
 								.resizable()
 								.aspectRatio(contentMode: .fit)
 								.frame(width: 50, height: 50)
@@ -88,18 +88,17 @@ struct AssetRow: View, AssetRowProtocol {
     
     //add a iiif item from library of congress
     func onAdd(path: String, width: Float = 1, length: Float = 1, completion: (_ success: Bool) -> Void){
-        print("here")
+        print("Remote Manifest Added")
         test_flag = true
-        let new_item = ManifestData()
 
-        if new_item.getRemoteManifest(resource_name: path){
+        if let new_item = ManifestDataHandler.getRemoteManifest(from: path) {
             let new_manifest = ManifestItem(item: new_item, image: new_item.image!)
             
             let contentdata = NSEntityDescription.insertNewObject(forEntityName: "ContentData", into: self.managedObjectContext) as! ContentData
             contentdata.id = new_manifest.id
             contentdata.labels = new_manifest.item.labels
             contentdata.values = new_manifest.item.values
-            contentdata.image = new_manifest.image
+            contentdata.imageData = new_manifest.image.jpegData(compressionQuality: 1.0)
             contentdata.width = new_manifest.item.width ?? width
             contentdata.length = new_manifest.item.height ?? length
             counter = counter + contentTest.count + 1
@@ -115,9 +114,10 @@ struct AssetRow: View, AssetRowProtocol {
                 print(error)
             }
             test_flag = false
-            return completion(true)			
+            return completion(true)
         }
-       return completion(false)
+
+        return completion(false)
     }
     
     //can delete items
@@ -131,37 +131,36 @@ struct AssetRow: View, AssetRowProtocol {
             print(error)
         }
     }
-	
-	
-	//FOR DEMO: add hard coded values from local manifests and images
-	func addExamples(){
-		let new_item = ManifestData()
-		let resource_paths = ["MapOfCalifornia", "MapOfLosAngeles", "TopographicLA", "LA1909", "AutomobileLA", "Hollywood"]
-		let sizes = [[0.48, 0.69], [0.63, 0.56],[1.53, 0.56],[0.85, 1.02],[0.22, 0.08],[0.67, 0.66]]
-		
-		for i in 0...resource_paths.count - 1{
-			if new_item.getLocalManifest(resource_name: resource_paths[i]){
-				let new_manifest = ManifestItem(item:new_item, image: UIImage(named: resource_paths[i])!)
-				let contentdata = NSEntityDescription.insertNewObject(forEntityName: "ContentData", into: self.managedObjectContext) as! ContentData
-				contentdata.id = new_manifest.id
-				contentdata.labels = new_manifest.item.labels
-				contentdata.values = new_manifest.item.values
-				contentdata.image = new_manifest.image
-				contentdata.width = Float(sizes[i][1])
-				contentdata.length = Float (sizes[i][0])
-				counter = counter + contentTest.count + 1
-				contentdata.index = Int16(counter)
-				
-				//test
-				contentdata.item_label = new_manifest.item.label
-				
-				do {
-					try self.managedObjectContext.save()
-				}
-				catch {
-					print(error)
-				}
-			}
-		}
-	}
+
+
+    //FOR DEMO: add hard coded values from local manifests and images
+    func addExamples() {
+        let resource_paths = ["MapOfCalifornia", "MapOfLosAngeles", "TopographicLA", "LA1909", "AutomobileLA", "Hollywood"]
+        let sizes = [[0.48, 0.69], [0.63, 0.56],[1.53, 0.56],[0.85, 1.02],[0.22, 0.08],[0.67, 0.66]]
+
+        for index in 0..<resource_paths.count {
+            if let new_item = ManifestDataHandler.getLocalManifest(from: resource_paths[index]) {
+                let new_manifest = ManifestItem(item:new_item, image: UIImage(named: resource_paths[index])!)
+                let contentdata = NSEntityDescription.insertNewObject(forEntityName: "ContentData", into: self.managedObjectContext) as! ContentData
+                contentdata.id = new_manifest.id
+                contentdata.labels = new_manifest.item.labels
+                contentdata.values = new_manifest.item.values
+                contentdata.imageData = new_manifest.image.jpegData(compressionQuality: 1.0)
+                contentdata.width = Float(sizes[index][1])
+                contentdata.length = Float (sizes[index][0])
+                counter = counter + contentTest.count + 1
+                contentdata.index = Int16(counter)
+
+                //test
+                contentdata.item_label = new_manifest.item.label
+
+                do {
+                    try self.managedObjectContext.save()
+                }
+                catch {
+                    print(error)
+                }
+            }
+        }
+    }
 }
