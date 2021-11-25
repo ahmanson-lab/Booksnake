@@ -16,63 +16,62 @@ struct ManifestItem: Identifiable {
     let item: ManifestData
     let image: UIImage
 }
- 
+
 protocol AssetRowProtocol {
     func onAddEntry(path: String, completion: (_ success: Bool) -> Void)
 }
 
 struct AssetRow: View, AssetRowProtocol {
-    
+
     @Environment(\.managedObjectContext) var managedObjectContext
     @State private var editMode = EditMode.inactive
-	@FetchRequest(fetchRequest: ContentData.allIdeasFetchRequest()) var contentTest: FetchedResults<ContentData>
+    @FetchRequest(fetchRequest: ContentData.allIdeasFetchRequest()) var contentTest: FetchedResults<ContentData>
 
     @State var addDefaultURL = false
-    @State var test_flag: Bool = false
-    @State var numCells: Int = 0
     @State var label: String = ""
     @State private var counter: Int = 0
 
-    @State var new_labels: [String] =  [String]()
-    @State var new_values: [String] =  [String]()
-    
     var body: some View {
-		TabView {
-			NavigationView{
-				List{
-					ForEach(contentTest, id: \.self){ item in
-						NavigationLink(destination: ContentView(image: UIImage(data: item.imageData!) ?? UIImage(), width: CGFloat(item.width), length: CGFloat(item.length), labels: item.labels! , values: item.values! )){
-                            Image(uiImage: UIImage(data: item.imageData!) ?? UIImage() )
-								.resizable()
-								.aspectRatio(contentMode: .fit)
-								.frame(width: 50, height: 50)
-						   
-							//item label
-							Text("\(item.item_label ?? "")")
-							   .lineLimit(2)
-							   .truncationMode(.tail)
-						}
-					}
-					.onDelete(perform: onDelete)
-				}.navigationBarTitle("Library")
-			}
-			.navigationViewStyle(StackNavigationViewStyle())
-			.tabItem {
-				Image(systemName: "scroll")
-				Text("Library")
-			}
-			
-			NavigationView {
-				CustomSearchMenu(addDefaultURL: $addDefaultURL, label: $label, delegate: self)
-					.navigationBarTitle("Explore")
-			}
-			.navigationViewStyle(StackNavigationViewStyle())
-			.tabItem {
-				Image(systemName: "magnifyingglass")
-				Text("Explore")
-			}
-			.environment(\.editMode, $editMode)
-			.id(UUID())
+        TabView {
+            NavigationView{
+                List{
+                    ForEach(contentTest, id: \.self){ item in
+                        NavigationLink(destination: LazyView(ContentView(image: UIImage(data: item.imageData!) ?? UIImage(),
+                                                                         width: CGFloat(item.width),
+                                                                         length: CGFloat(item.length),
+                                                                         labels: item.labels! ,
+                                                                         values: item.values! ))) {
+                            Image(uiImage: UIImage(data: item.imageData!) ?? UIImage())
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 50, height: 50)
+
+                            //item label
+                            Text("\(item.item_label ?? "")")
+                               .lineLimit(2)
+                               .truncationMode(.tail)
+                        }
+                    }
+                    .onDelete(perform: onDelete)
+                }.navigationBarTitle("Library")
+            }
+            .navigationViewStyle(StackNavigationViewStyle())
+            .tabItem {
+                Image(systemName: "scroll")
+                Text("Library")
+            }
+
+            NavigationView {
+                CustomSearchMenu(addDefaultURL: $addDefaultURL, label: $label, delegate: self)
+                    .navigationBarTitle("Explore")
+            }
+            .navigationViewStyle(StackNavigationViewStyle())
+            .tabItem {
+                Image(systemName: "magnifyingglass")
+                Text("Explore")
+            }
+            .environment(\.editMode, $editMode)
+            .id(UUID())
         }
         .onAppear(perform: {
             if(contentTest.count < 1){
@@ -85,15 +84,14 @@ struct AssetRow: View, AssetRowProtocol {
     func onAddEntry(path: String, completion: (_ success: Bool) -> Void) {
         onAdd(path: path, completion: completion)
     }
-    
+
     //add a iiif item from library of congress
     func onAdd(path: String, width: Float = 1, length: Float = 1, completion: (_ success: Bool) -> Void){
         print("Remote Manifest Added")
-        test_flag = true
 
         if let new_item = ManifestDataHandler.getRemoteManifest(from: path) {
             let new_manifest = ManifestItem(item: new_item, image: new_item.image!)
-            
+
             let contentdata = NSEntityDescription.insertNewObject(forEntityName: "ContentData", into: self.managedObjectContext) as! ContentData
             contentdata.id = new_manifest.id
             contentdata.labels = new_manifest.item.labels
@@ -103,23 +101,22 @@ struct AssetRow: View, AssetRowProtocol {
             contentdata.length = new_manifest.item.height ?? length
             counter = counter + contentTest.count + 1
             contentdata.index = Int16(counter)
-            
+
             //test
             contentdata.item_label = new_manifest.item.label
             self.label = new_manifest.item.label
-            
+
             do {
                 try self.managedObjectContext.save()
             } catch {
                 print(error)
             }
-            test_flag = false
             return completion(true)
         }
 
         return completion(false)
     }
-    
+
     //can delete items
     private func onDelete(offsets: IndexSet) {
         let contentToDelete = contentTest[offsets.first!]
@@ -162,5 +159,15 @@ struct AssetRow: View, AssetRowProtocol {
                 }
             }
         }
+    }
+}
+
+struct LazyView<Content: View>: View {
+    let build: () -> Content
+    init(_ build: @autoclosure @escaping () -> Content) {
+        self.build = build
+    }
+    var body: Content {
+        build()
     }
 }
