@@ -10,14 +10,13 @@ import Foundation
 import CoreData
 import UIKit
 
-// ❇️ BlogIdea code generation is turned OFF in the xcdatamodeld file
 public class ContentData: NSManagedObject, Identifiable {
     @NSManaged public var id: UUID?
     @NSManaged public var labels: [String]?
     @NSManaged public var values: [String]?
     @NSManaged public var item_label: String?
     @NSManaged public var imageData: Data?
-    @NSManaged public var index: Int16
+    @NSManaged public var createdDate: Date?
     
     //for init sizes
     @NSManaged public var width: Float
@@ -28,7 +27,7 @@ extension ContentData {
     static func allIdeasFetchRequest() -> NSFetchRequest<ContentData> {
         let request: NSFetchRequest<ContentData> = ContentData.fetchRequest() as! NSFetchRequest<ContentData>
         
-        request.sortDescriptors = [NSSortDescriptor(key: "index", ascending: true)]
+        request.sortDescriptors = [NSSortDescriptor(key: "createdDate", ascending: true)]
           
         return request
     }

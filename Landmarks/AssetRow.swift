@@ -29,7 +29,6 @@ struct AssetRow: View, AssetRowProtocol {
 
     @State var addDefaultURL = false
     @State var label: String = ""
-    @State private var counter: Int = 0
 
     var body: some View {
         TabView {
@@ -99,8 +98,7 @@ struct AssetRow: View, AssetRowProtocol {
             contentdata.imageData = new_manifest.image.jpegData(compressionQuality: 1.0)
             contentdata.width = new_manifest.item.width ?? width
             contentdata.length = new_manifest.item.height ?? length
-            counter = counter + contentTest.count + 1
-            contentdata.index = Int16(counter)
+            contentdata.createdDate = Date()
 
             //test
             contentdata.item_label = new_manifest.item.label
@@ -145,8 +143,7 @@ struct AssetRow: View, AssetRowProtocol {
                 contentdata.imageData = new_manifest.image.jpegData(compressionQuality: 1.0)
                 contentdata.width = Float(sizes[index][1])
                 contentdata.length = Float (sizes[index][0])
-                counter = counter + contentTest.count + 1
-                contentdata.index = Int16(counter)
+                contentdata.createdDate = Date()
 
                 //test
                 contentdata.item_label = new_manifest.item.label
