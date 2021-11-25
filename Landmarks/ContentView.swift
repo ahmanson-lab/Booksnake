@@ -12,8 +12,8 @@ struct ContentView: View {
     @State var showingPreview = false
     @State private var showText = false
     
-    @State var image: UIImage = UIImage()
-	@State var width: CGFloat = 5
+    var image: UIImage = UIImage()
+	var width: CGFloat = 5
     var length: CGFloat
     var labels: [String]
     var values: [String]
