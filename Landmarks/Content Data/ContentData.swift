@@ -13,7 +13,6 @@ import UIKit
 // ❇️ BlogIdea code generation is turned OFF in the xcdatamodeld file
 public class ContentData: NSManagedObject, Identifiable {
     @NSManaged public var id: UUID?
-    //@NSManaged public var item: [String]?
     @NSManaged public var labels: [String]?
     @NSManaged public var values: [String]?
     @NSManaged public var item_label: String?
