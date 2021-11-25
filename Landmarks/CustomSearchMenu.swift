@@ -28,7 +28,7 @@ struct CustomSearchMenu: View {
     var body: some View {
 		ScrollView (.vertical, showsIndicators: false) {
 			LazyVGrid(columns: items, alignment: .center, spacing: 50) {
-				NavigationLink( destination: InputView( label: $label,hasText: $hasText, delegate: delegate),
+				NavigationLink( destination: LazyView(InputView( label: $label,hasText: $hasText, delegate: delegate)),
 					label: {
 						Text("Add from IIIF Manifest")
 							.fontWeight(.bold)
@@ -44,7 +44,7 @@ struct CustomSearchMenu: View {
 				
 					//LOC Catalogue
 					NavigationLink(
-						destination: CatalogSearchView(label: $label, title: "Library of Congress", type: "LOC", instructions: "Search results are limited to Library of Congress materials with an IIIF manifest, which Booksnake uses to add items.", filter: "gov/item", fieldURL: ["https://www.loc.gov/search/?q=", "&fa=mime-type:image/jp2"], delegate: delegate),
+						destination: LazyView(CatalogSearchView(label: $label, title: "Library of Congress", type: "LOC", instructions: "Search results are limited to Library of Congress materials with an IIIF manifest, which Booksnake uses to add items.", filter: "gov/item", fieldURL: ["https://www.loc.gov/search/?q=", "&fa=mime-type:image/jp2"], delegate: delegate)),
 						label: {
 							Text("Library of Congress")
 								.fontWeight(.bold)

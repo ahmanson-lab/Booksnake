@@ -28,7 +28,7 @@ struct ContentView: View {
 			}
 			
 			NavigationLink(
-				destination: ARViewControllerRepresentable(image: image, width:width, length: length)
+				destination: LazyView(ARViewControllerRepresentable(image: image, width:width, length: length))
 					.navigationBarTitle("")
 					.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: .center),
 				isActive: $showingPreview){
