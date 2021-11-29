@@ -16,7 +16,6 @@ public class ContentData: NSManagedObject, Identifiable {
     @NSManaged public var values: [String]?
     @NSManaged public var item_label: String?
     @NSManaged public var imagePath: String?
-//    @NSManaged public var imageData: Data?
     @NSManaged public var createdDate: Date?
     
     //for init sizes
