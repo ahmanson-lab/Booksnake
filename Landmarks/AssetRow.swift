@@ -96,9 +96,10 @@ struct AssetRow: View, AssetRowProtocol {
             contentdata.id = new_manifest.id
             contentdata.labels = new_manifest.item.labels
             contentdata.values = new_manifest.item.values
-            if let imagePath = FileHandler.save(data: new_manifest.image.jpegData(compressionQuality: 1.0) ?? Data(),
-                                               toDirectory: FileHandler.documentDirectory(),
-                                               withFileName: "\(new_manifest.id).jpg")?.path {
+            if let imageDirectory = FileHandler.imageDirectoryURL,
+               let imagePath = FileHandler.save(data: new_manifest.image.jpegData(compressionQuality: 1.0) ?? Data(),
+                                                toDirectory: imageDirectory,
+                                                withFileName: "\(new_manifest.id).jpg")?.path {
                 contentdata.imagePath = imagePath
             }
             contentdata.width = new_manifest.item.width ?? width
@@ -145,9 +146,10 @@ struct AssetRow: View, AssetRowProtocol {
                 contentdata.id = new_manifest.id
                 contentdata.labels = new_manifest.item.labels
                 contentdata.values = new_manifest.item.values
-                if let imagePath = FileHandler.save(data: new_manifest.image.jpegData(compressionQuality: 1.0) ?? Data(),
-                                                   toDirectory: FileHandler.documentDirectory(),
-                                                   withFileName: "\(new_manifest.id).jpg")?.path {
+                if let imageDirectory = FileHandler.imageDirectoryURL,
+                   let imagePath = FileHandler.save(data: new_manifest.image.jpegData(compressionQuality: 1.0) ?? Data(),
+                                                    toDirectory: imageDirectory,
+                                                    withFileName: "\(new_manifest.id).jpg")?.path {
                     contentdata.imagePath = imagePath
                 }
                 contentdata.width = Float(sizes[index][1])
@@ -180,21 +182,32 @@ struct LazyView<Content: View>: View {
 
 
 struct FileHandler {
-    static func documentDirectory() -> String {
+    private static var documentDirectoryPath: String {
         let documentDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory,
                                                                     .userDomainMask,
                                                                     true)
         return documentDirectory[0]
     }
 
-    static func append(toPath path: String, withPathComponent pathComponent: String) -> URL? {
-        return URL(fileURLWithPath: path).appendingPathComponent(pathComponent)
+    static var imageDirectoryURL: URL? {
+        let imageDir = URL(fileURLWithPath: Self.documentDirectoryPath).appendingPathComponent("Images")
+
+        if !FileManager.default.fileExists(atPath: imageDir.path) {
+            do {
+                try FileManager.default.createDirectory(at: imageDir,
+                                                        withIntermediateDirectories: true,
+                                                        attributes: [FileAttributeKey.protectionKey: FileProtectionType.none])
+            } catch {
+                print("Can't create Document/Image folder.")
+                return nil
+            }
+        }
+
+        return imageDir
     }
 
-    static func read(fromDocumentsWithFileName fileName: String) -> Data? {
-        guard let fileURL = Self.append(toPath: self.documentDirectory(), withPathComponent: fileName) else {
-            return nil
-        }
+    static func read(from directoryURL: URL, fileName: String) -> Data? {
+        let fileURL = directoryURL.appendingPathComponent(fileName)
 
         do {
             let savedFile = try Data(contentsOf: fileURL)
@@ -208,10 +221,8 @@ struct FileHandler {
         }
     }
 
-    static func save(data: Data, toDirectory directory: String, withFileName fileName: String) -> URL? {
-        guard let fileURL = Self.append(toPath: directory, withPathComponent: fileName) else {
-            return nil
-        }
+    static func save(data: Data, toDirectory directory: URL, withFileName fileName: String) -> URL? {
+        let fileURL = directory.appendingPathComponent(fileName)
 
         do {
             try data.write(to: fileURL, options: .noFileProtection)
