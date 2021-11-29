@@ -4,6 +4,7 @@
         <attribute name="createdDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="imageData" optional="YES" attributeType="Binary" valueTransformerName="" customClassName="."/>
+        <attribute name="imageURL" optional="YES" attributeType="String"/>
         <attribute name="item_label" optional="YES" attributeType="String"/>
         <attribute name="labels" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName=".[String]"/>
         <attribute name="length" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -11,6 +12,6 @@
         <attribute name="width" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
     </entity>
     <elements>
-        <element name="ContentData" positionX="-27" positionY="18" width="128" height="149"/>
+        <element name="ContentData" positionX="-27" positionY="18" width="128" height="164"/>
     </elements>
 </model>

@@ -35,12 +35,13 @@ struct AssetRow: View, AssetRowProtocol {
             NavigationView{
                 List{
                     ForEach(contentTest, id: \.self){ item in
-                        NavigationLink(destination: LazyView(ContentView(image: UIImage(data: item.imageData!) ?? UIImage(),
+                        let image = UIImage(contentsOfFile: item.imageURL ?? "") ?? UIImage()
+                        NavigationLink(destination: LazyView(ContentView(image: image,
                                                                          width: CGFloat(item.width),
                                                                          length: CGFloat(item.length),
                                                                          labels: item.labels! ,
                                                                          values: item.values! ))) {
-                            Image(uiImage: UIImage(data: item.imageData!) ?? UIImage())
+                            Image(uiImage: image)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .frame(width: 50, height: 50)
@@ -95,7 +96,11 @@ struct AssetRow: View, AssetRowProtocol {
             contentdata.id = new_manifest.id
             contentdata.labels = new_manifest.item.labels
             contentdata.values = new_manifest.item.values
-            contentdata.imageData = new_manifest.image.jpegData(compressionQuality: 1.0)
+            if let imagePath = FileHandler.save(data: new_manifest.image.jpegData(compressionQuality: 1.0) ?? Data(),
+                                               toDirectory: FileHandler.documentDirectory(),
+                                               withFileName: "\(new_manifest.id).jpg")?.path {
+                contentdata.imageURL = imagePath
+            }
             contentdata.width = new_manifest.item.width ?? width
             contentdata.length = new_manifest.item.height ?? length
             contentdata.createdDate = Date()
@@ -140,7 +145,11 @@ struct AssetRow: View, AssetRowProtocol {
                 contentdata.id = new_manifest.id
                 contentdata.labels = new_manifest.item.labels
                 contentdata.values = new_manifest.item.values
-                contentdata.imageData = new_manifest.image.jpegData(compressionQuality: 1.0)
+                if let imagePath = FileHandler.save(data: new_manifest.image.jpegData(compressionQuality: 1.0) ?? Data(),
+                                                   toDirectory: FileHandler.documentDirectory(),
+                                                   withFileName: "\(new_manifest.id).jpg")?.path {
+                    contentdata.imageURL = imagePath
+                }
                 contentdata.width = Float(sizes[index][1])
                 contentdata.length = Float (sizes[index][0])
                 contentdata.createdDate = Date()
@@ -166,5 +175,51 @@ struct LazyView<Content: View>: View {
     }
     var body: Content {
         build()
+    }
+}
+
+
+struct FileHandler {
+    static func documentDirectory() -> String {
+        let documentDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory,
+                                                                    .userDomainMask,
+                                                                    true)
+        return documentDirectory[0]
+    }
+
+    static func append(toPath path: String, withPathComponent pathComponent: String) -> URL? {
+        return URL(fileURLWithPath: path).appendingPathComponent(pathComponent)
+    }
+
+    static func read(fromDocumentsWithFileName fileName: String) -> Data? {
+        guard let fileURL = Self.append(toPath: self.documentDirectory(), withPathComponent: fileName) else {
+            return nil
+        }
+
+        do {
+            let savedFile = try Data(contentsOf: fileURL)
+
+            print("File saved at \(fileURL)")
+
+            return savedFile
+        } catch {
+            print("Error reading saved file")
+            return nil
+        }
+    }
+
+    static func save(data: Data, toDirectory directory: String, withFileName fileName: String) -> URL? {
+        guard let fileURL = Self.append(toPath: directory, withPathComponent: fileName) else {
+            return nil
+        }
+
+        do {
+            try data.write(to: fileURL, options: .noFileProtection)
+        } catch {
+            print("Error", error)
+            return nil
+        }
+
+        return fileURL
     }
 }
