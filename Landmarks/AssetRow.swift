@@ -35,7 +35,7 @@ struct AssetRow: View, AssetRowProtocol {
             NavigationView{
                 List{
                     ForEach(contentTest, id: \.self){ item in
-                        let image = UIImage(contentsOfFile: item.imageURL ?? "") ?? UIImage()
+                        let image = UIImage(contentsOfFile: item.imagePath ?? "") ?? UIImage()
                         NavigationLink(destination: LazyView(ContentView(image: image,
                                                                          width: CGFloat(item.width),
                                                                          length: CGFloat(item.length),
@@ -99,7 +99,7 @@ struct AssetRow: View, AssetRowProtocol {
             if let imagePath = FileHandler.save(data: new_manifest.image.jpegData(compressionQuality: 1.0) ?? Data(),
                                                toDirectory: FileHandler.documentDirectory(),
                                                withFileName: "\(new_manifest.id).jpg")?.path {
-                contentdata.imageURL = imagePath
+                contentdata.imagePath = imagePath
             }
             contentdata.width = new_manifest.item.width ?? width
             contentdata.length = new_manifest.item.height ?? length
@@ -148,7 +148,7 @@ struct AssetRow: View, AssetRowProtocol {
                 if let imagePath = FileHandler.save(data: new_manifest.image.jpegData(compressionQuality: 1.0) ?? Data(),
                                                    toDirectory: FileHandler.documentDirectory(),
                                                    withFileName: "\(new_manifest.id).jpg")?.path {
-                    contentdata.imageURL = imagePath
+                    contentdata.imagePath = imagePath
                 }
                 contentdata.width = Float(sizes[index][1])
                 contentdata.length = Float (sizes[index][0])
