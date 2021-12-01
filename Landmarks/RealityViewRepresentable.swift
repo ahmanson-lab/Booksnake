@@ -13,6 +13,7 @@ struct RealityViewRepresentable: UIViewControllerRepresentable {
 	var image: UIImage?
 	var width: CGFloat?
 	var length: CGFloat?
+	var image_url: String?
 	
 	typealias UIViewControllerType = UIViewController
 	
@@ -21,6 +22,7 @@ struct RealityViewRepresentable: UIViewControllerRepresentable {
 		picker.textureImage = image
 		picker.width = width
 		picker.height = length
+		picker.texture_url = image_url
 		return picker
 	}
 	func updateUIViewController(_ uiViewController: UIViewController, context: Context) {

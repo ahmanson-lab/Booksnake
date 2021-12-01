@@ -15,6 +15,7 @@ struct ManifestItem: Identifiable {
     let id = UUID()
     let item: ManifestData
     let image: UIImage
+	let image_url: String
 }
  
 protocol AssetRowProtocol {
@@ -41,7 +42,7 @@ struct AssetRow: View, AssetRowProtocol {
 			NavigationView{
 				List{
 					ForEach(contentTest, id: \.self){ item in
-						NavigationLink(destination: ContentView(image: item.image!, width: CGFloat(item.width), length: CGFloat(item.length), labels: item.labels! , values: item.values! )){
+						NavigationLink(destination: ContentView(image: item.image!, image_url: item.image_url!, width: CGFloat(item.width), length: CGFloat(item.length), labels: item.labels! , values: item.values! )){
 							Image(uiImage: item.image ?? UIImage() )
 								.resizable()
 								.aspectRatio(contentMode: .fit)
@@ -93,13 +94,14 @@ struct AssetRow: View, AssetRowProtocol {
         let new_item = ManifestData()
 
         if new_item.getRemoteManifest(resource_name: path){
-            let new_manifest = ManifestItem(item: new_item, image: new_item.image!)
+			let new_manifest = ManifestItem(item: new_item, image: new_item.image!, image_url: new_item.image_url!)
             
             let contentdata = NSEntityDescription.insertNewObject(forEntityName: "ContentData", into: self.managedObjectContext) as! ContentData
             contentdata.id = new_manifest.id
             contentdata.labels = new_manifest.item.labels
             contentdata.values = new_manifest.item.values
             contentdata.image = new_manifest.image
+			contentdata.image_url = new_manifest.image_url
             contentdata.width = new_manifest.item.width ?? width
             contentdata.length = new_manifest.item.height ?? length
             counter = counter + contentTest.count + 1
@@ -141,7 +143,7 @@ struct AssetRow: View, AssetRowProtocol {
 		
 		for i in 0...resource_paths.count - 1{
 			if new_item.getLocalManifest(resource_name: resource_paths[i]){
-				let new_manifest = ManifestItem(item:new_item, image: UIImage(named: resource_paths[i])!)
+				let new_manifest = ManifestItem(item:new_item, image: UIImage(named: resource_paths[i])!, image_url: new_item.image_url ?? "")
 				let contentdata = NSEntityDescription.insertNewObject(forEntityName: "ContentData", into: self.managedObjectContext) as! ContentData
 				contentdata.id = new_manifest.id
 				contentdata.labels = new_manifest.item.labels

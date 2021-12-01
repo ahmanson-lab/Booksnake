@@ -17,6 +17,7 @@
 		11929F602739DB9700EB2036 /* CustomPlane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11929F5F2739DB9700EB2036 /* CustomPlane.swift */; };
 		119334FE2582FE7B00CA19A2 /* ContentData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 119334FD2582FE7B00CA19A2 /* ContentData.swift */; };
 		1193352A25830ED900CA19A2 /* ContentDataContainer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1193352825830ED900CA19A2 /* ContentDataContainer.xcdatamodeld */; };
+		11A9459D2745AA5800A526B1 /* Hollywood.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 11A9459C2745AA5800A526B1 /* Hollywood.jpg */; };
 		11B208562537C90900704F40 /* MultiProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B208552537C90900704F40 /* MultiProperty.swift */; };
 		11B208592537C9AF00704F40 /* IIIFManifest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B208582537C9AF00704F40 /* IIIFManifest.swift */; };
 		11B2085C2537C9EB00704F40 /* IIIFSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B2085B2537C9EB00704F40 /* IIIFSequence.swift */; };
@@ -67,6 +68,7 @@
 		11929F5F2739DB9700EB2036 /* CustomPlane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPlane.swift; sourceTree = "<group>"; };
 		119334FD2582FE7B00CA19A2 /* ContentData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentData.swift; sourceTree = "<group>"; };
 		1193352925830ED900CA19A2 /* ContentDataContainer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ContentDataContainer.xcdatamodel; sourceTree = "<group>"; };
+		11A9459C2745AA5800A526B1 /* Hollywood.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Hollywood.jpg; path = Assets.xcassets/Hollywood.imageset/Hollywood.jpg; sourceTree = "<group>"; };
 		11B208552537C90900704F40 /* MultiProperty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiProperty.swift; sourceTree = "<group>"; };
 		11B208582537C9AF00704F40 /* IIIFManifest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IIIFManifest.swift; sourceTree = "<group>"; };
 		11B2085B2537C9EB00704F40 /* IIIFSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IIIFSequence.swift; sourceTree = "<group>"; };
@@ -201,6 +203,7 @@
 				1119FE522651E5EB00807C94 /* IIIFContainers */,
 				56CD50AD24C7CA1F00EF8C3E /* Assets.xcassets */,
 				1147E68A269D1D5B00BAECE1 /* Launch Screen.storyboard */,
+				11A9459C2745AA5800A526B1 /* Hollywood.jpg */,
 			);
 			path = Landmarks;
 			sourceTree = "<group>";
@@ -272,6 +275,7 @@
 				11C73CD025F16FC300FB66DA /* MapOfLosAngeles.json in Resources */,
 				11C73CCD25F1662900FB66DA /* MapOfCalifornia.json in Resources */,
 				11C73CD725F172BE00FB66DA /* TopographicLA.json in Resources */,
+				11A9459D2745AA5800A526B1 /* Hollywood.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -365,7 +369,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -420,7 +424,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -441,7 +445,7 @@
 				DEVELOPMENT_TEAM = 2ARS5NMQTK;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Landmarks/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -467,7 +471,7 @@
 				DEVELOPMENT_TEAM = 2ARS5NMQTK;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Landmarks/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -14,6 +14,7 @@ public class ManifestData: ValueTransformer {
     
     var label: String = ""
     var image: UIImage?
+	var image_url: String?
     var width: Float?
     var height: Float?
     var labels: [String]?
@@ -24,6 +25,9 @@ public class ManifestData: ValueTransformer {
     var curr_json: Any?
     
     public static var supportsSecureCoding: Bool = true
+	let documentDirectory = FileManager.SearchPathDirectory.documentDirectory
+	let userDomainMask    = FileManager.SearchPathDomainMask.userDomainMask
+	
     
     public func getRemoteManifest(resource_name: String) -> Bool{
        
@@ -49,6 +53,7 @@ public class ManifestData: ValueTransformer {
     }
 
     public func parseJson() -> Bool {
+		let paths        = NSSearchPathForDirectoriesInDomains(documentDirectory, userDomainMask, true)
         
         if let dictionary = curr_json as? [String: Any] {
             
@@ -71,13 +76,11 @@ public class ManifestData: ValueTransformer {
                 let annotation  = canvas.images
                 let path = annotation?[0].resource.id ?? ""
                 self.image = (downloadImage(path:path))
-                
-//                for i in 0...(manifest_data.count) - 1 {
-//                    let canvas = test_manifest?.sequences?[0].canvases[i]
-//                    let annotation  = canvas?.images
-//                    let path = annotation?[0].resource.id ?? ""
-//                    self.image = (downloadImage(path:path))
-                    
+				
+				let array = path.split(separator: "/")
+				
+				self.image_url = URL(fileURLWithPath: paths.first!).appendingPathComponent(String(array.last!)).absoluteString
+				print ("image url test ", self.image_url)
                     if let metadata = test_manifest?.metadata {
                         self.metadata = metadata
                         

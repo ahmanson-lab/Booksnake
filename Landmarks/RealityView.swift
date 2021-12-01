@@ -14,6 +14,7 @@ import ARKit
 class RealityView: UIViewController, ARSessionDelegate  {
 	
 	var textureImage: UIImage?
+	var texture_url: String?
 	var width: CGFloat?
 	var height: CGFloat?
 	
@@ -43,24 +44,19 @@ class RealityView: UIViewController, ARSessionDelegate  {
 	
 	@objc func tapGesture( _ sender: UITapGestureRecognizer? = nil){
 		guard let touchInView = sender?.location(in: self.realityView) else { return }
-	//	guard let hitEntity = self.realityView.entity(at: touchInView) else {return}
 		guard let query = realityView.makeRaycastQuery(from: touchInView, allowing: .estimatedPlane, alignment: .horizontal) else {return}
 		
+		let coord = self.realityView.unproject(touchInView, ontoPlane: matrix_identity_float4x4)
 		guard let hitResult = realityView.session.raycast(query).first	else {return}
 		
-		let raycastAnchor = AnchorEntity(raycastResult: hitResult)
-		
-//		if (hitEntity.name == "Ground Plane"){
-//			print("is plane")
-//		}
-		let plane = CustomPlane(image: textureImage ?? UIImage())
+		//plane
+		let plane = CustomPlane(image_url: texture_url ?? "Hollywood.jpg")
+		plane.position = coord!
 		realityView.scene.anchors.append(plane)
 		
 		realityView.installGestures([.all], for: plane)
 		plane.generateCollisionShapes(recursive: true)
-			print("nothign ", hitResult)
-		//	print("nothign e ", hitEntity)
-		
+		print("nothign ", hitResult)
 	}
 }
 
