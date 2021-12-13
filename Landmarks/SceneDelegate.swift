@@ -20,17 +20,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let windowScene = scene as? UIWindowScene {
             // Get persistentContainer
             let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-            let path = FileManager
-                .default
-                .urls(for: .applicationSupportDirectory, in: .userDomainMask)
-                .last?
-                .absoluteString
-                .replacingOccurrences(of: "file://", with: "")
-                .removingPercentEncoding
 
-            print("Core Data DB Path :: \(path ?? "Not found")")
-
-            // Set information
+            // Set view for SwiftUI
             let contentView = AssetRow().environment(\.managedObjectContext, context)
             let window = UIWindow(windowScene: windowScene)
             window.rootViewController = UIHostingController(rootView: contentView)
