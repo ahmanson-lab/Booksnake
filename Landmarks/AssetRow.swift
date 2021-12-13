@@ -25,7 +25,7 @@ struct AssetRow: View, AssetRowProtocol {
 
     @Environment(\.managedObjectContext) var managedObjectContext
     @State private var editMode = EditMode.inactive
-    @FetchRequest(fetchRequest: ContentData.allIdeasFetchRequest()) var contentTest: FetchedResults<ContentData>
+    @FetchRequest(fetchRequest: Manifest.sortedFetchRequest()) var contentTest: FetchedResults<Manifest>
 
     @State var addDefaultURL = false
     @State var label: String = ""
@@ -92,7 +92,7 @@ struct AssetRow: View, AssetRowProtocol {
         if let new_item = ManifestDataHandler.getRemoteManifest(from: path) {
             let new_manifest = ManifestItem(item: new_item, image: new_item.image!)
 
-            let contentdata = NSEntityDescription.insertNewObject(forEntityName: "ContentData", into: self.managedObjectContext) as! ContentData
+            let contentdata = NSEntityDescription.insertNewObject(forEntityName: "Manifest", into: self.managedObjectContext) as! Manifest
             contentdata.id = new_manifest.id
             contentdata.labels = new_manifest.item.labels
             contentdata.values = new_manifest.item.values
@@ -142,7 +142,7 @@ struct AssetRow: View, AssetRowProtocol {
         for index in 0..<resource_paths.count {
             if let new_item = ManifestDataHandler.getLocalManifest(from: resource_paths[index]) {
                 let new_manifest = ManifestItem(item:new_item, image: UIImage(named: resource_paths[index])!)
-                let contentdata = NSEntityDescription.insertNewObject(forEntityName: "ContentData", into: self.managedObjectContext) as! ContentData
+                let contentdata = NSEntityDescription.insertNewObject(forEntityName: "Manifest", into: self.managedObjectContext) as! Manifest
                 contentdata.id = new_manifest.id
                 contentdata.labels = new_manifest.item.labels
                 contentdata.values = new_manifest.item.values

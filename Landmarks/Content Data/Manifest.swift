@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 import UIKit
 
-public class ContentData: NSManagedObject, Identifiable {
+public class Manifest: NSManagedObject, Identifiable {
     @NSManaged public var id: UUID?
     @NSManaged public var labels: [String]?
     @NSManaged public var values: [String]?
@@ -23,9 +23,9 @@ public class ContentData: NSManagedObject, Identifiable {
     @NSManaged public var length: Float
 }
 
-extension ContentData {
-    static func allIdeasFetchRequest() -> NSFetchRequest<ContentData> {
-        let request: NSFetchRequest<ContentData> = ContentData.fetchRequest() as! NSFetchRequest<ContentData>
+extension Manifest {
+    static func sortedFetchRequest() -> NSFetchRequest<Manifest> {
+        let request = Manifest.fetchRequest() as! NSFetchRequest<Manifest>
         
         request.sortDescriptors = [NSSortDescriptor(key: "createdDate", ascending: true)]
           

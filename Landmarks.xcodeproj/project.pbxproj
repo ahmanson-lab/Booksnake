@@ -13,7 +13,7 @@
 		117C02E926ACD638004197D3 /* FullWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117C02E826ACD638004197D3 /* FullWebView.swift */; };
 		117C02EB26ACDDEE004197D3 /* InputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117C02EA26ACDDEE004197D3 /* InputView.swift */; };
 		117C02ED26ACDE4D004197D3 /* CustomSearchMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117C02EC26ACDE4D004197D3 /* CustomSearchMenu.swift */; };
-		119334FE2582FE7B00CA19A2 /* ContentData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 119334FD2582FE7B00CA19A2 /* ContentData.swift */; };
+		119334FE2582FE7B00CA19A2 /* Manifest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 119334FD2582FE7B00CA19A2 /* Manifest.swift */; };
 		1193352A25830ED900CA19A2 /* ContentDataContainer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1193352825830ED900CA19A2 /* ContentDataContainer.xcdatamodeld */; };
 		11B208562537C90900704F40 /* MultiProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B208552537C90900704F40 /* MultiProperty.swift */; };
 		11B208592537C9AF00704F40 /* IIIFManifest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B208582537C9AF00704F40 /* IIIFManifest.swift */; };
@@ -62,7 +62,7 @@
 		117C02E826ACD638004197D3 /* FullWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FullWebView.swift; sourceTree = "<group>"; };
 		117C02EA26ACDDEE004197D3 /* InputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputView.swift; sourceTree = "<group>"; };
 		117C02EC26ACDE4D004197D3 /* CustomSearchMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchMenu.swift; sourceTree = "<group>"; };
-		119334FD2582FE7B00CA19A2 /* ContentData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentData.swift; sourceTree = "<group>"; };
+		119334FD2582FE7B00CA19A2 /* Manifest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manifest.swift; sourceTree = "<group>"; };
 		1193352925830ED900CA19A2 /* ContentDataContainer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ContentDataContainer.xcdatamodel; sourceTree = "<group>"; };
 		11B208552537C90900704F40 /* MultiProperty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiProperty.swift; sourceTree = "<group>"; };
 		11B208582537C9AF00704F40 /* IIIFManifest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IIIFManifest.swift; sourceTree = "<group>"; };
@@ -139,7 +139,7 @@
 		1193351F25830D9000CA19A2 /* Content Data */ = {
 			isa = PBXGroup;
 			children = (
-				119334FD2582FE7B00CA19A2 /* ContentData.swift */,
+				119334FD2582FE7B00CA19A2 /* Manifest.swift */,
 				1193352825830ED900CA19A2 /* ContentDataContainer.xcdatamodeld */,
 			);
 			path = "Content Data";
@@ -290,7 +290,7 @@
 				11B2086E2537CE9600704F40 /* IIIFService.swift in Sources */,
 				56CD50A824C7CA1C00EF8C3E /* AppDelegate.swift in Sources */,
 				11DB8429254373BE004882F4 /* ARViewControllerRepresentable.swift in Sources */,
-				119334FE2582FE7B00CA19A2 /* ContentData.swift in Sources */,
+				119334FE2582FE7B00CA19A2 /* Manifest.swift in Sources */,
 				1193352A25830ED900CA19A2 /* ContentDataContainer.xcdatamodeld in Sources */,
 				11B208592537C9AF00704F40 /* IIIFManifest.swift in Sources */,
 				11B208562537C90900704F40 /* MultiProperty.swift in Sources */,
