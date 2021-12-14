@@ -35,7 +35,8 @@ struct AssetRow: View, AssetRowProtocol {
             NavigationView{
                 List{
                     ForEach(contentTest, id: \.self){ item in
-                        let image = UIImage(contentsOfFile: item.imagePath ?? "") ?? UIImage()
+                        let imageData = FileHandler.read(from: .image, fileName: item.imageFileName ?? "") ?? Data()
+                        let image = UIImage(data: imageData) ?? UIImage()
                         NavigationLink(destination: LazyView(ContentView(image: image,
                                                                          width: CGFloat(item.width),
                                                                          length: CGFloat(item.length),
@@ -47,7 +48,7 @@ struct AssetRow: View, AssetRowProtocol {
                                 .frame(width: 50, height: 50)
 
                             //item label
-                            Text("\(item.item_label ?? "")")
+                            Text("\(item.itemLabel ?? "")")
                                .lineLimit(2)
                                .truncationMode(.tail)
                         }
@@ -96,18 +97,16 @@ struct AssetRow: View, AssetRowProtocol {
             contentdata.id = new_manifest.id
             contentdata.labels = new_manifest.item.labels
             contentdata.values = new_manifest.item.values
-            if let imageDirectory = FileHandler.imageDirectoryURL,
-               let imagePath = FileHandler.save(data: new_manifest.image.jpegData(compressionQuality: 1.0) ?? Data(),
-                                                toDirectory: imageDirectory,
-                                                withFileName: "\(new_manifest.id).jpg")?.path {
-                contentdata.imagePath = imagePath
-            }
+            FileHandler.save(data: new_manifest.image.jpegData(compressionQuality: 1.0) ?? Data(),
+                             toDirectory: .image,
+                             withFileName: "\(new_manifest.id).jpg")
+            contentdata.imageFileName = "\(new_manifest.id).jpg"
             contentdata.width = new_manifest.item.width ?? width
             contentdata.length = new_manifest.item.height ?? length
             contentdata.createdDate = Date()
 
             //test
-            contentdata.item_label = new_manifest.item.label
+            contentdata.itemLabel = new_manifest.item.label
             self.label = new_manifest.item.label
 
             do {
@@ -146,18 +145,16 @@ struct AssetRow: View, AssetRowProtocol {
                 contentdata.id = new_manifest.id
                 contentdata.labels = new_manifest.item.labels
                 contentdata.values = new_manifest.item.values
-                if let imageDirectory = FileHandler.imageDirectoryURL,
-                   let imagePath = FileHandler.save(data: new_manifest.image.jpegData(compressionQuality: 1.0) ?? Data(),
-                                                    toDirectory: imageDirectory,
-                                                    withFileName: "\(new_manifest.id).jpg")?.path {
-                    contentdata.imagePath = imagePath
-                }
+                FileHandler.save(data: new_manifest.image.jpegData(compressionQuality: 1.0) ?? Data(),
+                                 toDirectory: .image,
+                                 withFileName: "\(new_manifest.id).jpg")
+                contentdata.imageFileName = "\(new_manifest.id).jpg"
                 contentdata.width = Float(sizes[index][1])
                 contentdata.length = Float (sizes[index][0])
                 contentdata.createdDate = Date()
 
                 //test
-                contentdata.item_label = new_manifest.item.label
+                contentdata.itemLabel = new_manifest.item.label
 
                 do {
                     try self.managedObjectContext.save()

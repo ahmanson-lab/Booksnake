@@ -8,38 +8,46 @@
 
 import Foundation
 
+enum FileDirectory {
+    case image
+
+    var url: URL? {
+        switch self {
+        case .image:
+            let imageDir = URL(fileURLWithPath: FileHandler.documentDirectoryPath).appendingPathComponent("Images")
+
+            if !FileManager.default.fileExists(atPath: imageDir.path) {
+                do {
+                    try FileManager.default.createDirectory(at: imageDir,
+                                                            withIntermediateDirectories: true,
+                                                            attributes: [FileAttributeKey.protectionKey: FileProtectionType.none])
+                } catch {
+                    print("Can't create Document/Image folder.")
+                    return nil
+                }
+            }
+
+            return imageDir
+        }
+    }
+}
+
 struct FileHandler {
-    private static var documentDirectoryPath: String {
+    static var documentDirectoryPath: String {
         let documentDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory,
                                                                     .userDomainMask,
                                                                     true)
         return documentDirectory[0]
     }
 
-    static var imageDirectoryURL: URL? {
-        let imageDir = URL(fileURLWithPath: Self.documentDirectoryPath).appendingPathComponent("Images")
-
-        if !FileManager.default.fileExists(atPath: imageDir.path) {
-            do {
-                try FileManager.default.createDirectory(at: imageDir,
-                                                        withIntermediateDirectories: true,
-                                                        attributes: [FileAttributeKey.protectionKey: FileProtectionType.none])
-            } catch {
-                print("Can't create Document/Image folder.")
-                return nil
-            }
-        }
-
-        return imageDir
-    }
-
-    static func read(from directoryURL: URL, fileName: String) -> Data? {
-        let fileURL = directoryURL.appendingPathComponent(fileName)
+    @discardableResult
+    static func read(from directory: FileDirectory, fileName: String) -> Data? {
+        guard let fileURL = directory.url?.appendingPathComponent(fileName) else { return nil }
 
         do {
             let savedFile = try Data(contentsOf: fileURL)
 
-            print("File saved at \(fileURL)")
+            print("File read at \(fileURL)")
 
             return savedFile
         } catch {
@@ -48,8 +56,9 @@ struct FileHandler {
         }
     }
 
-    static func save(data: Data, toDirectory directory: URL, withFileName fileName: String) -> URL? {
-        let fileURL = directory.appendingPathComponent(fileName)
+    @discardableResult
+    static func save(data: Data, toDirectory directory: FileDirectory, withFileName fileName: String) -> URL? {
+        guard let fileURL = directory.url?.appendingPathComponent(fileName) else { return nil }
 
         do {
             try data.write(to: fileURL, options: .noFileProtection)
