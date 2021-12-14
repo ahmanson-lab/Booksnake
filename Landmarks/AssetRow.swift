@@ -35,8 +35,8 @@ struct AssetRow: View, AssetRowProtocol {
             NavigationView{
                 List{
                     ForEach(contentTest, id: \.self){ item in
-                        let imageData = FileHandler.read(from: .image, fileName: item.imageFileName ?? "") ?? Data()
-                        let image = UIImage(data: imageData) ?? UIImage()
+                        let image = UIImage.resizedImage(at: item.imageURL,
+                                                         for: CGSize(width: 50.0, height: 50.0)) ?? UIImage()
                         NavigationLink(destination: LazyView(ContentView(image: image,
                                                                          width: CGFloat(item.width),
                                                                          length: CGFloat(item.length),

@@ -24,6 +24,12 @@ public class Manifest: NSManagedObject, Identifiable {
 }
 
 extension Manifest {
+    var imageURL: URL? {
+        guard let imageFileName = imageFileName else { return nil }
+
+        return FileDirectory.image.url?.appendingPathComponent(imageFileName)
+    }
+
     static func sortedFetchRequest() -> NSFetchRequest<Manifest> {
         let request = Manifest.fetchRequest() as! NSFetchRequest<Manifest>
         
