@@ -7,7 +7,12 @@
 //
 
 import Foundation
+import CoreData
 import UIKit
+
+enum ManifestDataErorr: Error {
+    case remoteFetchError
+}
 
 public struct ManifestData {
     var label: String = ""
@@ -20,20 +25,57 @@ public struct ManifestData {
 }
 
 struct ManifestDataHandler {
-    public static func getRemoteManifest(from urlString: String) -> ManifestData? {
-        // TODO: Need to make this async code, or the data download may failed
-        guard let url = URL(string: urlString),
+    public static func addNewManifest(from urlPath: String,
+                                      width: Float = 1,
+                                      length: Float = 1,
+                                      managedObjectContext: NSManagedObjectContext,
+                                      completion: (Result<String, ManifestDataErorr>) -> Void) {
+        guard let new_item = ManifestDataHandler.getRemoteManifest(from: urlPath) else {
+            completion(.failure(.remoteFetchError))
+            return
+        }
+
+        print("Adding Remote Manifest")
+
+        let new_manifest = ManifestItem(item: new_item, image: new_item.image!)
+
+        let contentdata = NSEntityDescription.insertNewObject(forEntityName: "Manifest", into: managedObjectContext) as! Manifest
+        contentdata.id = new_manifest.id
+        contentdata.labels = new_manifest.item.labels
+        contentdata.itemLabel = new_manifest.item.label
+        contentdata.values = new_manifest.item.values
+        contentdata.width = new_manifest.item.width ?? width
+        contentdata.length = new_manifest.item.height ?? length
+        contentdata.createdDate = Date()
+        FileHandler.save(data: new_manifest.image.jpegData(compressionQuality: 1.0) ?? Data(),
+                         toDirectory: .image,
+                         withFileName: "\(new_manifest.id).jpg")
+        contentdata.imageFileName = "\(new_manifest.id).jpg"
+
+        do {
+            try managedObjectContext.save()
+        } catch {
+            print(error)
+        }
+
+        completion(.success(new_manifest.item.label))
+    }
+
+    // FOR DEMO ONLY: The local manifest only used for hard code demo manifests
+    public static func getLocalManifest(from resrouceName: String) -> ManifestData? {
+        guard let url = Bundle.main.url(forResource: resrouceName, withExtension: "json"),
               let data = try? Data(contentsOf: url),
-              let jsonObject = try? JSONSerialization.jsonObject(with: data, options: .allowFragments),
+              let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []),
               let jsonData = jsonObject as? [String: Any] else { return nil }
 
         return parseJson(dictionary: jsonData)
     }
 
-    public static func getLocalManifest(from resrouceName: String) -> ManifestData? {
-        guard let url = Bundle.main.url(forResource: resrouceName, withExtension: "json"),
+    private static func getRemoteManifest(from urlString: String) -> ManifestData? {
+        // TODO: Need to make this async code, or the data download may failed
+        guard let url = URL(string: urlString),
               let data = try? Data(contentsOf: url),
-              let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []),
+              let jsonObject = try? JSONSerialization.jsonObject(with: data, options: .allowFragments),
               let jsonData = jsonObject as? [String: Any] else { return nil }
 
         return parseJson(dictionary: jsonData)

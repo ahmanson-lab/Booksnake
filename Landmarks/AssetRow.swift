@@ -18,20 +18,16 @@ struct ManifestItem: Identifiable {
 }
 
 protocol AssetRowProtocol {
-    func onAddEntry(path: String, completion: (_ success: Bool) -> Void)
+    func switchToLibraryTab()
 }
 
 struct AssetRow: View, AssetRowProtocol {
-
     @Environment(\.managedObjectContext) var managedObjectContext
-    @State private var editMode = EditMode.inactive
     @FetchRequest(fetchRequest: Manifest.sortedFetchRequest()) var contentTest: FetchedResults<Manifest>
-
-    @State var addDefaultURL = false
-    @State var label: String = ""
+    @State private var tabSelection = 1
 
     var body: some View {
-        TabView {
+        TabView(selection: $tabSelection) {
             NavigationView{
                 List{
                     ForEach(contentTest, id: \.self) { item in
@@ -60,9 +56,10 @@ struct AssetRow: View, AssetRowProtocol {
                 Image(systemName: "scroll")
                 Text("Library")
             }
+            .tag(1)
 
             NavigationView {
-                CustomSearchMenu(addDefaultURL: $addDefaultURL, label: $label, delegate: self)
+                CustomSearchMenu(delegate: self)
                     .navigationBarTitle("Explore")
             }
             .navigationViewStyle(StackNavigationViewStyle())
@@ -70,56 +67,22 @@ struct AssetRow: View, AssetRowProtocol {
                 Image(systemName: "magnifyingglass")
                 Text("Explore")
             }
-            .environment(\.editMode, $editMode)
-            .id(UUID())
+            .tag(2)
         }
         .onAppear(perform: {
+            // To add some demo items in the collection
             if(contentTest.count < 1){
                 addExamples()
             }
         })
     }
 
-    //wrapper function for adding content from another view
-    func onAddEntry(path: String, completion: (_ success: Bool) -> Void) {
-        onAdd(path: path, completion: completion)
+    // Delegate function
+    func switchToLibraryTab() {
+        // Switch back to Library tab
+        tabSelection = 1
     }
 
-    //add a iiif item from library of congress
-    func onAdd(path: String, width: Float = 1, length: Float = 1, completion: (_ success: Bool) -> Void){
-        print("Remote Manifest Added")
-
-        if let new_item = ManifestDataHandler.getRemoteManifest(from: path) {
-            let new_manifest = ManifestItem(item: new_item, image: new_item.image!)
-
-            let contentdata = NSEntityDescription.insertNewObject(forEntityName: "Manifest", into: self.managedObjectContext) as! Manifest
-            contentdata.id = new_manifest.id
-            contentdata.labels = new_manifest.item.labels
-            contentdata.values = new_manifest.item.values
-            contentdata.width = new_manifest.item.width ?? width
-            contentdata.length = new_manifest.item.height ?? length
-            contentdata.createdDate = Date()
-            FileHandler.save(data: new_manifest.image.jpegData(compressionQuality: 1.0) ?? Data(),
-                             toDirectory: .image,
-                             withFileName: "\(new_manifest.id).jpg")
-            contentdata.imageFileName = "\(new_manifest.id).jpg"
-
-            //test
-            contentdata.itemLabel = new_manifest.item.label
-            self.label = new_manifest.item.label
-
-            do {
-                try self.managedObjectContext.save()
-            } catch {
-                print(error)
-            }
-            return completion(true)
-        }
-
-        return completion(false)
-    }
-
-    //can delete items
     private func onDelete(offsets: IndexSet) {
         let contentToDelete = contentTest[offsets.first!]
         self.managedObjectContext.delete(contentToDelete)
@@ -131,9 +94,8 @@ struct AssetRow: View, AssetRowProtocol {
         }
     }
 
-
-    //FOR DEMO: add hard coded values from local manifests and images
-    func addExamples() {
+    // FOR DEMO ONLY: add hard coded values from local manifests and images
+    private func addExamples() {
         let resource_paths = ["MapOfCalifornia", "MapOfLosAngeles", "TopographicLA", "LA1909", "AutomobileLA", "Hollywood"]
         let sizes = [[0.48, 0.69], [0.63, 0.56],[1.53, 0.56],[0.85, 1.02],[0.22, 0.08],[0.67, 0.66]]
 
@@ -143,6 +105,7 @@ struct AssetRow: View, AssetRowProtocol {
                 let contentdata = NSEntityDescription.insertNewObject(forEntityName: "Manifest", into: self.managedObjectContext) as! Manifest
                 contentdata.id = new_manifest.id
                 contentdata.labels = new_manifest.item.labels
+                contentdata.itemLabel = new_manifest.item.label
                 contentdata.values = new_manifest.item.values
                 contentdata.width = Float(sizes[index][1])
                 contentdata.length = Float (sizes[index][0])
@@ -151,9 +114,6 @@ struct AssetRow: View, AssetRowProtocol {
                                  toDirectory: .image,
                                  withFileName: "\(new_manifest.id).jpg")
                 contentdata.imageFileName = "\(new_manifest.id).jpg"
-
-                //test
-                contentdata.itemLabel = new_manifest.item.label
 
                 do {
                     try self.managedObjectContext.save()

@@ -9,16 +9,14 @@
 import SwiftUI
 
 struct InputView: View {
-//	@Binding var showModal: Bool
-	@Binding var label: String
-	@Binding var hasText: Bool
-	
+    @Environment(\.managedObjectContext) var managedObjectContext
+
 	@State var text: String = "Adding to Booksnake"
 	@State var fieldValue: String = ""
 	@State var isAlert: Bool = false
 	@State var activeAlert: ActiveAlert = .first
-	@State private var isError: Bool = false
 	@State private var isActivity: Bool = false
+    @State private var newItemLabel: String = ""
 	
 	var delegate: AssetRowProtocol?
 	
@@ -79,7 +77,6 @@ struct InputView: View {
 				}, label:{
 					Text("Add")
 				})
-				.disabled(!hasText)
 				.alert(isPresented: $isAlert) {
 						switch activeAlert {
 						case .first:
@@ -87,45 +84,58 @@ struct InputView: View {
 						case .second:
 							return Alert(title: Text("URL has spaces and/or nothing is entered"), message: Text("Please remove spaces from URL address and/or type something"), dismissButton: .default(Text("OK")))
 						case .third:
-							return Alert(title: Text(label + " Download Complete!"), message: Text("Swipe down to return to main page."), dismissButton: .default(Text("OK")))
+							return Alert(title: Text("\(newItemLabel) Download Complete!"), message: Text("Swipe down to return to main page."), dismissButton: .default(Text("OK")))
 						}
 				}
 			})
 	}
 	
-	func urlEnter() {
-		if (!fieldValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty){
-			checkTextField(url: fieldValue, completion: { status in
-				isActivity = true
-				if (status) {
-					if (!fieldValue.hasSuffix("manifest.json") && fieldValue.contains("loc.gov")) {
-						fieldValue.append("/manifest.json")
-					}
-					self.delegate?.onAddEntry(path: fieldValue,  completion: { success in
-						if (success){
-							print("sucess in downloading")
-						  //  activeAlert = .third
-//							self.showModal = false
-							return
-						}
-					 //   isAlert = true
-					})
-				}
-				else {
-					activeAlert = .first
-					isAlert = true
-				}
-				isError = !status
-				isActivity = false
-			})
-		}
-		else {
-			activeAlert = .second
-			isAlert = true
-		}
+	private func urlEnter() {
+        isActivity = true
+
+        // Check if textField is valid
+        guard !fieldValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            activeAlert = .second
+            isAlert = true
+            return
+        }
+
+        // Check if url is valid for ifff
+        validateURLForIIIF(url: fieldValue, completion: { status in
+            defer { isActivity = false }
+
+            // If the textField is incorrect, show error
+            guard status else {
+                activeAlert = .first
+                isAlert = true
+                return
+            }
+
+            // Add manifest.json at the end of the url if needed
+            if (!fieldValue.hasSuffix("manifest.json") && fieldValue.contains("loc.gov")) {
+                fieldValue.append("/manifest.json")
+            }
+
+            // Add the manifest into DB
+            ManifestDataHandler.addNewManifest(from: fieldValue,
+                                               managedObjectContext: self.managedObjectContext) { result in
+                switch result {
+                case .success(let newItemLabel):
+                    print("sucess in downloading")
+                    self.newItemLabel = newItemLabel
+                    activeAlert = .third
+                    isAlert = true
+                    self.delegate?.switchToLibraryTab()
+                case .failure(let error):
+                    print("can't download manifest. Error \(error)")
+                    activeAlert = .first
+                    isAlert = true
+                }
+            }
+        })
 	}
 	
-	func checkTextField(url : String, completion: @escaping (Bool) -> Void) {
+	private func validateURLForIIIF(url : String, completion: @escaping (Bool) -> Void) {
 		let checkSession = Foundation.URLSession.shared
 		var path: String = url
 
