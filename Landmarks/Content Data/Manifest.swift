@@ -15,8 +15,8 @@ public class Manifest: NSManagedObject, Identifiable {
     @NSManaged public var labels: [String]?
     @NSManaged public var values: [String]?
     @NSManaged public var itemLabel: String?
-    @NSManaged public var imageFileName: String?
-    @NSManaged public var createdDate: Date?
+    @NSManaged public var imageFileName: String
+    @NSManaged public var createdDate: Date
     
     //for init sizes
     @NSManaged public var width: Float
@@ -25,8 +25,6 @@ public class Manifest: NSManagedObject, Identifiable {
 
 extension Manifest {
     var imageURL: URL? {
-        guard let imageFileName = imageFileName else { return nil }
-
         return FileDirectory.image.url?.appendingPathComponent(imageFileName)
     }
 

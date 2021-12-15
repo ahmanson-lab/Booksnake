@@ -96,13 +96,13 @@ struct AssetRow: View, AssetRowProtocol {
             contentdata.id = new_manifest.id
             contentdata.labels = new_manifest.item.labels
             contentdata.values = new_manifest.item.values
+            contentdata.width = new_manifest.item.width ?? width
+            contentdata.length = new_manifest.item.height ?? length
+            contentdata.createdDate = Date()
             FileHandler.save(data: new_manifest.image.jpegData(compressionQuality: 1.0) ?? Data(),
                              toDirectory: .image,
                              withFileName: "\(new_manifest.id).jpg")
             contentdata.imageFileName = "\(new_manifest.id).jpg"
-            contentdata.width = new_manifest.item.width ?? width
-            contentdata.length = new_manifest.item.height ?? length
-            contentdata.createdDate = Date()
 
             //test
             contentdata.itemLabel = new_manifest.item.label
@@ -144,13 +144,13 @@ struct AssetRow: View, AssetRowProtocol {
                 contentdata.id = new_manifest.id
                 contentdata.labels = new_manifest.item.labels
                 contentdata.values = new_manifest.item.values
+                contentdata.width = Float(sizes[index][1])
+                contentdata.length = Float (sizes[index][0])
+                contentdata.createdDate = Date()
                 FileHandler.save(data: new_manifest.image.jpegData(compressionQuality: 1.0) ?? Data(),
                                  toDirectory: .image,
                                  withFileName: "\(new_manifest.id).jpg")
                 contentdata.imageFileName = "\(new_manifest.id).jpg"
-                contentdata.width = Float(sizes[index][1])
-                contentdata.length = Float (sizes[index][0])
-                contentdata.createdDate = Date()
 
                 //test
                 contentdata.itemLabel = new_manifest.item.label
