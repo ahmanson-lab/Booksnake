@@ -12,7 +12,7 @@ struct ContentView: View {
     @State var showingPreview = false
     @State private var showText = false
     
-    var image: UIImage = UIImage()
+    var imageURL: URL?
 	var width: CGFloat = 5
     var length: CGFloat
     var labels: [String]
@@ -22,13 +22,14 @@ struct ContentView: View {
 		List {
 			HStack{
 				Spacer()
-			RectangularImage(image: image)
-				.frame(height: UIScreen.main.bounds.height / 2, alignment: .center)
+                let image = UIImage.loadThumbnail(at: imageURL, forSize: .medium) ?? UIImage()
+                RectangularImage(image: image)
+                    .frame(height: UIScreen.main.bounds.height / 2, alignment: .center)
 				Spacer()
 			}
 			
 			NavigationLink(
-				destination: LazyView(ARViewControllerRepresentable(image: image, width:width, length: length))
+				destination: LazyView(ARViewControllerRepresentable(imageURL: imageURL, width:width, length: length))
 					.navigationBarTitle("")
 					.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: .center),
 				isActive: $showingPreview){

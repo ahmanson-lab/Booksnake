@@ -25,7 +25,7 @@ enum ImageThumbnailSize {
 }
 
 extension UIImage {
-    static func getThumbnail(at url: URL?, for size: ImageThumbnailSize) -> UIImage? {
+    static func loadThumbnail(at url: URL?, forSize size: ImageThumbnailSize) -> UIImage? {
         guard let url = url else { return nil }
 
         let options: [CFString: Any] = [

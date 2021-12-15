@@ -34,10 +34,9 @@ struct AssetRow: View, AssetRowProtocol {
         TabView {
             NavigationView{
                 List{
-                    ForEach(contentTest, id: \.self){ item in
-                        let image = UIImage.getThumbnail(at: item.imageURL,
-                                                         for: .small) ?? UIImage()
-                        NavigationLink(destination: LazyView(ContentView(image: image,
+                    ForEach(contentTest, id: \.self) { item in
+                        let image = UIImage.loadThumbnail(at: item.imageURL, forSize: .small) ?? UIImage()
+                        NavigationLink(destination: LazyView(ContentView(imageURL: item.imageURL,
                                                                          width: CGFloat(item.width),
                                                                          length: CGFloat(item.length),
                                                                          labels: item.labels! ,
