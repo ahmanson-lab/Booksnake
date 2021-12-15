@@ -19,7 +19,7 @@ enum ImageThumbnailSize {
         case .small:
             return CGSize(width: 150.0, height: 150.0)
         case .medium:
-            return CGSize(width: 500.0, height: 500.0)
+            return CGSize(width: 750.0, height: 750.0)
         }
     }
 }
