@@ -72,7 +72,7 @@ struct AssetRow: View, AssetRowProtocol {
         .onAppear(perform: {
             // To add some demo items in the collection
             if(contentTest.count < 1){
-                addExamples()
+                ManifestDataHandler.addExamples(managedObjectContext: managedObjectContext)
             }
         })
     }
@@ -91,37 +91,6 @@ struct AssetRow: View, AssetRowProtocol {
         }
         catch {
             print(error)
-        }
-    }
-
-    // FOR DEMO ONLY: add hard coded values from local manifests and images
-    private func addExamples() {
-        let resource_paths = ["MapOfCalifornia", "MapOfLosAngeles", "TopographicLA", "LA1909", "AutomobileLA", "Hollywood"]
-        let sizes = [[0.48, 0.69], [0.63, 0.56],[1.53, 0.56],[0.85, 1.02],[0.22, 0.08],[0.67, 0.66]]
-
-        for index in 0..<resource_paths.count {
-            if let new_item = ManifestDataHandler.getLocalManifest(from: resource_paths[index]) {
-                let new_manifest = ManifestItem(item:new_item, image: UIImage(named: resource_paths[index])!)
-                let contentdata = NSEntityDescription.insertNewObject(forEntityName: "Manifest", into: self.managedObjectContext) as! Manifest
-                contentdata.id = new_manifest.id
-                contentdata.labels = new_manifest.item.labels
-                contentdata.itemLabel = new_manifest.item.label
-                contentdata.values = new_manifest.item.values
-                contentdata.width = Float(sizes[index][1])
-                contentdata.length = Float (sizes[index][0])
-                contentdata.createdDate = Date()
-                FileHandler.save(data: new_manifest.image.jpegData(compressionQuality: 1.0) ?? Data(),
-                                 toDirectory: .image,
-                                 withFileName: "\(new_manifest.id).jpg")
-                contentdata.imageFileName = "\(new_manifest.id).jpg"
-
-                do {
-                    try self.managedObjectContext.save()
-                }
-                catch {
-                    print(error)
-                }
-            }
         }
     }
 }
