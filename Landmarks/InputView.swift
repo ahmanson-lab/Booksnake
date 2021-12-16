@@ -15,7 +15,7 @@ struct InputView: View {
 	@State var fieldValue: String = ""
 	@State var isAlert: Bool = false
 	@State var activeAlert: ActiveAlert = .first
-	@State private var isActivity: Bool = false
+	@State private var showLoading: Bool = false
     @State private var newItemLabel: String = ""
 	
 	var delegate: AssetRowProtocol?
@@ -61,14 +61,13 @@ struct InputView: View {
                     .padding(EdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0))
             }
             ZStack(alignment: .center, content: {
-                Rectangle()
-                    .fill(Color.init(white: 0.7))
-                    .frame(width: 200, height: 200, alignment: .center)
-                    .isHidden(!isActivity)
-                    .opacity(0.7)
-                    .cornerRadius(5.0)
-                ActivityIndicator(isAnimating: $isActivity, text: $text, style: .large)
-            }).position(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 3)
+                ActivityIndicator(isAnimating: $showLoading, text: $text, style: .large)
+                    .frame(width: 200.0, height: 200.0, alignment: .center)
+                    .background(Color(white: 0.7, opacity: 0.7))
+                    .cornerRadius(20)
+            })
+            .isHidden(!showLoading)
+            .position(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 3)
         })
         .navigationBarItems(trailing: HStack() {
             Button(action: {
@@ -98,7 +97,7 @@ struct InputView: View {
     }
 
 	private func urlEnter() {
-        isActivity = true
+        showLoading = true
 
         // Check if textField is valid
         guard !fieldValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
@@ -109,7 +108,7 @@ struct InputView: View {
 
         // Check if url is valid for ifff
         validateURLForIIIF(url: fieldValue, completion: { status in
-            defer { isActivity = false }
+            defer { showLoading = false }
 
             // If the textField is incorrect, show error
             guard status else {

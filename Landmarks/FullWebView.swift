@@ -29,7 +29,7 @@ struct FullWebView : View {
 	@State var type: String
 	
     @State private var isAlert: Bool = false
-    @State private var isActivity: Bool = false
+    @State private var showLoading: Bool = false
     @State private var newItemLabel: String = ""
     @State var text: String = "Adding to Booksnake"
     @State var activeAlert: ActiveAlert = .second
@@ -74,14 +74,14 @@ struct FullWebView : View {
             }
 			ProgressView(width: $width)
             
-            Rectangle()
-				.fill(temp ? Color.red : Color.init(white: 0.7))
-                .frame(width: 200, height: 200, alignment: .center)
-                .isHidden(!isActivity, remove:!isActivity)
-                .opacity(0.7)
-                .cornerRadius(5.0)
-
-            ActivityIndicator(isAnimating: $isActivity, text: $text, style: .large)
+            ZStack(alignment: .center, content: {
+                ActivityIndicator(isAnimating: $showLoading, text: $text, style: .large)
+                    .frame(width: 200.0, height: 200.0, alignment: .center)
+                    .background(Color(white: 0.7, opacity: 0.7))
+                    .cornerRadius(20)
+            })
+            .isHidden(!showLoading)
+            .position(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 3)
         }
         .navigationBarItems(trailing: HStack(){
             Button(action: {
@@ -112,12 +112,12 @@ struct FullWebView : View {
     }
 	
 	private func downloadItem(type: String) {
-        isActivity = true
+        showLoading = true
 
 		if (type == "LOC"){
 			path = self.webview.viewModel.path
             validateURLForIIIF(url: path, filter: "?fo=json&at=item.mime_type", completion: { status in
-                defer { isActivity = false }
+                defer { showLoading = false }
 
                 guard status else {
                     activeAlert = .first
@@ -150,7 +150,7 @@ struct FullWebView : View {
 			//download process for Huntington
 			path = self.webview.viewModel.path
             validateURLForIIIF(url: path, filter: "/id/", completion: { status in
-                defer { isActivity = false }
+                defer { showLoading = false }
 
                 guard status,
                       let collection = path.range(of: "collection/") else {
