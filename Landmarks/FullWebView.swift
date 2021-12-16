@@ -74,14 +74,14 @@ struct FullWebView : View {
             }
 			ProgressView(width: $width)
             
-            ZStack(alignment: .center, content: {
+            ZStack {
                 ActivityIndicator(isAnimating: $showLoading, text: $text, style: .large)
                     .frame(width: 200.0, height: 200.0, alignment: .center)
                     .background(Color(white: 0.7, opacity: 0.7))
                     .cornerRadius(20)
-            })
+            }
             .isHidden(!showLoading)
-            .position(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 3)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         }
         .navigationBarItems(trailing: HStack(){
             Button(action: {
