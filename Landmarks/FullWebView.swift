@@ -93,12 +93,20 @@ struct FullWebView : View {
         })
         .alert(isPresented: $isAlert, content: {
             switch activeAlert{
-                case .first:
-                    return Alert(title: Text("Unable to add item"), message: Text("The item catalog page doesn't have the necessary information"), dismissButton: .default(Text("OK")))
-                case .second:
-                    return Alert(title: Text("Download failed"), message: Text("Something went wrong during download process. Check that manifest has necessary information and/or internet is working"), dismissButton: .default(Text("OK")))
-                case .third:
-                    return  Alert(title: Text("\(newItemLabel) Download Complete!"), message: Text("Swipe down to return to main page."), dismissButton: .default(Text("OK")))
+            case .first:
+                return Alert(title: Text("Unable to add item"),
+                             message: Text("The item catalog page doesn't have the necessary information"),
+                             dismissButton: .default(Text("OK")))
+            case .second:
+                return Alert(title: Text("Download failed"),
+                             message: Text("Something went wrong during download process. Check that manifest has necessary information and/or internet is working"),
+                             dismissButton: .default(Text("OK")))
+            case .third:
+                return  Alert(title: Text("\(newItemLabel) Download Complete!"),
+                              message: Text("Tap OK to return to main page."),
+                              dismissButton: .default(Text("OK"), action: {
+                    delegate?.switchToLibraryTab()
+                }))
             }
         })
     }
@@ -130,7 +138,6 @@ struct FullWebView : View {
                         self.newItemLabel = newItemLabel
                         activeAlert = .third
                         isAlert = true
-                        self.delegate?.switchToLibraryTab()
                     case .failure(let error):
                         print("can't download manifest. Error \(error)")
                         activeAlert = .first

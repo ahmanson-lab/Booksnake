@@ -20,76 +20,83 @@ struct InputView: View {
 	
 	var delegate: AssetRowProtocol?
 	
-	var body: some View {
+    var body: some View {
+        ZStack(alignment: .top, content: {
+            Color.init(.systemGray6)
+            VStack {
+                Text("Add from IIIF Manifest")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .multilineTextAlignment(.center)
+                    .padding(.top, 25)
 
-		ZStack(alignment: .top, content: {
-				Color.init(.systemGray6)
-				VStack {
-					Text("Add from IIIF Manifest")
-						.font(.title)
-						.fontWeight(.bold)
-						.multilineTextAlignment(.center)
-						.padding(.top, 25)
-						
-						Text("Libraries, museums, and archives around the world use IIIF, the International Image Interoperability Framework, to share digitized archival materials.\n\nFor instructions on how to find an item's IIIF manifest URL in different archives, visit:")
-							.font(.subheadline)
-							.multilineTextAlignment(.center)
-							.padding(EdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20))
-						
-						Button(action: {
-								UIApplication.shared.open(URL(string:"https://guides.iiif.io")!)
-							}, label: {
-								Text("https://guides.iiif.io.").font(.subheadline)
-						})
-						.buttonStyle(BorderlessButtonStyle())
-						
-					TextField("Enter IIIF manifest URL", text: $fieldValue, onEditingChanged: { _ in
-						  }, onCommit: {
-							  urlEnter()
-						})
-					.padding(.horizontal, 20.0)
-					.multilineTextAlignment(.leading)
-					.textFieldStyle(RoundedBorderTextFieldStyle())
-					.foregroundColor(.gray)
-					.font(.body)
-					.padding(EdgeInsets(top: 25, leading: 0, bottom: 0, trailing: 0))
-					  
-					Text("Type or paste an item's IIIF manifest URL to add it to Booksnake.")
-						.font(.caption)
-						.fontWeight(.regular)
-						.foregroundColor(Color.gray)
-						.multilineTextAlignment(.leading)
-						.padding(EdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0))
-				}
-				ZStack(alignment: .center, content: {
-						Rectangle()
-							.fill(Color.init(white: 0.7))
-							.frame(width: 200, height: 200, alignment: .center)
-							.isHidden(!isActivity)
-							.opacity(0.7)
-							.cornerRadius(5.0)
-					ActivityIndicator(isAnimating: $isActivity, text: $text, style: .large)
-				}).position(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 3)
-			})
-			.navigationBarItems(trailing: HStack() {
-				Button(action: {
-					urlEnter()
-				}, label:{
-					Text("Add")
-				})
-				.alert(isPresented: $isAlert) {
-						switch activeAlert {
-						case .first:
-							return Alert(title: Text("Unable to add item"), message: Text("The item catalog page doesn't have the necessary information"), dismissButton: .default(Text("OK")))
-						case .second:
-							return Alert(title: Text("URL has spaces and/or nothing is entered"), message: Text("Please remove spaces from URL address and/or type something"), dismissButton: .default(Text("OK")))
-						case .third:
-							return Alert(title: Text("\(newItemLabel) Download Complete!"), message: Text("Swipe down to return to main page."), dismissButton: .default(Text("OK")))
-						}
-				}
-			})
-	}
-	
+                Text("Libraries, museums, and archives around the world use IIIF, the International Image Interoperability Framework, to share digitized archival materials.\n\nFor instructions on how to find an item's IIIF manifest URL in different archives, visit:")
+                    .font(.subheadline)
+                    .multilineTextAlignment(.center)
+                    .padding(EdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20))
+
+                Button(action: {
+                    UIApplication.shared.open(URL(string:"https://guides.iiif.io")!)
+                }, label: {
+                    Text("https://guides.iiif.io.").font(.subheadline)
+                })
+                    .buttonStyle(BorderlessButtonStyle())
+
+                TextField("Enter IIIF manifest URL", text: $fieldValue, onEditingChanged: { _ in
+                }, onCommit: {
+                    urlEnter()
+                })
+                    .padding(.horizontal, 20.0)
+                    .multilineTextAlignment(.leading)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .foregroundColor(.gray)
+                    .font(.body)
+                    .padding(EdgeInsets(top: 25, leading: 0, bottom: 0, trailing: 0))
+
+                Text("Type or paste an item's IIIF manifest URL to add it to Booksnake.")
+                    .font(.caption)
+                    .fontWeight(.regular)
+                    .foregroundColor(Color.gray)
+                    .multilineTextAlignment(.leading)
+                    .padding(EdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0))
+            }
+            ZStack(alignment: .center, content: {
+                Rectangle()
+                    .fill(Color.init(white: 0.7))
+                    .frame(width: 200, height: 200, alignment: .center)
+                    .isHidden(!isActivity)
+                    .opacity(0.7)
+                    .cornerRadius(5.0)
+                ActivityIndicator(isAnimating: $isActivity, text: $text, style: .large)
+            }).position(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 3)
+        })
+        .navigationBarItems(trailing: HStack() {
+            Button(action: {
+                urlEnter()
+            }, label:{
+                Text("Add")
+            })
+        })
+        .alert(isPresented: $isAlert) {
+            switch activeAlert {
+            case .first:
+                return Alert(title: Text("Unable to add item"),
+                             message: Text("The item catalog page doesn't have the necessary information"),
+                             dismissButton: .default(Text("OK")))
+            case .second:
+                return Alert(title: Text("URL has spaces and/or nothing is entered"),
+                             message: Text("Please remove spaces from URL address and/or type something"),
+                             dismissButton: .default(Text("OK")))
+            case .third:
+                return Alert(title: Text("\(newItemLabel) Download Complete!"),
+                             message: Text("Tap OK to return to main page."),
+                             dismissButton: .default(Text("OK"), action: {
+                    delegate?.switchToLibraryTab()
+                }))
+            }
+        }
+    }
+
 	private func urlEnter() {
         isActivity = true
 
@@ -125,7 +132,6 @@ struct InputView: View {
                     self.newItemLabel = newItemLabel
                     activeAlert = .third
                     isAlert = true
-                    self.delegate?.switchToLibraryTab()
                 case .failure(let error):
                     print("can't download manifest. Error \(error)")
                     activeAlert = .first
