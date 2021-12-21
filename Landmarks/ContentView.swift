@@ -13,7 +13,7 @@ struct ContentView: View {
     @State private var showText = false
     
     @State var image: UIImage = UIImage()
-	@State var image_url: String
+	//@State var image_url: String
 	@State var width: CGFloat = 5
     var length: CGFloat
     var labels: [String]
@@ -29,7 +29,7 @@ struct ContentView: View {
 			}
 			
 			NavigationLink(
-				destination: RealityViewRepresentable(image: image, width:width, length: length, image_url: image_url)
+				destination: RealityViewRepresentable(image: image, width:width, length: length) //, image_url: image_url)
 					.navigationBarTitle("")
 					.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: .center),
 				isActive: $showingPreview){

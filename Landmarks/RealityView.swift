@@ -43,20 +43,20 @@ class RealityView: UIViewController, ARSessionDelegate  {
 	
 	
 	@objc func tapGesture( _ sender: UITapGestureRecognizer? = nil){
-		guard let touchInView = sender?.location(in: self.realityView) else { return }
-		guard let query = realityView.makeRaycastQuery(from: touchInView, allowing: .estimatedPlane, alignment: .horizontal) else {return}
 		
-		let coord = self.realityView.unproject(touchInView, ontoPlane: matrix_identity_float4x4)
+		guard let query = realityView.makeRaycastQuery(from: realityView.center, allowing: .existingPlaneInfinite, alignment: .horizontal) else { return }
+		
 		guard let hitResult = realityView.session.raycast(query).first	else {return}
 		
-		//plane
+		// set a transform to an existing entity
+		let transform = Transform(matrix: hitResult.worldTransform)
+		
 		let plane = CustomPlane(image_url: texture_url ?? "Hollywood.jpg")
-		plane.position = coord!
+		plane.transform = transform
 		realityView.scene.anchors.append(plane)
 		
 		realityView.installGestures([.all], for: plane)
 		plane.generateCollisionShapes(recursive: true)
-		print("nothign ", hitResult)
 	}
 }
 
