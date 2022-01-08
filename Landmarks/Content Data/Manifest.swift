@@ -31,7 +31,7 @@ extension Manifest {
     static func sortedFetchRequest() -> NSFetchRequest<Manifest> {
         let request = Manifest.fetchRequest() as! NSFetchRequest<Manifest>
         
-        request.sortDescriptors = [NSSortDescriptor(key: "createdDate", ascending: true)]
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \Manifest.createdDate, ascending: true)]
           
         return request
     }
