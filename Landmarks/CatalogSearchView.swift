@@ -9,8 +9,6 @@
 import SwiftUI
 
 struct CatalogSearchView: View {
-	@Binding var label: String
-	
 	//text in catalogue
 	@State var title: String
 	@State var type: String
@@ -71,7 +69,8 @@ struct CatalogSearchView: View {
 						.multilineTextAlignment(.leading)
 						.padding([.leading, .bottom, .trailing], 20.0)
 					NavigationLink(
-						destination: FullWebView(hasJP2: $hasJP2, label: $label, filter: filter, type: type, delegate: delegate, webview: WebViewRepresentable(search: fieldURL.joined(separator: fieldValue), path: $urlPath, isJP2: $hasJP2, filter: filter, hasBackList: $hasBackList, hasForwardList: $hasForwardList, viewModel: model)) , isActive: $active,
+						destination: LazyView(FullWebView(hasJP2: $hasJP2, filter: filter, type: type, delegate: delegate, webview: WebViewRepresentable(search: fieldURL.joined(separator: fieldValue), path: $urlPath, isJP2: $hasJP2, filter: filter, hasBackList: $hasBackList, hasForwardList: $hasForwardList, viewModel: model))),
+                        isActive: $active,
 						label: {
 							ZStack(){
 								Color.init(.systemBlue)

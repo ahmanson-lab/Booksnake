@@ -17,7 +17,7 @@ struct ActivityIndicator: UIViewRepresentable {
 
     func makeUIView(context: UIViewRepresentableContext<ActivityIndicator>) -> UIActivityIndicatorView {
         let temp = UIActivityIndicatorView(style: style)
-        temp.color = UIColor.white
+        temp.color = .white
         return temp
     }
 
@@ -26,7 +26,7 @@ struct ActivityIndicator: UIViewRepresentable {
         
         let label = UILabel(frame: CGRect(x: -60, y: 0, width: 300, height: 100))
         label.text = text
-        label.textColor = UIColor.white
+        label.textColor = .white
 
         uiView.addSubview(label)
     }

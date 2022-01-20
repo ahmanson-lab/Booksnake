@@ -12,10 +12,6 @@ enum ActiveAlert {
 }
 
 struct CustomSearchMenu: View {
-    @Binding var addDefaultURL: Bool
-    @Binding var label: String
-    @State var hasText: Bool = true
-	
     var delegate: AssetRowProtocol?
     
     var color1: Color = Color(red: 237/225, green: 30/225, blue: 52/225, opacity: 1)
@@ -28,7 +24,7 @@ struct CustomSearchMenu: View {
     var body: some View {
 		ScrollView (.vertical, showsIndicators: false) {
 			LazyVGrid(columns: items, alignment: .center, spacing: 50) {
-				NavigationLink( destination: InputView( label: $label,hasText: $hasText, delegate: delegate),
+				NavigationLink( destination: LazyView(InputView(delegate: delegate)),
 					label: {
 						Text("Add from IIIF Manifest")
 							.fontWeight(.bold)
@@ -44,7 +40,7 @@ struct CustomSearchMenu: View {
 				
 					//LOC Catalogue
 					NavigationLink(
-						destination: CatalogSearchView(label: $label, title: "Library of Congress", type: "LOC", instructions: "Search results are limited to Library of Congress materials with an IIIF manifest, which Booksnake uses to add items.", filter: "gov/item", fieldURL: ["https://www.loc.gov/search/?q=", "&fa=mime-type:image/jp2"], delegate: delegate),
+						destination: LazyView(CatalogSearchView(title: "Library of Congress", type: "LOC", instructions: "Search results are limited to Library of Congress materials with an IIIF manifest, which Booksnake uses to add items.", filter: "gov/item", fieldURL: ["https://www.loc.gov/search/?q=", "&fa=mime-type:image/jp2"], delegate: delegate)),
 						label: {
 							Text("Library of Congress")
 								.fontWeight(.bold)

@@ -22,13 +22,15 @@ struct ProgressView: View {
 }
 
 struct FullWebView : View {
+    @Environment(\.managedObjectContext) var managedObjectContext
+
     @Binding var hasJP2: Bool
-    @Binding var label: String
 	@State var filter: String
 	@State var type: String
 	
     @State private var isAlert: Bool = false
-    @State private var isActivity: Bool = false
+    @State private var showLoading: Bool = false
+    @State private var newItemLabel: String = ""
     @State var text: String = "Adding to Booksnake"
     @State var activeAlert: ActiveAlert = .second
 	@State var width: CGFloat = 1
@@ -72,14 +74,14 @@ struct FullWebView : View {
             }
 			ProgressView(width: $width)
             
-            Rectangle()
-				.fill(temp ? Color.red : Color.init(white: 0.7))
-                .frame(width: 200, height: 200, alignment: .center)
-                .isHidden(!isActivity, remove:!isActivity)
-                .opacity(0.7)
-                .cornerRadius(5.0)
-
-            ActivityIndicator(isAnimating: $isActivity, text: $text, style: .large)
+            ZStack {
+                ActivityIndicator(isAnimating: $showLoading, text: $text, style: .large)
+                    .frame(width: 200.0, height: 200.0, alignment: .center)
+                    .background(Color(white: 0.7, opacity: 0.7))
+                    .cornerRadius(20)
+            }
+            .isHidden(!showLoading)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         }
         .navigationBarItems(trailing: HStack(){
             Button(action: {
@@ -91,91 +93,99 @@ struct FullWebView : View {
         })
         .alert(isPresented: $isAlert, content: {
             switch activeAlert{
-                case .first:
-                    return Alert(title: Text("Unable to add item"), message: Text("The item catalog page doesn't have the necessary information"), dismissButton: .default(Text("OK")))
-                case .second:
-                    return Alert(title: Text("Download failed"), message: Text("Something went wrong during download process. Check that manifest has necessary information and/or internet is working"), dismissButton: .default(Text("OK")))
-                case .third:
-                    return  Alert(title: Text(label + " Download Complete!"), message: Text("Swipe down to return to main page."), dismissButton: .default(Text("OK")))
+            case .first:
+                return Alert(title: Text("Unable to add item"),
+                             message: Text("The item catalog page doesn't have the necessary information"),
+                             dismissButton: .default(Text("OK")))
+            case .second:
+                return Alert(title: Text("Download failed"),
+                             message: Text("Something went wrong during download process. Check that manifest has necessary information and/or internet is working"),
+                             dismissButton: .default(Text("OK")))
+            case .third:
+                return  Alert(title: Text("\(newItemLabel) Download Complete!"),
+                              message: Text("Tap OK to return to main page."),
+                              dismissButton: .default(Text("OK"), action: {
+                    delegate?.switchToLibraryTab()
+                }))
             }
         })
     }
 	
-	func downloadItem(type: String){
+	private func downloadItem(type: String) {
+        showLoading = true
+
 		if (type == "LOC"){
 			path = self.webview.viewModel.path
-			checkTextField(url: path, filter: "?fo=json&at=item.mime_type", completion: { status in
-					if (!status){
-						activeAlert = .first
-						isAlert = true
-					}
-					else {
-						//treat URL depending on Catalogue
-						if !path.hasSuffix("manifest.json"){
-							path.append("manifest.json")
-						}
-						isActivity = true
-						self.delegate?.onAddEntry(path: path,  completion: { success in
-							
-							if (success) {
-								print("success in downloading")
-								activeAlert = .third
-								isAlert = true
-								
-//								return
-							}
-							else {
-								activeAlert = .first
-								isAlert = true
-								
-							}
-							isActivity = false
-						})
-						
-					}
-				})
+            validateURLForIIIF(url: path, filter: "?fo=json&at=item.mime_type", completion: { status in
+                defer { showLoading = false }
+
+                guard status else {
+                    activeAlert = .first
+                    isAlert = true
+                    return
+                }
+
+                // treat URL depending on Catalogue
+                if !path.hasSuffix("manifest.json"){
+                    path.append("manifest.json")
+                }
+
+                ManifestDataHandler.addNewManifest(from: path,
+                                                   managedObjectContext: self.managedObjectContext) { result in
+                    switch result {
+                    case .success(let newItemLabel):
+                        print("success in downloading")
+                        self.newItemLabel = newItemLabel
+                        activeAlert = .third
+                        isAlert = true
+                    case .failure(let error):
+                        print("can't download manifest. Error \(error)")
+                        activeAlert = .first
+                        isAlert = true
+                    }
+                }
+            })
 		}
 		else if (type == "HDL"){
 			//download process for Huntington
 			path = self.webview.viewModel.path
-			checkTextField(url: path, filter: "/id/", completion: { status in
-				if (!status){
-					activeAlert = .first
-					isAlert = true
-				}
-				else{
-					if let collection = path.range(of: "collection/"){
-						let indexA = path[collection.upperBound...].firstIndex(of: "/")
-						let collection_id = path[collection.upperBound..<indexA!]
-						
-						let indexB = path[path.range(of: "id/")!.upperBound...].firstIndex(of: "/")
-						let item_id = path[path.range(of: "id/")!.upperBound..<indexB!]
-						
-						isActivity = true
-						
-						self.delegate?.onAddEntry(path: "https://hdl.huntington.org/iiif/info/" + collection_id + "/" + item_id + "/manifest.json",  completion: { success in
-							
-							if (success) {
-								print("success in downloading")
-								activeAlert = .third
-								isAlert = true
-								
-//								return
-							}
-							else {
-								activeAlert = .first
-								isAlert = true
-							}
-							isActivity = false
-						})
-					}
-					
-				}
+            validateURLForIIIF(url: path, filter: "/id/", completion: { status in
+                defer { showLoading = false }
+
+                guard status,
+                      let collection = path.range(of: "collection/") else {
+                    activeAlert = .first
+                    isAlert = true
+                    return
+                }
+
+                let indexA = path[collection.upperBound...].firstIndex(of: "/")
+                let collection_id = path[collection.upperBound..<indexA!]
+
+                let indexB = path[path.range(of: "id/")!.upperBound...].firstIndex(of: "/")
+                let item_id = path[path.range(of: "id/")!.upperBound..<indexB!]
+
+                let itemURL = "https://hdl.huntington.org/iiif/info/" + collection_id + "/" + item_id + "/manifest.json"
+                ManifestDataHandler.addNewManifest(from: itemURL,
+                                                   managedObjectContext: self.managedObjectContext) { result in
+                    switch result {
+                    case .success(let newItemLabel):
+                        print("success in downloading")
+                        self.newItemLabel = newItemLabel
+                        activeAlert = .third
+                        isAlert = true
+                        self.delegate?.switchToLibraryTab()
+                    case .failure(let error):
+                        print("can't download manifest. Error \(error)")
+                        activeAlert = .first
+                        isAlert = true
+                    }
+                }
 			})
 		}
 	}
     
-	func checkTextField(url : String, filter: String, completion: @escaping (Bool) -> Void) {
+    private func validateURLForIIIF(url : String, filter: String, completion: @escaping (Bool) -> Void) {
         let checkSession = Foundation.URLSession.shared
         var path: String = url
         
