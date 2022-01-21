@@ -12,10 +12,10 @@ import UIKit
 
 class CustomPlane: Entity, HasModel, HasCollision, HasAnchoring{
 	
-	required init(image_url: String) {
+	required init(image_url: URL) {
 		super .init()
 		
-		let resource = try? TextureResource.load(named: image_url)
+		let resource = try? TextureResource.load(named: image_url.absoluteString)
 		
 		var material = PhysicallyBasedMaterial()
 		//material.baseColor = UIColor.white

@@ -13,8 +13,8 @@ import ARKit
 
 class RealityView: UIViewController, ARSessionDelegate  {
 	
-	var textureImage: UIImage?
-	var texture_url: String?
+	//var textureImage: UIImage?
+	var texture_url: URL?
 	var width: CGFloat?
 	var height: CGFloat?
 	
@@ -51,7 +51,7 @@ class RealityView: UIViewController, ARSessionDelegate  {
 		// set a transform to an existing entity
 		let transform = Transform(matrix: hitResult.worldTransform)
 		
-		let plane = CustomPlane(image_url: texture_url ?? "Hollywood.jpg")
+		let plane = CustomPlane(image_url: texture_url ?? URL(fileURLWithPath: "Hollywood.jpg"))
 		plane.transform = transform
 		realityView.scene.anchors.append(plane)
 		

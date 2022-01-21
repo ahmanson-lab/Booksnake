@@ -11,13 +11,14 @@ import QuickLook
 import ARKit
 
 struct ARViewControllerRepresentable: UIViewControllerRepresentable {
-    var image: UIImage? 
+    var imageURL: URL?
     var width: CGFloat?
     var length: CGFloat?
     
     typealias UIViewControllerType = UIViewController
     
     func makeUIViewController(context: Context) -> UIViewController {
+        let image = UIImage(contentsOfFile: imageURL?.path ?? "") ?? UIImage()
         let picker = ARView()
         picker.texture_image = image
         picker.width = width
