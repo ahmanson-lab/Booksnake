@@ -16,8 +16,6 @@ public struct ManifestData {
     var width: Float?
     var height: Float?
     var labels: [String]?
-    var values: [String]?
-    var metadata: Metadata?
 	
     //public static var supportsSecureCoding: Bool = true
 	let documentDirectory = FileManager.SearchPathDirectory.documentDirectory
