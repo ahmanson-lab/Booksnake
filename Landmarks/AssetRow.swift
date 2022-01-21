@@ -34,8 +34,8 @@ struct AssetRow: View, AssetRowProtocol {
                     ForEach(contentTest, id: \.self) { item in
                         let image = UIImage.loadThumbnail(at: item.imageURL, forSize: .small) ?? UIImage()
                         NavigationLink(destination: LazyView(ContentView(imageURL: item.imageURL,
-                                                                         width: CGFloat(item.width),
-                                                                         length: CGFloat(item.length),
+                                                                         width: (item.width),
+                                                                         length: (item.length),
                                                                          labels: item.labels! ,
                                                                          values: item.values! ))) {
                             Image(uiImage: image)

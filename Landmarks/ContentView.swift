@@ -12,9 +12,10 @@ struct ContentView: View {
     @State var showingPreview = false
     @State private var showText = false
     var imageURL: URL?
-	var width: CGFloat = 5
-
-    var length: CGFloat
+	
+	var width: Float = 1.0
+	var length: Float = 1.0
+	
     var labels: [String]
     var values: [String]
 

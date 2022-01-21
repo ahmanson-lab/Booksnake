@@ -15,8 +15,8 @@ class RealityView: UIViewController, ARSessionDelegate  {
 	
 	//var textureImage: UIImage?
 	var texture_url: URL?
-	var width: CGFloat?
-	var height: CGFloat?
+	var width: Float?
+	var height: Float?
 	
 	
 	var realityView: ARView {
@@ -51,7 +51,7 @@ class RealityView: UIViewController, ARSessionDelegate  {
 		// set a transform to an existing entity
 		let transform = Transform(matrix: hitResult.worldTransform)
 		
-		let plane = CustomPlane(image_url: texture_url ?? URL(fileURLWithPath: "Hollywood.jpg"))
+		let plane = CustomPlane(image_url: texture_url ?? URL(fileURLWithPath: "Hollywood.jpg"), width: width ?? 1.0, height: height ?? 1.0)
 		plane.transform = transform
 		realityView.scene.anchors.append(plane)
 		

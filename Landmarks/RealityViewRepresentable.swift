@@ -11,8 +11,8 @@ import ARKit
 
 struct RealityViewRepresentable: UIViewControllerRepresentable {
 	//var image: UIImage?
-	var width: CGFloat?
-	var length: CGFloat?
+	var width: Float?
+	var length: Float?
 	var image_url: URL?
 	
 	typealias UIViewControllerType = UIViewController
