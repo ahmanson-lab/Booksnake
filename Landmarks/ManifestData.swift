@@ -96,16 +96,6 @@ struct ManifestDataHandler {
         let annotation  = canvas.images
         let path = annotation?[0].resource.id ?? ""
         manifestData.image = (downloadImage(path:path))
-		
-		
-		let array = path.split(separator: "/")
-		
-
-//        for i in 0...(manifest_data.count) - 1 {
-//            let canvas = test_manifest?.sequences?[0].canvases[i]
-//            let annotation  = canvas?.images
-//            let path = annotation?[0].resource.id ?? ""
-//            self.image = (downloadImage(path:path))
 
         if let metadata = resolvedManifest?.metadata {
             manifestData.metadata = metadata

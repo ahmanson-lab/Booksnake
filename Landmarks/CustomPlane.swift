@@ -21,7 +21,7 @@ class CustomPlane: Entity, HasModel, HasCollision, HasAnchoring{
 		//material.baseColor = UIColor.white
 		material.baseColor.texture = PhysicallyBasedMaterial.Texture.init(resource!)
 		
-		self.components[ModelComponent] = ModelComponent(
+        self.components[ModelComponent.self] = ModelComponent(
 			mesh: .generatePlane(width: width, depth: height),
 			materials: [material]
 			)
