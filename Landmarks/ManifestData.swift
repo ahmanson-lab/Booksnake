@@ -17,16 +17,11 @@ enum ManifestDataErorr: Error {
 public struct ManifestData {
     var label: String = ""
     var image: UIImage?
-
     var width: Float?
     var height: Float?
     var labels: [String]?
-	var values: [String]?
-	var metadata: Metadata?
-	
-    //public static var supportsSecureCoding: Bool = true
-	let documentDirectory = FileManager.SearchPathDirectory.documentDirectory
-	let userDomainMask    = FileManager.SearchPathDomainMask.userDomainMask
+    var values: [String]?
+    var metadata: Metadata?
 }
 
 struct ManifestDataHandler {
@@ -75,7 +70,7 @@ struct ManifestDataHandler {
 
         return parseJson(dictionary: jsonData)
     }
-	
+
     private static func parseJson(dictionary: [String: Any]) -> ManifestData? {
         var manifestData = ManifestData()
         let resolvedManifest = IIIFManifest(dictionary)
