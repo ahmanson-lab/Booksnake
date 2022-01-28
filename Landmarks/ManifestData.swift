@@ -24,6 +24,13 @@ public struct ManifestData {
     var metadata: Metadata?
 }
 
+//don't use this struct in view
+struct ManifestItem: Identifiable {
+    let id = UUID()
+    let item: ManifestData
+    let image: UIImage
+}
+
 struct ManifestDataHandler {
     public static func addNewManifest(from urlPath: String,
                                       width: Float = 1,
