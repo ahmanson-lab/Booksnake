@@ -49,10 +49,6 @@ class RealityView: UIViewController, ARSessionDelegate  {
         realityView.session.pause()
     }
 
-    deinit {
-        print("RealityView Deinit")
-    }
-
 	func addGestures(){
 		let tap = UITapGestureRecognizer(target: self, action: #selector(self.tapGesture(_:)))
 		realityView.addGestureRecognizer(tap)
