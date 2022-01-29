@@ -31,7 +31,6 @@ struct FullWebView : View {
     @State private var isAlert: Bool = false
     @State private var showLoading: Bool = false
     @State private var newItemLabel: String = ""
-    @State var text: String = "Adding to Booksnake"
     @State var activeAlert: ActiveAlert = .second
 	@State var width: CGFloat = 1
 	@State var opacityValue = 0.0
@@ -75,7 +74,7 @@ struct FullWebView : View {
 			ProgressView(width: $width)
             
             ZStack {
-                ActivityIndicator(isAnimating: $showLoading, text: $text, style: .large)
+                ActivityIndicator(isAnimating: $showLoading, text: "Adding to Booksnake", style: .large)
                     .frame(width: 200.0, height: 200.0, alignment: .center)
                     .background(Color(white: 0.7, opacity: 0.7))
                     .cornerRadius(20)
@@ -117,8 +116,6 @@ struct FullWebView : View {
 		if (type == "LOC"){
 			path = self.webview.viewModel.path
             validateURLForIIIF(url: path, filter: "?fo=json&at=item.mime_type", completion: { status in
-                defer { showLoading = false }
-
                 guard status else {
                     activeAlert = .first
                     isAlert = true
@@ -143,6 +140,8 @@ struct FullWebView : View {
                         activeAlert = .first
                         isAlert = true
                     }
+
+                    showLoading = false
                 }
             })
 		}

@@ -11,7 +11,6 @@ import SwiftUI
 struct InputView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
 
-	@State var text: String = "Adding to Booksnake"
 	@State var fieldValue: String = ""
 	@State var isAlert: Bool = false
 	@State var activeAlert: ActiveAlert = .first
@@ -62,7 +61,7 @@ struct InputView: View {
             }
 
             ZStack {
-                ActivityIndicator(isAnimating: $showLoading, text: $text, style: .large)
+                ActivityIndicator(isAnimating: $showLoading, text: "Adding to Booksnake", style: .large)
                     .frame(width: 200.0, height: 200.0, alignment: .center)
                     .background(Color(white: 0.7, opacity: 0.7))
                     .cornerRadius(20)
@@ -116,8 +115,6 @@ struct InputView: View {
 
         // Check if url is valid for ifff
         validateURLForIIIF(url: fieldValue, completion: { status in
-            defer { showLoading = false }
-
             // If the textField is incorrect, show error
             guard status else {
                 activeAlert = .first
@@ -144,6 +141,8 @@ struct InputView: View {
                     activeAlert = .first
                     isAlert = true
                 }
+
+                showLoading = false
             }
         })
 	}
