@@ -17,33 +17,48 @@ class RealityView: UIViewController, ARSessionDelegate  {
 	var texture_url: URL?
 	var width: Float?
 	var height: Float?
+
+    var realityView = ARView(frame: .zero)
 	
-	
-	var realityView: ARView {
-			return self.view as! ARView
-	}
-	
-	override func loadView() {
-		self.view = ARView(frame: .zero)
-		self.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+	override func viewDidLoad() {
+        super.viewDidLoad()
+
+        view.addSubview(realityView)
+        realityView.translatesAutoresizingMaskIntoConstraints = false
+        realityView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        realityView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        realityView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        realityView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
 		
 		self.addCoaching()
 		addGestures()
-		
-		let config = ARWorldTrackingConfiguration()
-		config.planeDetection  = [.horizontal]
-		realityView.session.run(config, options: [.removeExistingAnchors])
 	}
-		
-	
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        let config = ARWorldTrackingConfiguration()
+        config.planeDetection  = [.horizontal]
+        realityView.session.run(config, options: [.removeExistingAnchors])
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        // Pause the view's session
+        realityView.session.pause()
+    }
+
+    deinit {
+        print("RealityView Deinit")
+    }
+
 	func addGestures(){
 		let tap = UITapGestureRecognizer(target: self, action: #selector(self.tapGesture(_:)))
 		realityView.addGestureRecognizer(tap)
 	}
-	
-	
+
 	@objc func tapGesture( _ sender: UITapGestureRecognizer? = nil){
-		
 		guard let query = realityView.makeRaycastQuery(from: realityView.center, allowing: .existingPlaneInfinite, alignment: .horizontal) else { return }
 		
 		guard let hitResult = realityView.session.raycast(query).first	else {return}
@@ -62,7 +77,6 @@ class RealityView: UIViewController, ARSessionDelegate  {
 
 extension RealityView: ARCoachingOverlayViewDelegate {
 	func addCoaching(){
-		
 		let coachingOverlay = ARCoachingOverlayView()
 		coachingOverlay.delegate = self
 		coachingOverlay.session = self.realityView.session
@@ -71,7 +85,6 @@ extension RealityView: ARCoachingOverlayViewDelegate {
 		coachingOverlay.goal = .anyPlane
 		self.realityView.addSubview(coachingOverlay)
 	}
-	
 }
 
 
