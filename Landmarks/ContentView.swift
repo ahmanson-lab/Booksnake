@@ -33,7 +33,7 @@ struct ContentView: View {
 				destination: LazyView(RealityViewRepresentable(width:width, length: length, image_url: imageURL))
 					.navigationBarTitle("")
 					.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: .center),
-				isActive: $showingPreview){
+				isActive: $showingPreview) {
 					ZStack(){
 						Color.init(.systemBlue)
 							.cornerRadius(10)
