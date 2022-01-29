@@ -72,6 +72,13 @@ struct InputView: View {
         })
         .navigationBarItems(trailing: HStack() {
             Button(action: {
+                // Resign keyboard to fix AttributeGraph: cycle detected through attribute error
+                DispatchQueue.main.async {
+                    UIApplication.shared.sendAction(
+                        #selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil
+                    )
+                }
+
                 urlEnter()
             }, label:{
                 Text("Add")

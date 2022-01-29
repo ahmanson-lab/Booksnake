@@ -42,7 +42,7 @@ struct ManifestDataHandler {
             return
         }
 
-        print("Adding Remote Manifest")
+        print("adding remote manifest")
 
         let new_manifest = ManifestItem(item: new_item, image: new_item.image!)
 
