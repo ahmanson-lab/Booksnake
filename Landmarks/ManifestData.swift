@@ -71,9 +71,11 @@ struct ManifestDataHandler {
     }
 
     private static func getRemoteManifest(from urlString: String) async -> ManifestData? {
-        // TODO: Need to make this async code, or the data download may failed
-        guard let url = URL(string: urlString),
-              let data = try? Data(contentsOf: url),
+        guard let url = URL(string: urlString) else { return nil }
+
+        let request = URLRequest(url: url)
+        guard let (data, response) = try? await URLSession.shared.data(for: request),
+              (response as? HTTPURLResponse)?.statusCode == 200,
               let jsonObject = try? JSONSerialization.jsonObject(with: data, options: .allowFragments),
               let jsonData = jsonObject as? [String: Any] else { return nil }
 
@@ -132,7 +134,7 @@ struct ManifestDataHandler {
     }
 
     private static func downloadImage(from url: URL) async throws -> UIImage? {
-        let request = URLRequest(url:url)
+        let request = URLRequest(url: url)
         let (data, response) = try await URLSession.shared.data(for: request)
         guard (response as? HTTPURLResponse)?.statusCode == 200 else { return nil }
 
