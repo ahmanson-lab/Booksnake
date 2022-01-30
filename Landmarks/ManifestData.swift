@@ -36,49 +36,51 @@ struct ManifestDataHandler {
                                       width: Float = 1,
                                       length: Float = 1,
                                       managedObjectContext: NSManagedObjectContext,
-                                      completion: (Result<String, ManifestDataErorr>) -> Void) {
-        guard let new_item = ManifestDataHandler.getRemoteManifest(from: urlPath) else {
-            completion(.failure(.remoteFetchError))
-            return
+                                      completion: @escaping (Result<String, ManifestDataErorr>) -> Void) {
+        Task {
+            guard let new_item = await ManifestDataHandler.getRemoteManifest(from: urlPath) else {
+                completion(.failure(.remoteFetchError))
+                return
+            }
+
+            print("adding remote manifest")
+
+            let new_manifest = ManifestItem(item: new_item, image: new_item.image!)
+
+            let contentdata = NSEntityDescription.insertNewObject(forEntityName: "Manifest", into: managedObjectContext) as! Manifest
+            contentdata.id = new_manifest.id
+            contentdata.labels = new_manifest.item.labels
+            contentdata.itemLabel = new_manifest.item.label
+            contentdata.values = new_manifest.item.values
+            contentdata.width = new_manifest.item.width ?? width
+            contentdata.length = new_manifest.item.height ?? length
+            contentdata.createdDate = Date()
+            FileHandler.save(data: new_manifest.image.jpegData(compressionQuality: 1.0) ?? Data(),
+                             toDirectory: .image,
+                             withFileName: "\(new_manifest.id).jpg")
+            contentdata.imageFileName = "\(new_manifest.id).jpg"
+
+            do {
+                try managedObjectContext.save()
+            } catch {
+                print(error)
+            }
+
+            completion(.success(new_manifest.item.label))
         }
-
-        print("adding remote manifest")
-
-        let new_manifest = ManifestItem(item: new_item, image: new_item.image!)
-
-        let contentdata = NSEntityDescription.insertNewObject(forEntityName: "Manifest", into: managedObjectContext) as! Manifest
-        contentdata.id = new_manifest.id
-        contentdata.labels = new_manifest.item.labels
-        contentdata.itemLabel = new_manifest.item.label
-        contentdata.values = new_manifest.item.values
-        contentdata.width = new_manifest.item.width ?? width
-        contentdata.length = new_manifest.item.height ?? length
-        contentdata.createdDate = Date()
-        FileHandler.save(data: new_manifest.image.jpegData(compressionQuality: 1.0) ?? Data(),
-                         toDirectory: .image,
-                         withFileName: "\(new_manifest.id).jpg")
-        contentdata.imageFileName = "\(new_manifest.id).jpg"
-
-        do {
-            try managedObjectContext.save()
-        } catch {
-            print(error)
-        }
-
-        completion(.success(new_manifest.item.label))
     }
 
-    private static func getRemoteManifest(from urlString: String) -> ManifestData? {
+    private static func getRemoteManifest(from urlString: String) async -> ManifestData? {
         // TODO: Need to make this async code, or the data download may failed
         guard let url = URL(string: urlString),
               let data = try? Data(contentsOf: url),
               let jsonObject = try? JSONSerialization.jsonObject(with: data, options: .allowFragments),
               let jsonData = jsonObject as? [String: Any] else { return nil }
 
-        return parseJson(dictionary: jsonData)
+        return await parseJson(dictionary: jsonData)
     }
 
-    private static func parseJson(dictionary: [String: Any]) -> ManifestData? {
+    private static func parseJson(dictionary: [String: Any]) async -> ManifestData? {
         var manifestData = ManifestData()
         let resolvedManifest = IIIFManifest(dictionary)
 
@@ -97,7 +99,9 @@ struct ManifestDataHandler {
 
         let annotation  = canvas.images
         let path = annotation?[0].resource.id ?? ""
-        manifestData.image = (downloadImage(path:path))
+        if let imageURL = URL(string: path) {
+            manifestData.image = try? await downloadImage(from: imageURL)
+        }
 
         if let metadata = resolvedManifest?.metadata {
             manifestData.metadata = metadata
@@ -127,28 +131,23 @@ struct ManifestDataHandler {
         return manifestData
     }
 
-    private static func downloadImage(path:String) -> UIImage {
-        var image = UIImage()
-        do {
-            let url = URL.init(string: path)!
-            let data = try Data(contentsOf: url)
-            image = UIImage(data: data) ?? UIImage()
-        }
-        catch {
-            print ("cannot find image")
-        }
-        return image
+    private static func downloadImage(from url: URL) async throws -> UIImage? {
+        let request = URLRequest(url:url)
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard (response as? HTTPURLResponse)?.statusCode == 200 else { return nil }
+
+        return UIImage(data: data)
     }
 }
 
 // MARK: - FOR DEMO ONLY: add hard coded values from local manifests and images
 extension ManifestDataHandler {
-    public static func addExamples(managedObjectContext: NSManagedObjectContext) {
+    public static func addExamples(managedObjectContext: NSManagedObjectContext) async {
         let resource_paths = ["MapOfCalifornia", "MapOfLosAngeles", "TopographicLA", "LA1909", "AutomobileLA", "Hollywood"]
         let sizes = [[0.48, 0.69], [0.63, 0.56],[1.53, 0.56],[0.85, 1.02],[0.22, 0.08],[0.67, 0.66]]
 
         for index in 0..<resource_paths.count {
-            if let new_item = ManifestDataHandler.getLocalManifest(from: resource_paths[index]) {
+            if let new_item = await ManifestDataHandler.getLocalManifest(from: resource_paths[index]) {
                 let new_manifest = ManifestItem(item:new_item, image: UIImage(named: resource_paths[index])!)
                 let contentdata = NSEntityDescription.insertNewObject(forEntityName: "Manifest", into: managedObjectContext) as! Manifest
                 contentdata.id = new_manifest.id
@@ -173,12 +172,12 @@ extension ManifestDataHandler {
         }
     }
 
-    private static func getLocalManifest(from resrouceName: String) -> ManifestData? {
+    private static func getLocalManifest(from resrouceName: String) async -> ManifestData? {
         guard let url = Bundle.main.url(forResource: resrouceName, withExtension: "json"),
               let data = try? Data(contentsOf: url),
               let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []),
               let jsonData = jsonObject as? [String: Any] else { return nil }
 
-        return parseJson(dictionary: jsonData)
+        return await parseJson(dictionary: jsonData)
     }
 }
