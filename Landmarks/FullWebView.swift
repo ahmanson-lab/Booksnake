@@ -31,7 +31,6 @@ struct FullWebView : View {
     @State private var isAlert: Bool = false
     @State private var showLoading: Bool = false
     @State private var newItemLabel: String = ""
-    @State var text: String = "Adding to Booksnake"
     @State var activeAlert: ActiveAlert = .second
 	@State var width: CGFloat = 1
 	@State var opacityValue = 0.0
@@ -75,7 +74,7 @@ struct FullWebView : View {
 			ProgressView(width: $width)
             
             ZStack {
-                ActivityIndicator(isAnimating: $showLoading, text: $text, style: .large)
+                ActivityIndicator(isAnimating: $showLoading, text: "Adding to Booksnake", style: .large)
                     .frame(width: 200.0, height: 200.0, alignment: .center)
                     .background(Color(white: 0.7, opacity: 0.7))
                     .cornerRadius(20)
@@ -117,11 +116,10 @@ struct FullWebView : View {
 		if (type == "LOC"){
 			path = self.webview.viewModel.path
             validateURLForIIIF(url: path, filter: "?fo=json&at=item.mime_type", completion: { status in
-                defer { showLoading = false }
-
                 guard status else {
                     activeAlert = .first
                     isAlert = true
+                    showLoading = false
                     return
                 }
 
@@ -130,8 +128,9 @@ struct FullWebView : View {
                     path.append("manifest.json")
                 }
 
-                ManifestDataHandler.addNewManifest(from: path,
-                                                   managedObjectContext: self.managedObjectContext) { result in
+                Task {
+                    let result = await ManifestDataHandler.addNewManifest(from: path, managedObjectContext: self.managedObjectContext)
+
                     switch result {
                     case .success(let newItemLabel):
                         print("success in downloading")
@@ -143,6 +142,8 @@ struct FullWebView : View {
                         activeAlert = .first
                         isAlert = true
                     }
+
+                    showLoading = false
                 }
             })
 		}
@@ -150,12 +151,11 @@ struct FullWebView : View {
 			//download process for Huntington
 			path = self.webview.viewModel.path
             validateURLForIIIF(url: path, filter: "/id/", completion: { status in
-                defer { showLoading = false }
-
                 guard status,
                       let collection = path.range(of: "collection/") else {
                     activeAlert = .first
                     isAlert = true
+                    showLoading = false
                     return
                 }
 
@@ -166,8 +166,10 @@ struct FullWebView : View {
                 let item_id = path[path.range(of: "id/")!.upperBound..<indexB!]
 
                 let itemURL = "https://hdl.huntington.org/iiif/info/" + collection_id + "/" + item_id + "/manifest.json"
-                ManifestDataHandler.addNewManifest(from: itemURL,
-                                                   managedObjectContext: self.managedObjectContext) { result in
+
+                Task {
+                    let result = await ManifestDataHandler.addNewManifest(from: itemURL, managedObjectContext: self.managedObjectContext)
+
                     switch result {
                     case .success(let newItemLabel):
                         print("success in downloading")
@@ -180,6 +182,8 @@ struct FullWebView : View {
                         activeAlert = .first
                         isAlert = true
                     }
+
+                    showLoading = false
                 }
 			})
 		}

@@ -11,7 +11,6 @@ import SwiftUI
 struct InputView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
 
-	@State var text: String = "Adding to Booksnake"
 	@State var fieldValue: String = ""
 	@State var isAlert: Bool = false
 	@State var activeAlert: ActiveAlert = .first
@@ -62,7 +61,7 @@ struct InputView: View {
             }
 
             ZStack {
-                ActivityIndicator(isAnimating: $showLoading, text: $text, style: .large)
+                ActivityIndicator(isAnimating: $showLoading, text: "Adding to Booksnake", style: .large)
                     .frame(width: 200.0, height: 200.0, alignment: .center)
                     .background(Color(white: 0.7, opacity: 0.7))
                     .cornerRadius(20)
@@ -72,6 +71,13 @@ struct InputView: View {
         })
         .navigationBarItems(trailing: HStack() {
             Button(action: {
+                // Resign keyboard to fix AttributeGraph: cycle detected through attribute error
+                DispatchQueue.main.async {
+                    UIApplication.shared.sendAction(
+                        #selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil
+                    )
+                }
+
                 urlEnter()
             }, label:{
                 Text("Add")
@@ -109,12 +115,11 @@ struct InputView: View {
 
         // Check if url is valid for ifff
         validateURLForIIIF(url: fieldValue, completion: { status in
-            defer { showLoading = false }
-
             // If the textField is incorrect, show error
             guard status else {
                 activeAlert = .first
                 isAlert = true
+                showLoading = false
                 return
             }
 
@@ -124,8 +129,9 @@ struct InputView: View {
             }
 
             // Add the manifest into DB
-            ManifestDataHandler.addNewManifest(from: fieldValue,
-                                               managedObjectContext: self.managedObjectContext) { result in
+            Task {
+                let result = await ManifestDataHandler.addNewManifest(from: fieldValue, managedObjectContext: self.managedObjectContext)
+
                 switch result {
                 case .success(let newItemLabel):
                     print("sucess in downloading")
@@ -137,6 +143,8 @@ struct InputView: View {
                     activeAlert = .first
                     isAlert = true
                 }
+
+                showLoading = false
             }
         })
 	}

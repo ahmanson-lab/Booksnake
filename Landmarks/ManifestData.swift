@@ -17,30 +17,30 @@ enum ManifestDataErorr: Error {
 public struct ManifestData {
     var label: String = ""
     var image: UIImage?
-
     var width: Float?
     var height: Float?
     var labels: [String]?
-	var values: [String]?
-	var metadata: Metadata?
-	
-    //public static var supportsSecureCoding: Bool = true
-	let documentDirectory = FileManager.SearchPathDirectory.documentDirectory
-	let userDomainMask    = FileManager.SearchPathDomainMask.userDomainMask
+    var values: [String]?
+    var metadata: Metadata?
+}
+
+//don't use this struct in view
+struct ManifestItem: Identifiable {
+    let id = UUID()
+    let item: ManifestData
+    let image: UIImage
 }
 
 struct ManifestDataHandler {
     public static func addNewManifest(from urlPath: String,
                                       width: Float = 1,
                                       length: Float = 1,
-                                      managedObjectContext: NSManagedObjectContext,
-                                      completion: (Result<String, ManifestDataErorr>) -> Void) {
-        guard let new_item = ManifestDataHandler.getRemoteManifest(from: urlPath) else {
-            completion(.failure(.remoteFetchError))
-            return
+                                      managedObjectContext: NSManagedObjectContext) async -> Result<String, ManifestDataErorr> {
+        guard let new_item = await ManifestDataHandler.getRemoteManifest(from: urlPath) else {
+            return .failure(.remoteFetchError)
         }
 
-        print("Adding Remote Manifest")
+        print("adding remote manifest")
 
         let new_manifest = ManifestItem(item: new_item, image: new_item.image!)
 
@@ -63,20 +63,22 @@ struct ManifestDataHandler {
             print(error)
         }
 
-        completion(.success(new_manifest.item.label))
+        return .success(new_manifest.item.label)
     }
 
-    private static func getRemoteManifest(from urlString: String) -> ManifestData? {
-        // TODO: Need to make this async code, or the data download may failed
-        guard let url = URL(string: urlString),
-              let data = try? Data(contentsOf: url),
+    private static func getRemoteManifest(from urlString: String) async -> ManifestData? {
+        guard let url = URL(string: urlString) else { return nil }
+
+        let request = URLRequest(url: url)
+        guard let (data, response) = try? await URLSession.shared.data(for: request),
+              (response as? HTTPURLResponse)?.statusCode == 200,
               let jsonObject = try? JSONSerialization.jsonObject(with: data, options: .allowFragments),
               let jsonData = jsonObject as? [String: Any] else { return nil }
 
-        return parseJson(dictionary: jsonData)
+        return await parseJson(dictionary: jsonData)
     }
-	
-    private static func parseJson(dictionary: [String: Any]) -> ManifestData? {
+
+    private static func parseJson(dictionary: [String: Any]) async -> ManifestData? {
         var manifestData = ManifestData()
         let resolvedManifest = IIIFManifest(dictionary)
 
@@ -95,17 +97,9 @@ struct ManifestDataHandler {
 
         let annotation  = canvas.images
         let path = annotation?[0].resource.id ?? ""
-        manifestData.image = (downloadImage(path:path))
-		
-		
-		let array = path.split(separator: "/")
-		
-
-//        for i in 0...(manifest_data.count) - 1 {
-//            let canvas = test_manifest?.sequences?[0].canvases[i]
-//            let annotation  = canvas?.images
-//            let path = annotation?[0].resource.id ?? ""
-//            self.image = (downloadImage(path:path))
+        if let imageURL = URL(string: path) {
+            manifestData.image = try? await downloadImage(from: imageURL)
+        }
 
         if let metadata = resolvedManifest?.metadata {
             manifestData.metadata = metadata
@@ -135,28 +129,23 @@ struct ManifestDataHandler {
         return manifestData
     }
 
-    private static func downloadImage(path:String) -> UIImage {
-        var image = UIImage()
-        do {
-            let url = URL.init(string: path)!
-            let data = try Data(contentsOf: url)
-            image = UIImage(data: data) ?? UIImage()
-        }
-        catch {
-            print ("cannot find image")
-        }
-        return image
+    private static func downloadImage(from url: URL) async throws -> UIImage? {
+        let request = URLRequest(url: url)
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard (response as? HTTPURLResponse)?.statusCode == 200 else { return nil }
+
+        return UIImage(data: data)
     }
 }
 
 // MARK: - FOR DEMO ONLY: add hard coded values from local manifests and images
 extension ManifestDataHandler {
-    public static func addExamples(managedObjectContext: NSManagedObjectContext) {
+    public static func addExamples(managedObjectContext: NSManagedObjectContext) async {
         let resource_paths = ["MapOfCalifornia", "MapOfLosAngeles", "TopographicLA", "LA1909", "AutomobileLA", "Hollywood"]
         let sizes = [[0.48, 0.69], [0.63, 0.56],[1.53, 0.56],[0.85, 1.02],[0.22, 0.08],[0.67, 0.66]]
 
         for index in 0..<resource_paths.count {
-            if let new_item = ManifestDataHandler.getLocalManifest(from: resource_paths[index]) {
+            if let new_item = await ManifestDataHandler.getLocalManifest(from: resource_paths[index]) {
                 let new_manifest = ManifestItem(item:new_item, image: UIImage(named: resource_paths[index])!)
                 let contentdata = NSEntityDescription.insertNewObject(forEntityName: "Manifest", into: managedObjectContext) as! Manifest
                 contentdata.id = new_manifest.id
@@ -181,12 +170,12 @@ extension ManifestDataHandler {
         }
     }
 
-    private static func getLocalManifest(from resrouceName: String) -> ManifestData? {
+    private static func getLocalManifest(from resrouceName: String) async -> ManifestData? {
         guard let url = Bundle.main.url(forResource: resrouceName, withExtension: "json"),
               let data = try? Data(contentsOf: url),
               let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []),
               let jsonData = jsonObject as? [String: Any] else { return nil }
 
-        return parseJson(dictionary: jsonData)
+        return await parseJson(dictionary: jsonData)
     }
 }
