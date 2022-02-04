@@ -119,6 +119,7 @@ struct InputView: View {
             guard status else {
                 activeAlert = .first
                 isAlert = true
+                showLoading = false
                 return
             }
 
@@ -128,8 +129,9 @@ struct InputView: View {
             }
 
             // Add the manifest into DB
-            ManifestDataHandler.addNewManifest(from: fieldValue,
-                                               managedObjectContext: self.managedObjectContext) { result in
+            Task {
+                let result = await ManifestDataHandler.addNewManifest(from: fieldValue, managedObjectContext: self.managedObjectContext)
+
                 switch result {
                 case .success(let newItemLabel):
                     print("sucess in downloading")

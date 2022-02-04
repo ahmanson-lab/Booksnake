@@ -35,39 +35,35 @@ struct ManifestDataHandler {
     public static func addNewManifest(from urlPath: String,
                                       width: Float = 1,
                                       length: Float = 1,
-                                      managedObjectContext: NSManagedObjectContext,
-                                      completion: @escaping (Result<String, ManifestDataErorr>) -> Void) {
-        Task {
-            guard let new_item = await ManifestDataHandler.getRemoteManifest(from: urlPath) else {
-                completion(.failure(.remoteFetchError))
-                return
-            }
-
-            print("adding remote manifest")
-
-            let new_manifest = ManifestItem(item: new_item, image: new_item.image!)
-
-            let contentdata = NSEntityDescription.insertNewObject(forEntityName: "Manifest", into: managedObjectContext) as! Manifest
-            contentdata.id = new_manifest.id
-            contentdata.labels = new_manifest.item.labels
-            contentdata.itemLabel = new_manifest.item.label
-            contentdata.values = new_manifest.item.values
-            contentdata.width = new_manifest.item.width ?? width
-            contentdata.length = new_manifest.item.height ?? length
-            contentdata.createdDate = Date()
-            FileHandler.save(data: new_manifest.image.jpegData(compressionQuality: 1.0) ?? Data(),
-                             toDirectory: .image,
-                             withFileName: "\(new_manifest.id).jpg")
-            contentdata.imageFileName = "\(new_manifest.id).jpg"
-
-            do {
-                try managedObjectContext.save()
-            } catch {
-                print(error)
-            }
-
-            completion(.success(new_manifest.item.label))
+                                      managedObjectContext: NSManagedObjectContext) async -> Result<String, ManifestDataErorr> {
+        guard let new_item = await ManifestDataHandler.getRemoteManifest(from: urlPath) else {
+            return .failure(.remoteFetchError)
         }
+
+        print("adding remote manifest")
+
+        let new_manifest = ManifestItem(item: new_item, image: new_item.image!)
+
+        let contentdata = NSEntityDescription.insertNewObject(forEntityName: "Manifest", into: managedObjectContext) as! Manifest
+        contentdata.id = new_manifest.id
+        contentdata.labels = new_manifest.item.labels
+        contentdata.itemLabel = new_manifest.item.label
+        contentdata.values = new_manifest.item.values
+        contentdata.width = new_manifest.item.width ?? width
+        contentdata.length = new_manifest.item.height ?? length
+        contentdata.createdDate = Date()
+        FileHandler.save(data: new_manifest.image.jpegData(compressionQuality: 1.0) ?? Data(),
+                         toDirectory: .image,
+                         withFileName: "\(new_manifest.id).jpg")
+        contentdata.imageFileName = "\(new_manifest.id).jpg"
+
+        do {
+            try managedObjectContext.save()
+        } catch {
+            print(error)
+        }
+
+        return .success(new_manifest.item.label)
     }
 
     private static func getRemoteManifest(from urlString: String) async -> ManifestData? {
