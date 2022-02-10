@@ -12,13 +12,19 @@ import UIKit
 struct RootListView : View {
 	var delegate: AssetRowProtocol?
 	
+	@State var modalDisplayed = false
+	
 	var body: some View {
 		VStack{
 			Button(action: {
 				print("something")
+				self.modalDisplayed	= true
 			}, label: {
 				Text("New List")
 			})
+			.sheet(isPresented: $modalDisplayed){
+				NewListView()
+			}
 			//add created lists here - probs henry's area
 			List{}
 		}
@@ -36,7 +42,9 @@ struct ChildListView: View{
 	//list of content - nav links to ContentView
 	
 	var body: some View{
-		VStack{}
+		VStack{
+			
+		}
 	}
 }
 
