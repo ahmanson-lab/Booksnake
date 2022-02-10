@@ -54,7 +54,7 @@ struct AssetRow: View, AssetRowProtocol {
                 .tag(1)
 				
 				NavigationView {
-					CustomSearchMenu(delegate: self)
+					RootListView(delegate: self)
 						.navigationBarTitle("Lists")
 				}
 				.navigationViewStyle(StackNavigationViewStyle())
