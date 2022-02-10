@@ -52,6 +52,17 @@ struct AssetRow: View, AssetRowProtocol {
                     Text("Library")
                 }
                 .tag(1)
+				
+				NavigationView {
+					CustomSearchMenu(delegate: self)
+						.navigationBarTitle("Lists")
+				}
+				.navigationViewStyle(StackNavigationViewStyle())
+				.tabItem {
+					Image(systemName: "list.bullet")
+					Text("Lists")
+				}
+				.tag(2)
 
                 NavigationView {
                     CustomSearchMenu(delegate: self)
@@ -62,7 +73,7 @@ struct AssetRow: View, AssetRowProtocol {
                     Image(systemName: "magnifyingglass")
                     Text("Explore")
                 }
-                .tag(2)
+                .tag(3)
             }
             .task {
                 // To add some demo items in the collection
