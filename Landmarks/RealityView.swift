@@ -15,7 +15,7 @@ class RealityView: UIViewController, ARSessionDelegate  {
 	var texture_url: URL?
 	var width: Float?
 	var height: Float?
-	
+	var dir_light: DirectionalLight = DirectionalLight()
 	var firstTap: Bool = true
 	var realityView = ARView(frame: .zero)
 	
@@ -28,6 +28,16 @@ class RealityView: UIViewController, ARSessionDelegate  {
         realityView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         realityView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         realityView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+		
+		
+		dir_light.light.color = .red
+		dir_light.light.intensity = 20000
+		dir_light.light.isRealWorldProxy = true
+		dir_light.shadow?.maximumDistance = 10.0
+		dir_light.shadow?.depthBias = 5.0
+		dir_light.orientation = simd_quatf(angle: -.pi/1.5,
+												   axis: [0,1,0])
+		
 		
 		self.addCoaching()
 		
@@ -43,7 +53,7 @@ class RealityView: UIViewController, ARSessionDelegate  {
         let config = ARWorldTrackingConfiguration()
 		config.planeDetection  = [.horizontal, .vertical]
 		realityView.session.run(config, options: [.removeExistingAnchors, .resetTracking])
-		
+
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -59,7 +69,7 @@ class RealityView: UIViewController, ARSessionDelegate  {
 	}
 
 	@objc func tapGesture( _ sender: UITapGestureRecognizer? = nil){
-		guard let query = realityView.makeRaycastQuery(from: sender?.location(in: realityView) ?? realityView.center, allowing: .existingPlaneInfinite, alignment: .vertical) else {
+		guard let query = realityView.makeRaycastQuery(from: sender?.location(in: realityView) ?? realityView.center, allowing: .existingPlaneInfinite, alignment: .horizontal) else {
 			return
 		}
 		
@@ -78,6 +88,11 @@ class RealityView: UIViewController, ARSessionDelegate  {
 			
 			plane.generateCollisionShapes(recursive: true)
 			firstTap = false
+			
+			let lightAnchor = AnchorEntity(world: [0,0,-3])
+			lightAnchor.addChild(dir_light)
+			
+			realityView.scene.anchors.append(lightAnchor)
 		}
 		else {
 			if let plane = realityView.scene.findEntity(named: "custom_plane"){
