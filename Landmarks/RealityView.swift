@@ -12,13 +12,12 @@ import UIKit
 import ARKit
 
 class RealityView: UIViewController, ARSessionDelegate  {
-	
-	//var textureImage: UIImage?
 	var texture_url: URL?
 	var width: Float?
 	var height: Float?
-
-    var realityView = ARView(frame: .zero)
+	
+	var firstTap: Bool = true
+	var realityView = ARView(frame: .zero)
 	
 	override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,15 +30,20 @@ class RealityView: UIViewController, ARSessionDelegate  {
         realityView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
 		
 		self.addCoaching()
+		
 		addGestures()
+		
+		let target = try! TargetScene.load_TargetScene()
+		realityView.scene.addAnchor(target)
 	}
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         let config = ARWorldTrackingConfiguration()
-        config.planeDetection  = [.horizontal]
-        realityView.session.run(config, options: [.removeExistingAnchors])
+		config.planeDetection  = [.horizontal, .vertical]
+		realityView.session.run(config, options: [.removeExistingAnchors, .resetTracking])
+		
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -48,26 +52,38 @@ class RealityView: UIViewController, ARSessionDelegate  {
         // Pause the view's session
         realityView.session.pause()
     }
-
+	
 	func addGestures(){
 		let tap = UITapGestureRecognizer(target: self, action: #selector(self.tapGesture(_:)))
 		realityView.addGestureRecognizer(tap)
 	}
 
 	@objc func tapGesture( _ sender: UITapGestureRecognizer? = nil){
-		guard let query = realityView.makeRaycastQuery(from: realityView.center, allowing: .existingPlaneInfinite, alignment: .horizontal) else { return }
+		guard let query = realityView.makeRaycastQuery(from: sender?.location(in: realityView) ?? realityView.center, allowing: .existingPlaneInfinite, alignment: .vertical) else {
+			return
+		}
 		
-		guard let hitResult = realityView.session.raycast(query).first	else {return}
+		guard let hitResult = realityView.session.raycast(query).first else { return }
 		
 		// set a transform to an existing entity
 		let transform = Transform(matrix: hitResult.worldTransform)
 		
-		let plane = CustomPlane(image_url: texture_url ?? URL(fileURLWithPath: "Hollywood.jpg"), width: width ?? 1.0, height: height ?? 1.0)
-		plane.transform = transform
-		realityView.scene.anchors.append(plane)
-		
-		realityView.installGestures([.all], for: plane)
-		plane.generateCollisionShapes(recursive: true)
+		if (firstTap){
+			let plane = CustomPlane(image_url: texture_url ?? URL(fileURLWithPath: "Hollywood.jpg"), width: width ?? 1.0, height: height ?? 1.0)
+			plane.transform = transform
+			realityView.scene.anchors.removeAll()
+			realityView.scene.anchors.append(plane)
+			
+			realityView.installGestures([.all], for: plane)
+			
+			plane.generateCollisionShapes(recursive: true)
+			firstTap = false
+		}
+		else {
+			if let plane = realityView.scene.findEntity(named: "custom_plane"){
+				plane.transform = transform
+			}
+		}
 	}
 }
 

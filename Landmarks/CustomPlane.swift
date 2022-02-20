@@ -15,11 +15,12 @@ class CustomPlane: Entity, HasModel, HasCollision, HasAnchoring{
 	required init(image_url: URL, width: Float, height: Float) {
 		super .init()
 		
-		let resource = try? TextureResource.load(contentsOf: image_url) //TextureResource.load(named: image_url.absoluteString)
+		let resource = try?  TextureResource.load(contentsOf: image_url)
 		
 		var material = PhysicallyBasedMaterial()
 		//material.baseColor = UIColor.white
-		material.baseColor.texture = PhysicallyBasedMaterial.Texture.init(resource!)
+		//material.baseColor.texture = PhysicallyBasedMaterial.Texture.init(resource!)
+		material.baseColor = .init(tint: .white.withAlphaComponent(0.0), texture: PhysicallyBasedMaterial.Texture.init(resource!))
 		
         self.components[ModelComponent.self] = ModelComponent(
 			mesh: .generatePlane(width: width, depth: height),
