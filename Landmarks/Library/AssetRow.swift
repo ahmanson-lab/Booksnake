@@ -24,7 +24,7 @@ struct AssetRow: View, AssetRowProtocol {
         ZStack {
             TabView(selection: $tabSelection) {
                 NavigationView{
-                    List{
+                    List {
                         ForEach(contentTest, id: \.self) { item in
                             let image = UIImage.loadThumbnail(at: item.imageURL, forSize: .small) ?? UIImage()
                             NavigationLink(destination: LazyView(ContentView(imageURL: item.imageURL,

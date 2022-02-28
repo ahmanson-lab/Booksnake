@@ -158,19 +158,19 @@
 			isa = PBXGroup;
 			children = (
 				56CD50B524C7CA1F00EF8C3E /* Info.plist */,
+				56CD50AD24C7CA1F00EF8C3E /* Assets.xcassets */,
+				1147E68A269D1D5B00BAECE1 /* Launch Screen.storyboard */,
 				56CD50A924C7CA1C00EF8C3E /* SceneDelegate.swift */,
 				56CD50A724C7CA1C00EF8C3E /* AppDelegate.swift */,
-				BAA84B4127CCA77F000FE43C /* SupportingFiles */,
 				BAA84B3F27CCA6EC000FE43C /* Library */,
 				BAA84B3E27CCA6C7000FE43C /* List */,
 				BAA84B4227CCA7AA000FE43C /* AR */,
 				BAA84B4327CCA7BD000FE43C /* Search */,
 				1193351F25830D9000CA19A2 /* Content Data */,
 				BAA84B4427CCA7D0000FE43C /* IIIFContainers */,
-				56CD50AD24C7CA1F00EF8C3E /* Assets.xcassets */,
-				1147E68A269D1D5B00BAECE1 /* Launch Screen.storyboard */,
-				11A9459C2745AA5800A526B1 /* Hollywood.jpg */,
+				BAA84B4127CCA77F000FE43C /* SupportingFiles */,
 				BAA84B4527CCA7F7000FE43C /* json */,
+				11A9459C2745AA5800A526B1 /* Hollywood.jpg */,
 			);
 			path = Landmarks;
 			sourceTree = "<group>";
