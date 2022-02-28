@@ -10,10 +10,6 @@ import SwiftUI
 
 struct ListDetailView: View {
     let collection: ItemCollection
-    let topLeftImage: UIImage
-    let topRightImage: UIImage
-    let bottomLeftImage: UIImage
-    let bottomRightImage: UIImage
     
     var body: some View {
         List {
@@ -24,6 +20,12 @@ struct ListDetailView: View {
                         .frame(height: 10)
                     // Images
                     VStack(spacing: 0) {
+                        let imageURLs = collection.compositeImageURLs
+                        let topLeftImage = UIImage.loadThumbnail(at: imageURLs[safe: 0], forSize: .medium) ?? UIImage()
+                        let topRightImage = UIImage.loadThumbnail(at: imageURLs[safe: 1], forSize: .medium) ?? UIImage()
+                        let bottomLeftImage = UIImage.loadThumbnail(at: imageURLs[safe: 2], forSize: .medium) ?? UIImage()
+                        let bottomRightImage = UIImage.loadThumbnail(at: imageURLs[safe: 3], forSize: .medium) ?? UIImage()
+
                         HStack(spacing: 0) {
                             Image(uiImage: topLeftImage)
                                 .resizable()

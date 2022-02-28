@@ -36,11 +36,7 @@ struct RootListView : View {
                     let bottomLeftImage = UIImage.loadThumbnail(at: imageURLs[safe: 2], forSize: .small) ?? UIImage()
                     let bottomRightImage = UIImage.loadThumbnail(at: imageURLs[safe: 3], forSize: .small) ?? UIImage()
 
-                    NavigationLink(destination: LazyView(ListDetailView(collection: collection,
-                                                                        topLeftImage: topLeftImage,
-                                                                        topRightImage: topRightImage,
-                                                                        bottomLeftImage: bottomLeftImage,
-                                                                        bottomRightImage: bottomRightImage))) {
+                    NavigationLink(destination: LazyView(ListDetailView(collection: collection))) {
                         HStack(spacing: 14) {
                             VStack(spacing: 0) {
                                 HStack(spacing: 0) {
