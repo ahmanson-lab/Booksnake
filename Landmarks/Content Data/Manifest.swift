@@ -8,7 +8,6 @@
 
 import Foundation
 import CoreData
-import UIKit
 
 public class Manifest: NSManagedObject, Identifiable {
     @NSManaged public var id: UUID?
@@ -17,6 +16,7 @@ public class Manifest: NSManagedObject, Identifiable {
     @NSManaged public var itemLabel: String?
     @NSManaged public var imageFileName: String
     @NSManaged public var createdDate: Date
+    @NSManaged public var collections: NSSet
     
     //for init sizes
     @NSManaged public var width: Float
