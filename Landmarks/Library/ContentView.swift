@@ -21,13 +21,17 @@ struct ContentView: View {
 
     var body: some View {
 		List {
-			HStack{
-				Spacer()
-                let image = UIImage.loadThumbnail(at: imageURL, forSize: .medium) ?? UIImage()
-                RectangularImage(image: image)
-                    .frame(height: UIScreen.main.bounds.height / 2, alignment: .center)
-				Spacer()
-			}
+            VStack {
+                Spacer()
+                    .frame(height: 10)
+                HStack{
+                    Spacer()
+                    let image = UIImage.loadThumbnail(at: imageURL, forSize: .medium) ?? UIImage()
+                    RectangularImage(image: image)
+                        .frame(height: UIScreen.main.bounds.height / 2, alignment: .center)
+                    Spacer()
+                }
+            }
 			
 			NavigationLink(
 				destination: LazyView(RealityViewRepresentable(width:width, length: length, image_url: imageURL))

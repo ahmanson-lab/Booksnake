@@ -19,75 +19,73 @@ struct ListDetailView: View {
         List {
             HStack {
                 Spacer()
-                VStack(spacing: 0) {
-                    HStack(spacing: 0) {
-                        Image(uiImage: topLeftImage)
-                            .resizable()
-                            .scaleEffect(1.1)   // some image has empty space, so we scale image to make it fill
-                            .scaledToFill()
-                            .frame(width: 100, height: 100, alignment: .center)
-                            .clipped()
-                        Image(uiImage: topRightImage)
-                            .resizable()
-                            .scaleEffect(1.1)
-                            .scaledToFill()
-                            .frame(width: 100, height: 100, alignment: .center)
-                            .clipped()
+                VStack {
+                    Spacer()
+                        .frame(height: 10)
+                    // Images
+                    VStack(spacing: 0) {
+                        HStack(spacing: 0) {
+                            Image(uiImage: topLeftImage)
+                                .resizable()
+                                .scaleEffect(1.1)   // some image has empty space, so we scale image to make it fill
+                                .scaledToFill()
+                                .frame(width: 100, height: 100, alignment: .center)
+                                .clipped()
+                            Image(uiImage: topRightImage)
+                                .resizable()
+                                .scaleEffect(1.1)
+                                .scaledToFill()
+                                .frame(width: 100, height: 100, alignment: .center)
+                                .clipped()
+                        }
+                        HStack(spacing: 0) {
+                            Image(uiImage: bottomLeftImage)
+                                .resizable()
+                                .scaleEffect(1.1)
+                                .scaledToFill()
+                                .frame(width: 100, height: 100, alignment: .center)
+                                .clipped()
+                            Image(uiImage: bottomRightImage)
+                                .resizable()
+                                .scaleEffect(1.1)
+                                .scaledToFill()
+                                .frame(width: 100, height: 100, alignment: .center)
+                                .clipped()
+                        }
                     }
-                    HStack(spacing: 0) {
-                        Image(uiImage: bottomLeftImage)
-                            .resizable()
-                            .scaleEffect(1.1)
-                            .scaledToFill()
-                            .frame(width: 100, height: 100, alignment: .center)
-                            .clipped()
-                        Image(uiImage: bottomRightImage)
-                            .resizable()
-                            .scaleEffect(1.1)
-                            .scaledToFill()
-                            .frame(width: 100, height: 100, alignment: .center)
-                            .clipped()
-                    }
-                }
-                Spacer()
-            }
-
-            HStack {
-                Spacer()
-                Text("\(collection.title ?? "")")
-                    .font(.title)
-                    .lineLimit(2)
-                    .truncationMode(.tail)
-                Spacer()
-            }
-
-            HStack {
-                Spacer()
-                Text("\(collection.subtitle ?? "")")
-                    .font(.title2)
-                    .lineLimit(2)
-                    .truncationMode(.tail)
-                Spacer()
-            }
-
-            HStack {
-                Spacer()
-                HStack(spacing: 3) {
-                    Image(systemName: "person.circle")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 12, height: 12)
-                    Text("\(collection.author ?? "")")
-                        .font(.footnote)
-                        .lineLimit(1)
+                    // Title
+                    Text("\(collection.title ?? "")")
+                        .font(.title)
+                        .bold()
+                        .lineLimit(2)
                         .truncationMode(.tail)
+                    Spacer()
+                        .frame(height: 5)
+                    // Subtitle
+                    Text("\(collection.subtitle ?? "")")
+                        .font(.title3)
+                        .lineLimit(2)
+                        .truncationMode(.tail)
+                    // Author
+                    HStack(spacing: 3) {
+                        Image(systemName: "person.circle")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 12, height: 12)
+                        Text("\(collection.author ?? "")")
+                            .font(.footnote)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                    }
+                    Spacer()
+                        .frame(height: 10)
                 }
                 Spacer()
             }
 
             HStack {
                 Spacer()
-                Text("\(collection.detail ?? "")")
+                Text("\(collection.detail ?? "No Description")")
                     .font(.subheadline)
                     .foregroundColor(.gray)
                     .lineLimit(5)
