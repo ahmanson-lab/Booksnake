@@ -109,20 +109,3 @@ struct RootListView : View {
 		}
 	}
 }
-
-struct ChildListView: View{
-	var title: String = "Untitled"
-	var subtitle: String = "subtitle"
-	var author: String = "Joe Doe"
-	var description: String = "something"
-	
-	let thumbnail: UIImage
-	
-	//list of content - nav links to ContentView
-	
-	var body: some View{
-		VStack{
-			
-		}
-	}
-}
