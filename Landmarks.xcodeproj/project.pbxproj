@@ -18,6 +18,7 @@
 		11929F602739DB9700EB2036 /* CustomPlane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11929F5F2739DB9700EB2036 /* CustomPlane.swift */; };
 		1193352A25830ED900CA19A2 /* ContentDataContainer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1193352825830ED900CA19A2 /* ContentDataContainer.xcdatamodeld */; };
 		11AD239F27C96D4B0035D265 /* CustomText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11AD239E27C96D4B0035D265 /* CustomText.swift */; };
+		11AD3BB827E28603006BB930 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11AD3BB727E28603006BB930 /* OnboardingView.swift */; };
 		11B208562537C90900704F40 /* MultiProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B208552537C90900704F40 /* MultiProperty.swift */; };
 		11B208592537C9AF00704F40 /* IIIFManifest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B208582537C9AF00704F40 /* IIIFManifest.swift */; };
 		11B2085C2537C9EB00704F40 /* IIIFSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B2085B2537C9EB00704F40 /* IIIFSequence.swift */; };
@@ -78,6 +79,7 @@
 		119334FD2582FE7B00CA19A2 /* Manifest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manifest.swift; sourceTree = "<group>"; };
 		1193352925830ED900CA19A2 /* ContentDataContainer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ContentDataContainer.xcdatamodel; sourceTree = "<group>"; };
 		11AD239E27C96D4B0035D265 /* CustomText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomText.swift; sourceTree = "<group>"; };
+		11AD3BB727E28603006BB930 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		11B208552537C90900704F40 /* MultiProperty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiProperty.swift; sourceTree = "<group>"; };
 		11B208582537C9AF00704F40 /* IIIFManifest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IIIFManifest.swift; sourceTree = "<group>"; };
 		11B2085B2537C9EB00704F40 /* IIIFSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IIIFSequence.swift; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 				56CD50B524C7CA1F00EF8C3E /* Info.plist */,
 				56CD50A924C7CA1C00EF8C3E /* SceneDelegate.swift */,
 				56CD50A724C7CA1C00EF8C3E /* AppDelegate.swift */,
+				11AD3BB727E28603006BB930 /* OnboardingView.swift */,
 				5616C5BB24CA7C8D00F1C1EE /* AssetRow.swift */,
 				56CD50AB24C7CA1C00EF8C3E /* ContentView.swift */,
 				11B2ADEB2593E6B500A54488 /* ActivityIndicatorView.swift */,
@@ -338,6 +341,7 @@
 				11FDF31E27B5CF4300EB5BDC /* ListsView.swift in Sources */,
 				1193352A25830ED900CA19A2 /* ContentDataContainer.xcdatamodeld in Sources */,
 				BA5ADC9B27BC642000A0E87B /* Manifest+CoreDataProperties.swift in Sources */,
+				11AD3BB827E28603006BB930 /* OnboardingView.swift in Sources */,
 				11B208592537C9AF00704F40 /* IIIFManifest.swift in Sources */,
 				11B208562537C90900704F40 /* MultiProperty.swift in Sources */,
 				BAB4BFAC2768735F007DC9A9 /* ImageHandler.swift in Sources */,

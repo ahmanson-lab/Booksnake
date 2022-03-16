@@ -31,7 +31,7 @@ class CustomText: Entity, HasModel, HasCollision, HasAnchoring{
 			self.name = "custom_text"
 		
 		self.scale = SIMD3<Float>(0.03, 0.03, 0.1)
-		self.anchoring = .init(.plane(.horizontal, classification: .any, minimumBounds: [1,1]))
+		//self.anchoring = .init(.world(transform: ))
 	}
 	
 	required init() {

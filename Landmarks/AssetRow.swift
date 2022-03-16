@@ -17,8 +17,9 @@ protocol AssetRowProtocol {
 struct AssetRow: View, AssetRowProtocol {
     @Environment(\.managedObjectContext) var managedObjectContext
     @FetchRequest(fetchRequest: Manifest.sortedFetchRequest()) var contentTest: FetchedResults<Manifest>
-    @State private var tabSelection = 1
+    @State private var tabSelection = 4
     @State private var showLoading: Bool = false
+	@State private var showOnboarding: Bool = true
 
     var body: some View {
         ZStack {
@@ -74,6 +75,17 @@ struct AssetRow: View, AssetRowProtocol {
                     Text("Explore")
                 }
                 .tag(3)
+				
+				NavigationView {
+					OnboardingView()
+						.navigationBarTitle("Tutorial")
+				}
+				.navigationViewStyle(StackNavigationViewStyle())
+				.tabItem {
+					Image(systemName: "info.circle")
+					Text("Tutorial")
+				}
+				.tag(4)
             }
             .task {
                 // To add some demo items in the collection
