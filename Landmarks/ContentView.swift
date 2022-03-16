@@ -30,7 +30,7 @@ struct ContentView: View {
 			}
 			
 			NavigationLink(
-				destination: LazyView(RealityViewRepresentable(width:width, length: length, image_url: imageURL))
+				destination: LazyView(RealityViewRepresentable(width:width, length: length, image_url: imageURL, title: values[0]))
 					.navigationBarTitle("")
 					.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: .center),
 				isActive: $showingPreview) {

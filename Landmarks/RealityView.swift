@@ -15,6 +15,7 @@ class RealityView: UIViewController, ARSessionDelegate  {
 	var texture_url: URL?
 	var width: Float?
 	var height: Float?
+	var title_text: String?
 	var dir_light: DirectionalLight = DirectionalLight()
 	var firstTap: Bool = true
 	var realityView = ARView(frame: .zero)
@@ -29,21 +30,18 @@ class RealityView: UIViewController, ARSessionDelegate  {
         realityView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         realityView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
 		
-		
-		dir_light.light.color = .red
+		dir_light.light.color = .white
 		dir_light.light.intensity = 20000
 		dir_light.light.isRealWorldProxy = true
 		dir_light.shadow?.maximumDistance = 10.0
 		dir_light.shadow?.depthBias = 5.0
-		dir_light.orientation = simd_quatf(angle: -.pi/1.5,
-												   axis: [0,1,0])
-		
+		dir_light.orientation = simd_quatf(angle: -.pi/1.5, axis: [0,1,0])
 		
 		self.addCoaching()
 		
 		addGestures()
 		
-		let target = try! TargetScene.load_TargetScene()
+		let target = try! TargetScene.load_TargetScene() //MARK: Consider using ModelEntity with .clearcoat
 		realityView.scene.addAnchor(target)
 	}
 
@@ -53,7 +51,6 @@ class RealityView: UIViewController, ARSessionDelegate  {
         let config = ARWorldTrackingConfiguration()
 		config.planeDetection  = [.horizontal, .vertical]
 		realityView.session.run(config, options: [.removeExistingAnchors, .resetTracking])
-
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -65,7 +62,22 @@ class RealityView: UIViewController, ARSessionDelegate  {
 	
 	func addGestures(){
 		let tap = UITapGestureRecognizer(target: self, action: #selector(self.tapGesture(_:)))
+		let longPress = UILongPressGestureRecognizer(target: self, action: #selector(self.longGesture(_:)))
 		realityView.addGestureRecognizer(tap)
+		realityView.addGestureRecognizer(longPress)
+	}
+	
+	@objc func longGesture(_ sender: UILongPressGestureRecognizer? = nil){
+		guard let hittest = realityView.entity(at: sender?.location(in: realityView) ?? realityView.center)else { return}
+			
+			if hittest.name == "custom_plane" {
+				var textModelComponent = CustomText(text: title_text ?? "something")
+				textModelComponent.position = SIMD3<Float>(0, 0.06, 0)
+				//textModelComponent.setPosition(SIMD3<Float>(0.2, 0, 0), relativeTo: hittest)
+				
+				hittest.addChild(textModelComponent)
+				//realityView.scene.anchors.append(textModelComponent)
+			}
 	}
 
 	@objc func tapGesture( _ sender: UITapGestureRecognizer? = nil){

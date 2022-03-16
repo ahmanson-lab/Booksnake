@@ -25,12 +25,11 @@ class CustomPlane: Entity, HasModel, HasCollision, HasAnchoring{
 		material.normal = .init(texture: PhysicallyBasedMaterial.Texture.init(normal!))
 		material.ambientOcclusion = .init(texture: PhysicallyBasedMaterial.Texture.init(ao!))
 		material.baseColor.texture = PhysicallyBasedMaterial.Texture.init(resource!)
-	//	material.baseColor = .init(tint: .white.withAlphaComponent(0.0), texture: PhysicallyBasedMaterial.Texture.init(resource!))
 		
         self.components[ModelComponent.self] = ModelComponent(
 			mesh: .generatePlane(width: width, depth: height),
 			materials: [material]
-			)
+		)
 			self.name = "custom_plane"
 		
 	}

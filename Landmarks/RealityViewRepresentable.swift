@@ -10,10 +10,11 @@ import SwiftUI
 import ARKit
 
 struct RealityViewRepresentable: UIViewControllerRepresentable {
-	//var image: UIImage?
 	var width: Float?
 	var length: Float?
 	var image_url: URL?
+	
+	var title: String?
 	
 	typealias UIViewControllerType = UIViewController
 	
@@ -23,6 +24,9 @@ struct RealityViewRepresentable: UIViewControllerRepresentable {
 		picker.width = width
 		picker.height = length
 		picker.texture_url = image_url
+		picker.title_text = title
+		
+		
 		return picker
 	}
 	func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
