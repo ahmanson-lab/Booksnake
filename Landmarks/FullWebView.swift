@@ -110,54 +110,62 @@ struct FullWebView : View {
         })
     }
 	
-	private func downloadItem(type: String) {
+    private func downloadItem(type: String) {
         showLoading = true
 
-		if (type == "LOC"){
-			path = self.webview.viewModel.path
-            validateURLForIIIF(url: path, filter: "?fo=json&at=item.mime_type", completion: { status in
-                guard status else {
-                    activeAlert = .first
+        if (type == "LOC") {
+            path = self.webview.viewModel.path
+
+            Task {
+                defer {
                     isAlert = true
                     showLoading = false
+                }
+
+                // Check if url is valid for ifff
+                let status = await validateURLForIIIF(url: path, filter: "?fo=json&at=item.mime_type")
+
+                guard status else {
+                    activeAlert = .first
                     return
                 }
 
                 // treat URL depending on Catalogue
-                if !path.hasSuffix("manifest.json"){
+                if !path.hasSuffix("manifest.json") {
                     path.append("manifest.json")
                 }
 
-                Task {
-                    let result = await ManifestDataHandler.addNewManifest(from: path, managedObjectContext: self.managedObjectContext)
+                let result = await ManifestDataHandler.addNewManifest(from: path, managedObjectContext: self.managedObjectContext)
 
-                    switch result {
-                    case .success(let newItemLabel):
-                        print("success in downloading")
-                        self.newItemLabel = newItemLabel
-                        activeAlert = .third
-                        isAlert = true
-                    case .failure(let error):
-                        print("can't download manifest. Error \(error)")
-                        activeAlert = .first
-                        isAlert = true
-                    }
-
-                    showLoading = false
-                }
-            })
-		}
-		else if (type == "HDL"){
-			//download process for Huntington
-			path = self.webview.viewModel.path
-            validateURLForIIIF(url: path, filter: "/id/", completion: { status in
-                guard status,
-                      let collection = path.range(of: "collection/") else {
+                switch result {
+                case .success(let newItemLabel):
+                    print("success in downloading")
+                    self.newItemLabel = newItemLabel
+                    activeAlert = .third
+                case .failure(let error):
+                    print("can't download manifest. Error \(error)")
                     activeAlert = .first
+                }
+            }
+        }
+        else if (type == "HDL"){
+            //download process for Huntington
+            path = self.webview.viewModel.path
+
+            Task {
+                defer {
                     isAlert = true
                     showLoading = false
-                    return
                 }
+
+                // Check if url is valid for ifff
+                let status = await validateURLForIIIF(url: path, filter: "/id/")
+
+                guard status,
+                      let collection = path.range(of: "collection/") else {
+                          activeAlert = .first
+                          return
+                      }
 
                 let indexA = path[collection.upperBound...].firstIndex(of: "/")
                 let collection_id = path[collection.upperBound..<indexA!]
@@ -167,72 +175,64 @@ struct FullWebView : View {
 
                 let itemURL = "https://hdl.huntington.org/iiif/info/" + collection_id + "/" + item_id + "/manifest.json"
 
-                Task {
-                    let result = await ManifestDataHandler.addNewManifest(from: itemURL, managedObjectContext: self.managedObjectContext)
+                let result = await ManifestDataHandler.addNewManifest(from: itemURL, managedObjectContext: self.managedObjectContext)
 
-                    switch result {
-                    case .success(let newItemLabel):
-                        print("success in downloading")
-                        self.newItemLabel = newItemLabel
-                        activeAlert = .third
-                        isAlert = true
-                        self.delegate?.switchToLibraryTab()
-                    case .failure(let error):
-                        print("can't download manifest. Error \(error)")
-                        activeAlert = .first
-                        isAlert = true
-                    }
-
-                    showLoading = false
+                switch result {
+                case .success(let newItemLabel):
+                    print("success in downloading")
+                    self.newItemLabel = newItemLabel
+                    activeAlert = .third
+                    self.delegate?.switchToLibraryTab()
+                case .failure(let error):
+                    print("can't download manifest. Error \(error)")
+                    activeAlert = .first
                 }
-			})
+            }
 		}
 	}
-    
-    private func validateURLForIIIF(url : String, filter: String, completion: @escaping (Bool) -> Void) {
-        let checkSession = Foundation.URLSession.shared
+
+    private func validateURLForIIIF(url: String, filter: String) async -> Bool {
         var path: String = url
-        
-        if (url.isEmpty){
-            completion(false)
-            return
+
+        guard !url.isEmpty else {
+            return false
         }
-        
+
         let url_filter = URL(string: path + filter) ?? URL(string: "https://www.google.com")
-        
-        if !path.hasSuffix("manifest.json"){
+
+        if !path.hasSuffix("manifest.json") {
             path.append("manifest.json")
         }
-		DispatchQueue.main.async {
-			let url_path = NSURL(string: path)
-			guard let html = try? String(contentsOf: url_filter!) else { return completion(false)}
-		   
-			if !UIApplication.shared.canOpenURL(url_path! as URL){
-				completion(false)
-			}
-			
-			//check that there is a jp2 tag
-			else if (!html.contains("image/jp2") && !html.contains("@context") && type == "LOC"){
-				print("no jp2")
-				completion(false)
-			}
-			else {
-				var request = URLRequest(url: url_path! as URL)
-				request.httpMethod = "HEAD"
-				request.timeoutInterval = 1.0
 
-				let task = checkSession.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
-					if let httpResp: HTTPURLResponse = response as? HTTPURLResponse {
-						completion(httpResp.statusCode == 200)
-					}
-					else{
-						completion(false)
-					}
-				})
-				task.resume()
-			}
-		}
-	}
+        let url_path = NSURL(string: path)
+
+        guard let html = try? String(contentsOf: url_filter!) else {
+            return false
+        }
+
+        if await !UIApplication.shared.canOpenURL(url_path! as URL) {
+            // No need to switch to Mainthread because UIApplication has @MainActor
+            return false
+        }
+        else if (!html.contains("image/jp2") && !html.contains("@context") && type == "LOC") {
+            //check that there is a jp2 tag
+            print("no jp2")
+            return false
+        }
+        else {
+            var request = URLRequest(url: url_path! as URL)
+            request.httpMethod = "HEAD"
+            request.timeoutInterval = 1.0
+
+            guard let (_, response) = try? await URLSession.shared.data(for: request),
+                  let httpResp: HTTPURLResponse = response as? HTTPURLResponse else {
+                      return false
+                  }
+
+            return httpResp.statusCode == 200
+        }
+
+    }
 }
 
 extension View {

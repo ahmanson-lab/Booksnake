@@ -110,16 +110,22 @@ struct InputView: View {
         guard !fieldValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             activeAlert = .second
             isAlert = true
+            showLoading = false
             return
         }
 
-        // Check if url is valid for ifff
-        validateURLForIIIF(url: fieldValue, completion: { status in
+        Task {
+            defer {
+                isAlert = true
+                showLoading = false
+            }
+
+            // Check if url is valid for ifff
+            let status = await validateURLForIIIF(url: fieldValue)
+
             // If the textField is incorrect, show error
             guard status else {
                 activeAlert = .first
-                isAlert = true
-                showLoading = false
                 return
             }
 
@@ -129,69 +135,46 @@ struct InputView: View {
             }
 
             // Add the manifest into DB
-            Task {
-                let result = await ManifestDataHandler.addNewManifest(from: fieldValue, managedObjectContext: self.managedObjectContext)
+            let result = await ManifestDataHandler.addNewManifest(from: fieldValue, managedObjectContext: self.managedObjectContext)
 
-                switch result {
-                case .success(let newItemLabel):
-                    print("sucess in downloading")
-                    self.newItemLabel = newItemLabel
-                    activeAlert = .third
-                    isAlert = true
-                case .failure(let error):
-                    print("can't download manifest. Error \(error)")
-                    activeAlert = .first
-                    isAlert = true
-                }
-
-                showLoading = false
+            switch result {
+            case .success(let newItemLabel):
+                print("sucess in downloading")
+                self.newItemLabel = newItemLabel
+                activeAlert = .third
+            case .failure(let error):
+                print("can't download manifest. Error \(error)")
+                activeAlert = .first
             }
-        })
+        }
 	}
-	
-	private func validateURLForIIIF(url : String, completion: @escaping (Bool) -> Void) {
-		let checkSession = Foundation.URLSession.shared
-		var path: String = url
 
-		//only for loc.gov
-		if (!path.hasSuffix("manifest.json")  && path.contains("loc.gov")){
-			path.append("/manifest.json")
-		}
-		
-		let url_path = NSURL(string: path)
-		
-		if (url.isEmpty || url_path == nil){
-			completion(false)
-			return
-		}
-		if !UIApplication.shared.canOpenURL((url_path!) as URL){
-			completion(false)
-			return
-		}
+    private func validateURLForIIIF(url: String) async -> Bool {
+        var path: String = url
 
-//		let url_filter = URL(string: url + "?fo=json&at=item.mime_type") ?? URL(string: "https://www.google.com")
-//		let html = try? String(contentsOf: url_filter!)
-//
-//		//check that there is a jp2 tag
-//		if (html?.contains("jp2") != nil) {
-//            if (!(html!.contains("jp2")) && path.contains("loc.gov")) {
-//                completion(false)
-//            }
-//            else {
-				var request = URLRequest(url: url_path! as URL)
-				request.httpMethod = "HEAD"
-				request.timeoutInterval = 1.0
+        // only for loc.gov
+        if (!path.hasSuffix("manifest.json") && path.contains("loc.gov")) {
+            path.append("/manifest.json")
+        }
 
-				let task = checkSession.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
-					if let httpResp: HTTPURLResponse = response as? HTTPURLResponse {
-						completion(httpResp.statusCode == 200)
-					}
-					else{
-						completion(false)
-					}
-				})
-				task.resume()
-		  //  }
-//		}
-	}
+        let url_path = NSURL(string: path)
+
+        // No need to switch to Mainthread because UIApplication has @MainActor
+        guard !url.isEmpty,
+              url_path != nil,
+              await UIApplication.shared.canOpenURL((url_path!) as URL) else {
+                  return false
+              }
+
+        var request = URLRequest(url: url_path! as URL)
+        request.httpMethod = "HEAD"
+        request.timeoutInterval = 1.0
+
+        guard let (_, response) = try? await URLSession.shared.data(for: request),
+              let httpResp: HTTPURLResponse = response as? HTTPURLResponse else {
+                  return false
+              }
+
+        return httpResp.statusCode == 200
+    }
 }
