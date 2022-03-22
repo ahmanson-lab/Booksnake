@@ -9,19 +9,18 @@
 import Foundation
 import SwiftUI
 import UIKit
+import CoreData
 
-struct NewListView: View{
+struct NewListView: View {
 	@Environment(\.presentationMode) var presentation
     @Environment(\.managedObjectContext) var managedObjectContext
-    @FetchRequest(fetchRequest: Manifest.sortedFetchRequest()) var manifestItems: FetchedResults<Manifest>
 
     @State private var collectionTitle: String = ""
     @State private var collectionSubtitle: String = ""
     @State private var collectionCreator: String = ""
     @State private var collectionDescription: String = ""
     @State private var collectionItems: [Manifest] = []
-    
-    @State private var showManifestItemsList = false
+    @State private var showManifestItemsPickerView = false
 
 	var body: some View {
         NavigationView {
@@ -110,7 +109,7 @@ struct NewListView: View{
                 }
                 
                 Button(action: {
-                    self.showManifestItemsList = true
+                    self.showManifestItemsPickerView = true
                 }, label: {
                     HStack {
                         Image(systemName: "plus.circle.fill")
@@ -121,33 +120,48 @@ struct NewListView: View{
                         Text("Add Items")
                     }
                 })
-                .sheet(isPresented: $showManifestItemsList) {
-                    // TODO: Show showManifestItemsList
+                .sheet(isPresented: $showManifestItemsPickerView) {
+                    ManifestItemsPickerView(selectedManifests: $collectionItems)
                 }
 
                 ForEach(collectionItems, id: \.self) { item in
                     let image = UIImage.loadThumbnail(at: item.imageURL, forSize: .small) ?? UIImage()
-                    Image(uiImage: image)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 50, height: 50)
-
-                    Text("\(item.itemLabel ?? "")")
-                        .lineLimit(2)
-                        .truncationMode(.tail)
+                    HStack {
+                        Image(uiImage: image)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 50, height: 50)
+                        Text("\(item.itemLabel ?? "")")
+                            .lineLimit(2)
+                            .truncationMode(.tail)
+                    }
                 }
             }
             .navigationTitle(Text("New List"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar{
                 ToolbarItem(placement: .navigation){
-                    Button("Cancel"){
-                        print("back")
-                        self.presentation.wrappedValue.dismiss()
+                    Button("Cancel") {
+                        presentation.wrappedValue.dismiss()
                     }.foregroundColor(.red)
                 }
                 ToolbarItem(placement: .navigationBarTrailing){
-                    Button("Done"){ }
+                    Button("Done") {
+                        let collectionData = NSEntityDescription.insertNewObject(forEntityName: "ItemCollection", into: managedObjectContext) as! ItemCollection
+                        collectionData.createdDate = Date()
+                        collectionData.title = collectionTitle
+                        collectionData.subtitle = collectionSubtitle
+                        collectionData.author = collectionCreator
+                        collectionData.detail = collectionDescription
+                        collectionItems.forEach { $0.addToCollections(collectionData) }
+                        do {
+                            try managedObjectContext.save()
+                        }
+                        catch {
+                            print(error)
+                        }
+                        presentation.wrappedValue.dismiss()
+                    }
                 }
             }
 		}
