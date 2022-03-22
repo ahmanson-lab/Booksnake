@@ -16,6 +16,20 @@ public class ItemCollection: NSManagedObject, Identifiable {
     @NSManaged public var detail: String?
     @NSManaged public var createdDate: Date
     @NSManaged public var items: NSOrderedSet?
+
+    public var compositeImageURLs: [URL] {
+        var urls = [URL]()
+        let enumerator = items?.objectEnumerator()
+
+        while let manifest = enumerator?.nextObject() as? Manifest,
+            let imageURL = manifest.imageURL {
+            guard urls.count < 4 else { break }
+
+            urls.append(imageURL)
+        }
+
+        return urls
+    }
 }
 
 extension ItemCollection {

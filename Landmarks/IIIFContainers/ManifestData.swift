@@ -144,6 +144,13 @@ extension ManifestDataHandler {
         let resource_paths = ["MapOfCalifornia", "MapOfLosAngeles", "TopographicLA", "LA1909", "AutomobileLA", "Hollywood"]
         let sizes = [[0.48, 0.69], [0.63, 0.56],[1.53, 0.56],[0.85, 1.02],[0.22, 0.08],[0.67, 0.66]]
 
+        // ItemCollection
+        let collectionData = NSEntityDescription.insertNewObject(forEntityName: "ItemCollection", into: managedObjectContext) as! ItemCollection
+        collectionData.title = "Sample List"
+        collectionData.subtitle = "This is a sample list"
+        collectionData.author = "Booksnake's Team"
+        collectionData.createdDate = Date()
+
         for index in 0..<resource_paths.count {
             if let new_item = await ManifestDataHandler.getLocalManifest(from: resource_paths[index]) {
                 let new_manifest = ManifestItem(item:new_item, image: UIImage(named: resource_paths[index])!)
@@ -159,6 +166,7 @@ extension ManifestDataHandler {
                                  toDirectory: .image,
                                  withFileName: "\(new_manifest.id).jpg")
                 contentdata.imageFileName = "\(new_manifest.id).jpg"
+                contentdata.addToCollections(collectionData)
 
                 do {
                     try managedObjectContext.save()
