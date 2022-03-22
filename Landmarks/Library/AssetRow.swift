@@ -102,10 +102,13 @@ struct AssetRow: View, AssetRowProtocol {
     }
 
     private func onDelete(offsets: IndexSet) {
-        let contentToDelete = manifestItems[offsets.first!]
-        self.managedObjectContext.delete(contentToDelete)
+        guard let contentToDelete = manifestItems[safe: offsets.first!] else {
+            return
+        }
+        
+        managedObjectContext.delete(contentToDelete)
         do {
-            try self.managedObjectContext.save()
+            try managedObjectContext.save()
         }
         catch {
             print(error)

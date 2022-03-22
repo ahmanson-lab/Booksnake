@@ -103,13 +103,13 @@ struct RootListView : View {
                             VStack(alignment: .leading) {
                                 Spacer()
                                     .frame(height: 5)
-                                Text("\(collection.title ?? "")")
+                                Text("\(collection.title)")
                                     .font(.headline)
                                     .lineLimit(2)
                                     .truncationMode(.tail)
                                 Spacer()
                                     .frame(height: 3)
-                                Text("\(collection.subtitle ?? "")")
+                                Text("\(collection.subtitle)")
                                     .font(.subheadline)
                                     .foregroundColor(.gray)
                                     .lineLimit(3)
@@ -120,7 +120,7 @@ struct RootListView : View {
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
                                         .frame(width: 12, height: 12)
-                                    Text("\(collection.author ?? "")")
+                                    Text("\(collection.author != "" ? collection.author : "Unknown")")
                                         .font(.footnote)
                                         .lineLimit(1)
                                         .truncationMode(.tail)
@@ -137,7 +137,10 @@ struct RootListView : View {
 	}
     
     private func onDelete(offsets: IndexSet) {
-        let contentToDelete = itemCollections[offsets.first!]
+        guard let contentToDelete = itemCollections[safe: offsets.first!] else {
+            return
+        }
+        
         self.managedObjectContext.delete(contentToDelete)
         do {
             try self.managedObjectContext.save()
