@@ -53,7 +53,7 @@ struct ManifestItemsPickerView: View {
                     }
                 }
             }
-            .navigationTitle(Text("Add New Items"))
+            .navigationTitle(Text("Select Items"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar{
                 ToolbarItem(placement: .navigationBarTrailing){
