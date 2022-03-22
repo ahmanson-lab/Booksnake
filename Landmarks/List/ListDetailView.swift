@@ -62,25 +62,30 @@ struct ListDetailView: View {
                     .cornerRadius(5)
 
                     // Title
-                    Text("\(collection.title ?? "")")
+                    Text("\(collection.title)")
                         .font(.title2)
                         .bold()
                         .lineLimit(2)
                         .truncationMode(.tail)
+                    
                     Spacer()
                         .frame(height: 5)
+                    
                     // Subtitle
-                    Text("\(collection.subtitle ?? "")")
-                        .font(.title3)
-                        .lineLimit(2)
-                        .truncationMode(.tail)
+                    if collection.subtitle != "" {
+                        Text("\(collection.subtitle)")
+                            .font(.title3)
+                            .lineLimit(2)
+                            .truncationMode(.tail)
+                    }
+                    
                     // Author
                     HStack(spacing: 3) {
                         Image(systemName: "person.circle")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 12, height: 12)
-                        Text("\(collection.author ?? "")")
+                        Text("\(collection.author != "" ? collection.author : "Unknown")")
                             .font(.footnote)
                             .lineLimit(1)
                             .truncationMode(.tail)
@@ -91,14 +96,16 @@ struct ListDetailView: View {
                 Spacer()
             }
 
-            HStack {
-                Spacer()
-                Text("\(collection.detail ?? "No Description")")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-                    .lineLimit(5)
-                    .truncationMode(.tail)
-                Spacer()
+            if collection.detail != "" {
+                HStack {
+                    Spacer()
+                    Text("\(collection.detail)")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                        .lineLimit(5)
+                        .truncationMode(.tail)
+                    Spacer()
+                }
             }
 
             if let items = collection.items?.array as? [Manifest] {
