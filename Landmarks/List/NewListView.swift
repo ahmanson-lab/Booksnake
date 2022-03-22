@@ -21,6 +21,7 @@ struct NewListView: View {
     @State private var collectionDescription: String = ""
     @State private var collectionItems: [Manifest] = []
     @State private var showManifestItemsPickerView = false
+    @State private var showAlert = false
 
 	var body: some View {
         NavigationView {
@@ -165,23 +166,72 @@ struct NewListView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing){
                     Button("Done") {
-                        let collectionData = NSEntityDescription.insertNewObject(forEntityName: "ItemCollection", into: managedObjectContext) as! ItemCollection
-                        collectionData.createdDate = Date()
-                        collectionData.title = collectionTitle
-                        collectionData.subtitle = collectionSubtitle
-                        collectionData.author = collectionCreator
-                        collectionData.detail = collectionDescription
-                        collectionItems.forEach { $0.addToCollections(collectionData) }
-                        do {
-                            try managedObjectContext.save()
+                        // Use default name if title is unset
+                        if collectionTitle == "" {
+                            collectionTitle = "Untitled List"
                         }
-                        catch {
-                            print(error)
+                        
+                        if saveCollection() {
+                            presentation.wrappedValue.dismiss()
+                        } else {
+                            showAlert = true
                         }
-                        presentation.wrappedValue.dismiss()
                     }
                 }
             }
+            .alert(isPresented: $showAlert) {
+                Alert(title: Text("Title is existed"),
+                      message: Text("The title is existed in your collection, please rename the title."),
+                      dismissButton: .default(Text("OK")))
+            }
 		}
 	}
+    
+    private func saveCollection() -> Bool {
+        // Title formatted check
+        guard !isTitleExistedInDB(title: collectionTitle) else {
+            return false
+        }
+        
+        let collectionData = NSEntityDescription.insertNewObject(forEntityName: "ItemCollection", into: managedObjectContext) as! ItemCollection
+        collectionData.createdDate = Date()
+        collectionData.title = collectionTitle
+        collectionData.subtitle = collectionSubtitle
+        collectionData.author = collectionCreator
+        collectionData.detail = collectionDescription
+        collectionItems.forEach { $0.addToCollections(collectionData) }
+        do {
+            try managedObjectContext.save()
+            return true
+        }
+        catch {
+            print(error)
+        }
+        
+        return false
+    }
+    
+    private func isTitleExistedInDB(title: String) -> Bool {
+        let request = ItemCollection.fetchRequest() as! NSFetchRequest<ItemCollection>
+        let predicate = NSPredicate(format: "title = %@", title)
+        request.predicate = predicate
+        request.fetchLimit = 1
+        
+        do {
+            let count = try managedObjectContext.count(for: request)
+
+            if count == 0 {
+                // No match found
+                return false
+            }
+            else{
+                // The title has existed in DB
+                return true
+            }
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+        }
+        
+        return true
+    }
 }
