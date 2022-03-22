@@ -10,6 +10,7 @@ import Foundation
 
 enum FileDirectory {
     case image
+    case imageCache
 
     var url: URL? {
         switch self {
@@ -22,12 +23,27 @@ enum FileDirectory {
                                                             withIntermediateDirectories: true,
                                                             attributes: [FileAttributeKey.protectionKey: FileProtectionType.none])
                 } catch {
-                    print("Can't create Document/Image folder.")
+                    print("Can't create Images folder.")
                     return nil
                 }
             }
 
             return imageDir
+        case .imageCache:
+            let imageCacheDir = URL(fileURLWithPath: FileHandler.documentDirectoryPath).appendingPathComponent("ImageCaches")
+
+            if !FileManager.default.fileExists(atPath: imageCacheDir.path) {
+                do {
+                    try FileManager.default.createDirectory(at: imageCacheDir,
+                                                            withIntermediateDirectories: true,
+                                                            attributes: [FileAttributeKey.protectionKey: FileProtectionType.none])
+                } catch {
+                    print("Can't create ImageCaches folder.")
+                    return nil
+                }
+            }
+
+            return imageCacheDir
         }
     }
 }
@@ -42,14 +58,13 @@ struct FileHandler {
 
     @discardableResult
     static func read(from directory: FileDirectory, fileName: String) -> Data? {
-        guard let fileURL = directory.url?.appendingPathComponent(fileName) else { return nil }
+        guard let fileURL = directory.url?.appendingPathComponent(fileName),
+              FileManager.default.fileExists(atPath: fileURL.path) else {
+            return nil
+        }
 
         do {
-            let savedFile = try Data(contentsOf: fileURL)
-
-            print("File read at \(fileURL)")
-
-            return savedFile
+            return try Data(contentsOf: fileURL)
         } catch {
             print("Error reading saved file")
             return nil

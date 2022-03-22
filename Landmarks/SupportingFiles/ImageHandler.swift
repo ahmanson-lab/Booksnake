@@ -10,9 +10,9 @@ import Foundation
 import UIKit
 import ImageIO
 
-enum ImageThumbnailSize {
-    case small
-    case medium
+enum ImageThumbnailSize: String {
+    case small = "small"
+    case medium = "medium"
 
     var cgSize: CGSize {
         switch self {
@@ -27,6 +27,10 @@ enum ImageThumbnailSize {
 extension UIImage {
     static func loadThumbnail(at url: URL?, forSize size: ImageThumbnailSize) -> UIImage? {
         guard let url = url else { return nil }
+        
+        if let cachedImage = loadFromCache(at: url, forSize: size) {
+            return cachedImage
+        }
 
         let options: [CFString: Any] = [
             kCGImageSourceCreateThumbnailFromImageIfAbsent: true,
@@ -41,6 +45,33 @@ extension UIImage {
             return nil
         }
         
-        return UIImage(cgImage: image)
+        let uiImage = UIImage(cgImage: image)
+        cache(thumbnail: uiImage, at: url, forSize: size)
+        
+        return uiImage
+    }
+    
+    private static func cache(thumbnail: UIImage, at url: URL, forSize size: ImageThumbnailSize) {
+        guard let originalFilename = URL(string: url.lastPathComponent) else {
+            return
+        }
+        
+        let filename = originalFilename.appendingPathExtension(size.rawValue)
+        FileHandler.save(data: thumbnail.jpegData(compressionQuality: 1.0) ?? Data(),
+                         toDirectory: .imageCache,
+                         withFileName: filename.lastPathComponent)
+    }
+    
+    private static func loadFromCache(at url: URL, forSize size: ImageThumbnailSize) -> UIImage? {
+        guard let originalFilename = URL(string: url.lastPathComponent) else {
+            return nil
+        }
+        
+        let filename = originalFilename.appendingPathExtension(size.rawValue)
+        guard let data = FileHandler.read(from: .imageCache, fileName: filename.lastPathComponent) else {
+            return nil
+        }
+        
+        return UIImage(data: data)
     }
 }
