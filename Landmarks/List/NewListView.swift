@@ -32,11 +32,11 @@ struct NewListView: View {
                             .frame(height: 10)
                         // Images
                         VStack(spacing: 0) {
-                            let topLeftImage = UIColor.gray.image()
-                            let topRightImage =  UIColor.gray.image()
-                            let bottomLeftImage = UIColor.gray.image()
-                            let bottomRightImage = UIColor.gray.image()
-
+                            let topLeftImage = UIImage.loadThumbnail(at: collectionItems[safe: 0]?.imageURL, forSize: .medium) ?? UIColor.lightGray.image()
+                            let topRightImage = UIImage.loadThumbnail(at: collectionItems[safe: 1]?.imageURL, forSize: .medium) ?? UIColor.lightGray.image()
+                            let bottomLeftImage = UIImage.loadThumbnail(at: collectionItems[safe: 2]?.imageURL, forSize: .medium) ?? UIColor.lightGray.image()
+                            let bottomRightImage = UIImage.loadThumbnail(at: collectionItems[safe: 3]?.imageURL, forSize: .medium) ?? UIColor.lightGray.image()
+                            
                             HStack(spacing: 0) {
                                 Image(uiImage: topLeftImage)
                                     .resizable()
@@ -44,12 +44,14 @@ struct NewListView: View {
                                     .scaledToFill()
                                     .frame(width: 100, height: 100, alignment: .center)
                                     .clipped()
+                                    .animation(.none, value: topLeftImage)
                                 Image(uiImage: topRightImage)
                                     .resizable()
                                     .scaleEffect(1.1)
                                     .scaledToFill()
                                     .frame(width: 100, height: 100, alignment: .center)
                                     .clipped()
+                                    .animation(.none, value: topRightImage)
                             }
                             HStack(spacing: 0) {
                                 Image(uiImage: bottomLeftImage)
@@ -58,15 +60,18 @@ struct NewListView: View {
                                     .scaledToFill()
                                     .frame(width: 100, height: 100, alignment: .center)
                                     .clipped()
+                                    .animation(.none, value: bottomLeftImage)
                                 Image(uiImage: bottomRightImage)
                                     .resizable()
                                     .scaleEffect(1.1)
                                     .scaledToFill()
                                     .frame(width: 100, height: 100, alignment: .center)
                                     .clipped()
+                                    .animation(.none, value: bottomRightImage)
                             }
                         }
-                        
+                        .cornerRadius(5)
+
                         Spacer()
                             .frame(height: 20)
                         
@@ -179,13 +184,4 @@ struct NewListView: View {
             }
 		}
 	}
-}
-
-extension UIColor {
-    func image(_ size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {
-        return UIGraphicsImageRenderer(size: size).image { rendererContext in
-            self.setFill()
-            rendererContext.fill(CGRect(origin: .zero, size: size))
-        }
-    }
 }

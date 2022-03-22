@@ -57,10 +57,10 @@ struct RootListView : View {
             List{
                 ForEach(itemCollection, id: \.self) { collection in
                     let imageURLs = collection.compositeImageURLs
-                    let topLeftImage = UIImage.loadThumbnail(at: imageURLs[safe: 0], forSize: .small) ?? UIImage()
-                    let topRightImage = UIImage.loadThumbnail(at: imageURLs[safe: 1], forSize: .small) ?? UIImage()
-                    let bottomLeftImage = UIImage.loadThumbnail(at: imageURLs[safe: 2], forSize: .small) ?? UIImage()
-                    let bottomRightImage = UIImage.loadThumbnail(at: imageURLs[safe: 3], forSize: .small) ?? UIImage()
+                    let topLeftImage = UIImage.loadThumbnail(at: imageURLs[safe: 0], forSize: .small) ?? UIColor.lightGray.image()
+                    let topRightImage = UIImage.loadThumbnail(at: imageURLs[safe: 1], forSize: .small) ?? UIColor.lightGray.image()
+                    let bottomLeftImage = UIImage.loadThumbnail(at: imageURLs[safe: 2], forSize: .small) ?? UIColor.lightGray.image()
+                    let bottomRightImage = UIImage.loadThumbnail(at: imageURLs[safe: 3], forSize: .small) ?? UIColor.lightGray.image()
 
                     NavigationLink(destination: LazyView(ListDetailView(collection: collection))) {
                         HStack(spacing: 14) {
@@ -72,12 +72,14 @@ struct RootListView : View {
                                         .scaledToFill()
                                         .frame(width: 50, height: 50, alignment: .center)
                                         .clipped()
+                                        .animation(.none, value: topLeftImage)
                                     Image(uiImage: topRightImage)
                                         .resizable()
                                         .scaleEffect(1.1)
                                         .scaledToFill()
                                         .frame(width: 50, height: 50, alignment: .center)
                                         .clipped()
+                                        .animation(.none, value: topRightImage)
                                 }
                                 HStack(spacing: 0) {
                                     Image(uiImage: bottomLeftImage)
@@ -86,14 +88,17 @@ struct RootListView : View {
                                         .scaledToFill()
                                         .frame(width: 50, height: 50, alignment: .center)
                                         .clipped()
+                                        .animation(.none, value: bottomLeftImage)
                                     Image(uiImage: bottomRightImage)
                                         .resizable()
                                         .scaleEffect(1.1)
                                         .scaledToFill()
                                         .frame(width: 50, height: 50, alignment: .center)
                                         .clipped()
+                                        .animation(.none, value: bottomRightImage)
                                 }
                             }
+                            .cornerRadius(5)
 
                             VStack(alignment: .leading) {
                                 Spacer()
