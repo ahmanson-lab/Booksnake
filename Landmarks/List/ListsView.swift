@@ -18,15 +18,42 @@ struct RootListView : View {
 	
 	var body: some View {
 		VStack{
-			Button(action: {
-				print("something")
-				self.modalDisplayed	= true
-			}, label: {
-				Text("New List")
-			})
-			.sheet(isPresented: $modalDisplayed){
-				NewListView()
-			}
+            HStack {
+                Button(action: {
+                    print("something")
+                    self.modalDisplayed    = true
+                }, label: {
+                    Image(systemName: "text.badge.plus")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 20, height: 20)
+                    Text("New List")
+                })
+                .foregroundColor(.white)
+                .padding(.horizontal, 24)
+                .padding(.vertical, 16)
+                .background(Color.blue)
+                .cornerRadius(18)
+                .sheet(isPresented: $modalDisplayed){
+                    NewListView()
+                }
+                
+                Button(action: {
+                    print("something")
+                    self.modalDisplayed    = true
+                }, label: {
+                    Image(systemName: "link.badge.plus")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 20, height: 20)
+                    Text("Import List")
+                })
+                .foregroundColor(.white)
+                .padding(.horizontal, 24)
+                .padding(.vertical, 16)
+                .background(Color.blue)
+                .cornerRadius(18)
+            }
 
             List{
                 ForEach(itemCollection, id: \.self) { collection in
