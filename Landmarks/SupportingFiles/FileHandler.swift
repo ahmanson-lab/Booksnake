@@ -30,7 +30,7 @@ enum FileDirectory {
 
             return imageDir
         case .imageCache:
-            let imageCacheDir = URL(fileURLWithPath: FileHandler.documentDirectoryPath).appendingPathComponent("ImageCaches")
+            let imageCacheDir = URL(fileURLWithPath: FileHandler.cachesDirectoryPath).appendingPathComponent("ImageCaches")
 
             if !FileManager.default.fileExists(atPath: imageCacheDir.path) {
                 do {
@@ -49,6 +49,13 @@ enum FileDirectory {
 }
 
 struct FileHandler {
+    static var cachesDirectoryPath: String {
+        let documentDirectory = NSSearchPathForDirectoriesInDomains(.cachesDirectory,
+                                                                    .userDomainMask,
+                                                                    true)
+        return documentDirectory[0]
+    }
+    
     static var documentDirectoryPath: String {
         let documentDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory,
                                                                     .userDomainMask,
