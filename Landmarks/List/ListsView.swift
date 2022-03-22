@@ -11,7 +11,7 @@ import UIKit
 
 struct RootListView : View {
     @Environment(\.managedObjectContext) var managedObjectContext
-    @FetchRequest(fetchRequest: ItemCollection.sortedFetchRequest()) var itemCollection: FetchedResults<ItemCollection>
+    @FetchRequest(fetchRequest: ItemCollection.sortedFetchRequest()) var itemCollections: FetchedResults<ItemCollection>
 	var delegate: AssetRowProtocol?
 	
 	@State private var showNewListView = false
@@ -54,8 +54,8 @@ struct RootListView : View {
                 .cornerRadius(18)
             }
 
-            List{
-                ForEach(itemCollection, id: \.self) { collection in
+            List {
+                ForEach(itemCollections, id: \.self) { collection in
                     let imageURLs = collection.compositeImageURLs
                     let topLeftImage = UIImage.loadThumbnail(at: imageURLs[safe: 0], forSize: .small) ?? UIColor.lightGray.image()
                     let topRightImage = UIImage.loadThumbnail(at: imageURLs[safe: 1], forSize: .small) ?? UIColor.lightGray.image()
@@ -131,7 +131,19 @@ struct RootListView : View {
                         }
                     }
                 }
+                .onDelete(perform: onDelete)
             }
 		}
 	}
+    
+    private func onDelete(offsets: IndexSet) {
+        let contentToDelete = itemCollections[offsets.first!]
+        self.managedObjectContext.delete(contentToDelete)
+        do {
+            try self.managedObjectContext.save()
+        }
+        catch {
+            print(error)
+        }
+    }
 }
