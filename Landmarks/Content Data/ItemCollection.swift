@@ -10,10 +10,10 @@ import Foundation
 import CoreData
 
 public class ItemCollection: NSManagedObject, Identifiable {
-    @NSManaged public var title: String?
-    @NSManaged public var subtitle: String?
-    @NSManaged public var author: String?
-    @NSManaged public var detail: String?
+    @NSManaged public var title: String
+    @NSManaged public var subtitle: String
+    @NSManaged public var author: String
+    @NSManaged public var detail: String
     @NSManaged public var createdDate: Date
     @NSManaged public var items: NSOrderedSet?
 

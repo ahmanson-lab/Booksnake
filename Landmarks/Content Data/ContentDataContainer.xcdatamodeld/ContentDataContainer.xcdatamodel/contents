@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21E230" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="ItemCollection" representedClassName=".ItemCollection" syncable="YES">
-        <attribute name="author" optional="YES" attributeType="String"/>
-        <attribute name="createdDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="detail" optional="YES" attributeType="String"/>
-        <attribute name="subtitle" optional="YES" attributeType="String"/>
-        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="author" attributeType="String"/>
+        <attribute name="createdDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="detail" attributeType="String"/>
+        <attribute name="subtitle" attributeType="String"/>
+        <attribute name="title" attributeType="String"/>
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Manifest" inverseName="collections" inverseEntity="Manifest"/>
     </entity>
     <entity name="Manifest" representedClassName=".Manifest" syncable="YES">
@@ -20,7 +20,7 @@
         <relationship name="collections" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ItemCollection" inverseName="items" inverseEntity="ItemCollection"/>
     </entity>
     <elements>
-        <element name="ItemCollection" positionX="286.29736328125" positionY="-32.0364990234375" width="128" height="133"/>
+        <element name="ItemCollection" positionX="286.29736328125" positionY="-32.0364990234375" width="128" height="119"/>
         <element name="Manifest" positionX="-31.7490234375" positionY="-91.912353515625" width="128" height="164"/>
     </elements>
 </model>
