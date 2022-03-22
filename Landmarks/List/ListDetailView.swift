@@ -9,7 +9,8 @@
 import SwiftUI
 
 struct ListDetailView: View {
-    let collection: ItemCollection
+    @Environment(\.managedObjectContext) var managedObjectContext
+    @ObservedObject var collection: ItemCollection
     
     var body: some View {
         List {
@@ -126,9 +127,23 @@ struct ListDetailView: View {
                             .truncationMode(.tail)
                     }
                 }
+                .onDelete(perform: onDelete)
             } else {
                 Text("Empty List")
             }
+        }
+    }
+    
+    private func onDelete(offsets: IndexSet) {
+        guard let contentToDeassociate = collection.items?[offsets.first!] as? Manifest else {
+            return
+        }
+        contentToDeassociate.removeFromCollections(collection)
+        do {
+            try managedObjectContext.save()
+        }
+        catch {
+            print(error)
         }
     }
 }
