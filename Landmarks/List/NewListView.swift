@@ -153,8 +153,18 @@ struct NewListView: View {
                         Text("\(item.itemLabel ?? "")")
                             .lineLimit(2)
                             .truncationMode(.tail)
+                        Spacer()
+                        Image(systemName: "line.3.horizontal")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .foregroundColor(.gray)
+                            .frame(width: 20, height: 20)
+                    }
+                    .onDrag {
+                        return NSItemProvider()
                     }
                 }
+                .onMove(perform: moveCollectionItems)
             }
             .navigationTitle(Text("New List"))
             .navigationBarTitleDisplayMode(.inline)
@@ -186,6 +196,10 @@ struct NewListView: View {
             }
 		}
 	}
+    
+    private func moveCollectionItems(from source: IndexSet, to destination: Int) {
+        collectionItems.move(fromOffsets: source, toOffset: destination)
+    }
     
     private func saveCollection() -> Bool {
         // Title formatted check
