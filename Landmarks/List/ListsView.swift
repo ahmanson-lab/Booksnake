@@ -17,7 +17,7 @@ struct RootListView : View {
 	@State private var showNewListView = false
 	
 	var body: some View {
-		VStack{
+		VStack {
             HStack {
                 Button(action: {
                     self.showNewListView = true
@@ -29,7 +29,7 @@ struct RootListView : View {
                     Text("New List")
                 })
                 .foregroundColor(.white)
-                .padding(.horizontal, 24)
+                .padding(.horizontal, 30)
                 .padding(.vertical, 16)
                 .background(Color.blue)
                 .cornerRadius(18)
@@ -37,6 +37,9 @@ struct RootListView : View {
                     NewListView()
                         .interactiveDismissDisabled(true)
                 }
+                
+                Spacer()
+                    .frame(width: 20)
                 
                 Button(action: {
                     // TODO: Implement Import feature
@@ -48,7 +51,7 @@ struct RootListView : View {
                     Text("Import List")
                 })
                 .foregroundColor(.white)
-                .padding(.horizontal, 24)
+                .padding(.horizontal, 30)
                 .padding(.vertical, 16)
                 .background(Color.blue)
                 .cornerRadius(18)
