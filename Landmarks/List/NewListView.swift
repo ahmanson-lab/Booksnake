@@ -12,13 +12,18 @@ import UIKit
 
 struct NewListView: View{
 	@Environment(\.presentationMode) var presentation
+    @Environment(\.managedObjectContext) var managedObjectContext
+    @FetchRequest(fetchRequest: Manifest.sortedFetchRequest()) var manifestItems: FetchedResults<Manifest>
+
     @State private var collectionTitle: String = ""
     @State private var collectionSubtitle: String = ""
     @State private var collectionCreator: String = ""
     @State private var collectionDescription: String = ""
-
+    @State private var collectionItems: [Manifest] = []
     
-	var body: some View{
+    @State private var showManifestItemsList = false
+
+	var body: some View {
         NavigationView {
             List {
                 HStack {
@@ -103,8 +108,34 @@ struct NewListView: View{
                     Spacer()
                         .frame(height: 25)
                 }
+                
+                Button(action: {
+                    self.showManifestItemsList = true
+                }, label: {
+                    HStack {
+                        Image(systemName: "plus.circle.fill")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .foregroundColor(.green)
+                            .frame(width: 20, height: 20)
+                        Text("Add Items")
+                    }
+                })
+                .sheet(isPresented: $showManifestItemsList) {
+                    // TODO: Show showManifestItemsList
+                }
 
-                Text("Empty List")
+                ForEach(collectionItems, id: \.self) { item in
+                    let image = UIImage.loadThumbnail(at: item.imageURL, forSize: .small) ?? UIImage()
+                    Image(uiImage: image)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 50, height: 50)
+
+                    Text("\(item.itemLabel ?? "")")
+                        .lineLimit(2)
+                        .truncationMode(.tail)
+                }
             }
             .navigationTitle(Text("New List"))
             .navigationBarTitleDisplayMode(.inline)

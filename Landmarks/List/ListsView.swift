@@ -14,13 +14,13 @@ struct RootListView : View {
     @FetchRequest(fetchRequest: ItemCollection.sortedFetchRequest()) var itemCollection: FetchedResults<ItemCollection>
 	var delegate: AssetRowProtocol?
 	
-	@State var modalDisplayed = false
+	@State private var showNewListView = false
 	
 	var body: some View {
 		VStack{
             HStack {
                 Button(action: {
-                    self.modalDisplayed = true
+                    self.showNewListView = true
                 }, label: {
                     Image(systemName: "text.badge.plus")
                         .resizable()
@@ -33,7 +33,7 @@ struct RootListView : View {
                 .padding(.vertical, 16)
                 .background(Color.blue)
                 .cornerRadius(18)
-                .sheet(isPresented: $modalDisplayed){
+                .sheet(isPresented: $showNewListView){
                     NewListView()
                         .interactiveDismissDisabled(true)
                 }
