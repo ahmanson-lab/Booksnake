@@ -16,7 +16,7 @@ protocol AssetRowProtocol {
 
 struct AssetRow: View, AssetRowProtocol {
     @Environment(\.managedObjectContext) var managedObjectContext
-    @FetchRequest(fetchRequest: Manifest.sortedFetchRequest()) var contentTest: FetchedResults<Manifest>
+    @FetchRequest(fetchRequest: Manifest.sortedFetchRequest()) var manifestItems: FetchedResults<Manifest>
     @State private var tabSelection = 1
     @State private var showLoading: Bool = false
 
@@ -25,7 +25,7 @@ struct AssetRow: View, AssetRowProtocol {
             TabView(selection: $tabSelection) {
                 NavigationView{
                     List {
-                        ForEach(contentTest, id: \.self) { item in
+                        ForEach(manifestItems, id: \.self) { item in
                             let image = UIImage.loadThumbnail(at: item.imageURL, forSize: .small) ?? UIImage()
                             NavigationLink(destination: LazyView(ContentView(imageURL: item.imageURL,
                                                                              width: (item.width),
@@ -77,7 +77,7 @@ struct AssetRow: View, AssetRowProtocol {
             }
             .task {
                 // To add some demo items in the collection
-                if(contentTest.count < 1) {
+                if(manifestItems.count < 1) {
                     showLoading = true
                     await ManifestDataHandler.addExamples(managedObjectContext: managedObjectContext)
                     showLoading = false
@@ -102,7 +102,7 @@ struct AssetRow: View, AssetRowProtocol {
     }
 
     private func onDelete(offsets: IndexSet) {
-        let contentToDelete = contentTest[offsets.first!]
+        let contentToDelete = manifestItems[offsets.first!]
         self.managedObjectContext.delete(contentToDelete)
         do {
             try self.managedObjectContext.save()

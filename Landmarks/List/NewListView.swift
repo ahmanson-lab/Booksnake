@@ -127,6 +127,19 @@ struct NewListView: View {
                 ForEach(collectionItems, id: \.self) { item in
                     let image = UIImage.loadThumbnail(at: item.imageURL, forSize: .small) ?? UIImage()
                     HStack {
+                        Button(action: {
+                            if let index = collectionItems.firstIndex(of: item) {
+                                _ = withAnimation(.spring()) {
+                                    collectionItems.remove(at: index)
+                                }
+                            }
+                        }, label: {
+                            Image(systemName: "minus.circle.fill")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .foregroundColor(.red)
+                                .frame(width: 20, height: 20)
+                        })
                         Image(uiImage: image)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
