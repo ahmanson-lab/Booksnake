@@ -146,6 +146,7 @@ struct NewListView: View {
                                 .foregroundColor(.red)
                                 .frame(width: 20, height: 20)
                         })
+                        .buttonStyle(PlainButtonStyle())
                         Image(uiImage: image)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
