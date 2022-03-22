@@ -20,8 +20,7 @@ struct RootListView : View {
 		VStack{
             HStack {
                 Button(action: {
-                    print("something")
-                    self.modalDisplayed    = true
+                    self.modalDisplayed = true
                 }, label: {
                     Image(systemName: "text.badge.plus")
                         .resizable()
@@ -36,11 +35,11 @@ struct RootListView : View {
                 .cornerRadius(18)
                 .sheet(isPresented: $modalDisplayed){
                     NewListView()
+                        .interactiveDismissDisabled(true)
                 }
                 
                 Button(action: {
-                    print("something")
-                    self.modalDisplayed    = true
+                    // TODO: Implement Import feature
                 }, label: {
                     Image(systemName: "link.badge.plus")
                         .resizable()

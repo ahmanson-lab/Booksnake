@@ -57,7 +57,7 @@ struct ListDetailView: View {
                     }
                     // Title
                     Text("\(collection.title ?? "")")
-                        .font(.title)
+                        .font(.title2)
                         .bold()
                         .lineLimit(2)
                         .truncationMode(.tail)
