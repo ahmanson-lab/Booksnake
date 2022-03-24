@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 
 public class Manifest: NSManagedObject, Identifiable {
-    @NSManaged public var id: UUID?
+    @NSManaged public var id: UUID
     @NSManaged public var labels: [String]?
     @NSManaged public var values: [String]?
     @NSManaged public var itemLabel: String?

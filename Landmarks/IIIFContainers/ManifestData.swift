@@ -149,6 +149,7 @@ extension ManifestDataHandler {
         collectionData.title = "Sample List"
         collectionData.subtitle = "This is a sample list"
         collectionData.author = "Booksnake's Team"
+        collectionData.detail = ""
         collectionData.createdDate = Date()
 
         for index in 0..<resource_paths.count {

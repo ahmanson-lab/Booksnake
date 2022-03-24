@@ -9,7 +9,8 @@
 import SwiftUI
 
 struct ListDetailView: View {
-    let collection: ItemCollection
+    @Environment(\.managedObjectContext) var managedObjectContext
+    @ObservedObject var collection: ItemCollection
     
     var body: some View {
         List {
@@ -21,10 +22,10 @@ struct ListDetailView: View {
                     // Images
                     VStack(spacing: 0) {
                         let imageURLs = collection.compositeImageURLs
-                        let topLeftImage = UIImage.loadThumbnail(at: imageURLs[safe: 0], forSize: .medium) ?? UIImage()
-                        let topRightImage = UIImage.loadThumbnail(at: imageURLs[safe: 1], forSize: .medium) ?? UIImage()
-                        let bottomLeftImage = UIImage.loadThumbnail(at: imageURLs[safe: 2], forSize: .medium) ?? UIImage()
-                        let bottomRightImage = UIImage.loadThumbnail(at: imageURLs[safe: 3], forSize: .medium) ?? UIImage()
+                        let topLeftImage = UIImage.loadThumbnail(at: imageURLs[safe: 0], forSize: .medium) ?? UIColor.lightGray.image()
+                        let topRightImage = UIImage.loadThumbnail(at: imageURLs[safe: 1], forSize: .medium) ?? UIColor.lightGray.image()
+                        let bottomLeftImage = UIImage.loadThumbnail(at: imageURLs[safe: 2], forSize: .medium) ?? UIColor.lightGray.image()
+                        let bottomRightImage = UIImage.loadThumbnail(at: imageURLs[safe: 3], forSize: .medium) ?? UIColor.lightGray.image()
 
                         HStack(spacing: 0) {
                             Image(uiImage: topLeftImage)
@@ -33,12 +34,14 @@ struct ListDetailView: View {
                                 .scaledToFill()
                                 .frame(width: 100, height: 100, alignment: .center)
                                 .clipped()
+                                .animation(.none, value: topLeftImage)
                             Image(uiImage: topRightImage)
                                 .resizable()
                                 .scaleEffect(1.1)
                                 .scaledToFill()
                                 .frame(width: 100, height: 100, alignment: .center)
                                 .clipped()
+                                .animation(.none, value: topRightImage)
                         }
                         HStack(spacing: 0) {
                             Image(uiImage: bottomLeftImage)
@@ -47,34 +50,43 @@ struct ListDetailView: View {
                                 .scaledToFill()
                                 .frame(width: 100, height: 100, alignment: .center)
                                 .clipped()
+                                .animation(.none, value: bottomLeftImage)
                             Image(uiImage: bottomRightImage)
                                 .resizable()
                                 .scaleEffect(1.1)
                                 .scaledToFill()
                                 .frame(width: 100, height: 100, alignment: .center)
                                 .clipped()
+                                .animation(.none, value: bottomRightImage)
                         }
                     }
+                    .cornerRadius(5)
+
                     // Title
-                    Text("\(collection.title ?? "")")
-                        .font(.title)
+                    Text("\(collection.title)")
+                        .font(.title2)
                         .bold()
                         .lineLimit(2)
                         .truncationMode(.tail)
+                    
                     Spacer()
                         .frame(height: 5)
+                    
                     // Subtitle
-                    Text("\(collection.subtitle ?? "")")
-                        .font(.title3)
-                        .lineLimit(2)
-                        .truncationMode(.tail)
+                    if collection.subtitle != "" {
+                        Text("\(collection.subtitle)")
+                            .font(.title3)
+                            .lineLimit(2)
+                            .truncationMode(.tail)
+                    }
+                    
                     // Author
                     HStack(spacing: 3) {
                         Image(systemName: "person.circle")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 12, height: 12)
-                        Text("\(collection.author ?? "")")
+                        Text("\(collection.author != "" ? collection.author : "Unknown")")
                             .font(.footnote)
                             .lineLimit(1)
                             .truncationMode(.tail)
@@ -85,14 +97,16 @@ struct ListDetailView: View {
                 Spacer()
             }
 
-            HStack {
-                Spacer()
-                Text("\(collection.detail ?? "No Description")")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-                    .lineLimit(5)
-                    .truncationMode(.tail)
-                Spacer()
+            if collection.detail != "" {
+                HStack {
+                    Spacer()
+                    Text("\(collection.detail)")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                        .lineLimit(5)
+                        .truncationMode(.tail)
+                    Spacer()
+                }
             }
 
             if let items = collection.items?.array as? [Manifest] {
@@ -113,9 +127,23 @@ struct ListDetailView: View {
                             .truncationMode(.tail)
                     }
                 }
+                .onDelete(perform: onDelete)
             } else {
                 Text("Empty List")
             }
+        }
+    }
+    
+    private func onDelete(offsets: IndexSet) {
+        guard let contentToDeassociate = collection.items?[offsets.first!] as? Manifest else {
+            return
+        }
+        contentToDeassociate.removeFromCollections(collection)
+        do {
+            try managedObjectContext.save()
+        }
+        catch {
+            print(error)
         }
     }
 }
