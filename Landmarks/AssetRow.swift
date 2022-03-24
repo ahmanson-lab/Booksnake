@@ -47,6 +47,17 @@ struct AssetRow: View, AssetRowProtocol {
                         .onDelete(perform: onDelete)
                     }.navigationBarTitle("Library")
                 }
+				.toolbar(content: {
+					NavigationView {
+						OnboardingView()
+					}
+					.navigationViewStyle(StackNavigationViewStyle())
+					.tabItem {
+						Image(systemName: "info.circle")
+						Text("Tutorial")
+					}
+					
+				})
                 .navigationViewStyle(StackNavigationViewStyle())
                 .tabItem {
                     Image(systemName: "scroll")
@@ -76,6 +87,7 @@ struct AssetRow: View, AssetRowProtocol {
                 }
                 .tag(3)
 				
+				//TODO: move to toolbar
 				NavigationView {
 					OnboardingView()
 						.navigationBarTitle("Tutorial")
@@ -88,7 +100,7 @@ struct AssetRow: View, AssetRowProtocol {
 				.tag(4)
             }
             .task {
-                // To add some demo items in the collection
+                // Add some demo items in the collection
                 if(contentTest.count < 1) {
                     showLoading = true
                     await ManifestDataHandler.addExamples(managedObjectContext: managedObjectContext)

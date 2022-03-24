@@ -18,12 +18,12 @@ class CustomPlane: Entity, HasModel, HasCollision, HasAnchoring{
 		let bundle = Bundle(identifier: "Assets.xcassets")
 		
 		let resource = try?  TextureResource.load(contentsOf: image_url)
-		let ao = try? TextureResource.load(named: "ao", in: bundle)
-		let normal = try? TextureResource.load(named: "normal", in: bundle)
+		//let ao = try? TextureResource.load(named: "ao", in: bundle)
+		//let normal = try? TextureResource.load(named: "normal", in: bundle)
 		
 		var material = PhysicallyBasedMaterial()
-		material.normal = .init(texture: PhysicallyBasedMaterial.Texture.init(normal!))
-		material.ambientOcclusion = .init(texture: PhysicallyBasedMaterial.Texture.init(ao!))
+		//material.normal = .init(texture: PhysicallyBasedMaterial.Texture.init(normal!))
+		//material.ambientOcclusion = .init(texture: PhysicallyBasedMaterial.Texture.init(ao!))
 		material.baseColor.texture = PhysicallyBasedMaterial.Texture.init(resource!)
 		
         self.components[ModelComponent.self] = ModelComponent(

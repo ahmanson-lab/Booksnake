@@ -70,14 +70,12 @@ class RealityView: UIViewController, ARSessionDelegate  {
 	@objc func longGesture(_ sender: UILongPressGestureRecognizer? = nil){
 		guard let hittest = realityView.entity(at: sender?.location(in: realityView) ?? realityView.center)else { return}
 			
-			if hittest.name == "custom_plane" {
-				var textModelComponent = CustomText(text: title_text ?? "something")
-				textModelComponent.position = SIMD3<Float>(0, 0.06, 0)
-				//textModelComponent.setPosition(SIMD3<Float>(0.2, 0, 0), relativeTo: hittest)
-				
-				hittest.addChild(textModelComponent)
-				//realityView.scene.anchors.append(textModelComponent)
-			}
+		//MARK: 3D text removed
+//			if hittest.name == "custom_plane" {
+//				var textModelComponent = CustomText(text: title_text ?? "something")
+//				textModelComponent.position = SIMD3<Float>(0, 0.06, 0)
+//				hittest.addChild(textModelComponent)
+//			}
 	}
 
 	@objc func tapGesture( _ sender: UITapGestureRecognizer? = nil){
