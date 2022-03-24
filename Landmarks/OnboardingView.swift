@@ -13,7 +13,7 @@ import AVKit
 struct OnboardingView: View{
 	var slide_count:Int = 3
 	
-	var images:[String] = ["1", "LA1909", "MapOfCalifornia"]
+	var images:[String] = ["LA1909", "LA1909", "MapOfCalifornia"]
 	var test: [String] = ["1Anim"]
 	let bundle = Bundle.init(url: URL(fileURLWithPath:"Assets.xcassets").appendingPathComponent("1Anim"))//Bundle(identifier: "Assets.xcassets")
 	
