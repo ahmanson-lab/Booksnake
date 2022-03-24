@@ -16,8 +16,8 @@ protocol AssetRowProtocol {
 
 struct AssetRow: View, AssetRowProtocol {
     @Environment(\.managedObjectContext) var managedObjectContext
-    @FetchRequest(fetchRequest: Manifest.sortedFetchRequest()) var contentTest: FetchedResults<Manifest>
-    @State private var tabSelection = 4
+    @FetchRequest(fetchRequest: Manifest.sortedFetchRequest()) var manifestItems: FetchedResults<Manifest>
+    @State private var tabSelection = 1
     @State private var showLoading: Bool = false
 	@State private var showOnboarding: Bool = true
 
@@ -25,8 +25,8 @@ struct AssetRow: View, AssetRowProtocol {
         ZStack {
             TabView(selection: $tabSelection) {
                 NavigationView{
-                    List{
-                        ForEach(contentTest, id: \.self) { item in
+                    List {
+                        ForEach(manifestItems, id: \.self) { item in
                             let image = UIImage.loadThumbnail(at: item.imageURL, forSize: .small) ?? UIImage()
                             NavigationLink(destination: LazyView(ContentView(imageURL: item.imageURL,
                                                                              width: (item.width),
@@ -100,8 +100,8 @@ struct AssetRow: View, AssetRowProtocol {
 				.tag(4)
             }
             .task {
-                // Add some demo items in the collection
-                if(contentTest.count < 1) {
+                // To add some demo items in the collection
+                if(manifestItems.count < 1) {
                     showLoading = true
                     await ManifestDataHandler.addExamples(managedObjectContext: managedObjectContext)
                     showLoading = false
@@ -126,23 +126,16 @@ struct AssetRow: View, AssetRowProtocol {
     }
 
     private func onDelete(offsets: IndexSet) {
-        let contentToDelete = contentTest[offsets.first!]
-        self.managedObjectContext.delete(contentToDelete)
+        guard let contentToDelete = manifestItems[safe: offsets.first!] else {
+            return
+        }
+        
+        managedObjectContext.delete(contentToDelete)
         do {
-            try self.managedObjectContext.save()
+            try managedObjectContext.save()
         }
         catch {
             print(error)
         }
-    }
-}
-
-struct LazyView<Content: View>: View {
-    let build: () -> Content
-    init(_ build: @autoclosure @escaping () -> Content) {
-        self.build = build
-    }
-    var body: Content {
-        build()
     }
 }
