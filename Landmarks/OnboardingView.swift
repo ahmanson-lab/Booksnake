@@ -11,7 +11,9 @@ import SwiftUI
 import AVKit
 
 struct OnboardingView: View {
-	@State var showingPreview = false
+	var delegate: AssetRowProtocol?
+	@State private var showingPreview = false
+	@State private var isLast = false
 	
 	var videos:[[String]] = [["0_onboarding", "0"],["1_Aim",""], ["2_Tap", ""], ["3_Explore",""], ["4", "4"]]
 	var image_title: [String] = ["Welcome to Booksnake!", "1. Aim Your Device", "2. Tap to Place", "3. Explore Your Item","Aim. Tap. Explore."]
@@ -72,9 +74,6 @@ struct OnboardingView: View {
 									}
 									.frame(height: 50.0)
 									.padding(EdgeInsets(top: 10, leading: 30, bottom: 10, trailing: 30))
-									
-							
-									
 							}
 							Text("Tap to try with an example item")
 							Spacer()
@@ -90,9 +89,38 @@ struct OnboardingView: View {
 					}
 				}
 			}.tabViewStyle(.page)
-					Button("Skip"){}
-					Spacer()
+					Button("Skip"){
+						delegate?.closeOnboardingView()
+					}
+			Spacer()
 			//}.frame(width: proxy.size.width, height: proxy.size.height, alignment: .center)
+		}
+	}
+}
+
+struct MiniOnboardingView: View{
+	var description: [[String]] = [["Booksnake lets you explore digitized archival materials as if they were physically present in the real world.", "Select an item, then tap \"View in AR.\" \n\nSwipe left for a quick orientation."], ["\nHold your device horizontally and aim it a table or wall within ten feet of you. For best results, turn the room lights on."], ["\nAfter aiming, tap the middle of your device’s screen to place your digitized item on a flat surface in the real world."],["\nMove your device to explore. Instead of pinching to zoom, try moving closer, farther, over, or around your item."], [""]]
+	var body: some View {
+		VStack{
+			Text("How to Use Booksnake").font(.title).fontWeight(.bold).frame(alignment: .center)
+			
+			VStack{
+				HStack{
+					Image(systemName: "camera.metering.multispot").resizable().foregroundColor(.blue).frame(width: 60, height: 40)
+					Text(description[1][0])
+				}
+				HStack{
+					Image(systemName: "hand.tap").resizable().foregroundColor(.blue).frame(width: 60, height: 60)
+					Text(description[2][0])
+				}
+				HStack{
+					Image(systemName: "person.fill.and.arrow.left.and.arrow.right").resizable().foregroundColor(.blue).frame(width: 60, height: 40)
+					Text(description[3][0])
+				}
+			}
+			Spacer()
+			Text("Tap to try with an example item")
+			Spacer()
 		}
 	}
 }
