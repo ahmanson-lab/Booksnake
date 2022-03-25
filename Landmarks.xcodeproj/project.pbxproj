@@ -22,6 +22,7 @@
 		1181A8D627ED35B8003EE7AF /* 2_Tap.mov in Resources */ = {isa = PBXBuildFile; fileRef = 1181A8D327ED35B8003EE7AF /* 2_Tap.mov */; };
 		1181A8D727ED35B8003EE7AF /* 1_Aim.mov in Resources */ = {isa = PBXBuildFile; fileRef = 1181A8D427ED35B8003EE7AF /* 1_Aim.mov */; };
 		1181A8DC27ED38BD003EE7AF /* 0_onboarding.png in Resources */ = {isa = PBXBuildFile; fileRef = 1181A8DB27ED38BD003EE7AF /* 0_onboarding.png */; };
+		1181A8DE27EE5362003EE7AF /* LA1909.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1181A8DD27EE5362003EE7AF /* LA1909.jpg */; };
 		11929F5E2739D97F00EB2036 /* RealityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11929F5D2739D97F00EB2036 /* RealityView.swift */; };
 		11929F602739DB9700EB2036 /* CustomPlane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11929F5F2739DB9700EB2036 /* CustomPlane.swift */; };
 		1193352A25830ED900CA19A2 /* ContentDataContainer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1193352825830ED900CA19A2 /* ContentDataContainer.xcdatamodeld */; };
@@ -88,6 +89,7 @@
 		1181A8D327ED35B8003EE7AF /* 2_Tap.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = 2_Tap.mov; sourceTree = "<group>"; };
 		1181A8D427ED35B8003EE7AF /* 1_Aim.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = 1_Aim.mov; sourceTree = "<group>"; };
 		1181A8DB27ED38BD003EE7AF /* 0_onboarding.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 0_onboarding.png; sourceTree = "<group>"; };
+		1181A8DD27EE5362003EE7AF /* LA1909.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = LA1909.jpg; sourceTree = "<group>"; };
 		11929F5D2739D97F00EB2036 /* RealityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealityView.swift; sourceTree = "<group>"; };
 		11929F5F2739DB9700EB2036 /* CustomPlane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPlane.swift; sourceTree = "<group>"; };
 		119334FD2582FE7B00CA19A2 /* Manifest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manifest.swift; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 		1181A8D827ED35BC003EE7AF /* OnboardingMat */ = {
 			isa = PBXGroup;
 			children = (
+				1181A8DD27EE5362003EE7AF /* LA1909.jpg */,
 				1181A8DB27ED38BD003EE7AF /* 0_onboarding.png */,
 				1181A8D427ED35B8003EE7AF /* 1_Aim.mov */,
 				1181A8D327ED35B8003EE7AF /* 2_Tap.mov */,
@@ -357,6 +360,7 @@
 				11C73CCD25F1662900FB66DA /* MapOfCalifornia.json in Resources */,
 				1181A8C727ED2BFB003EE7AF /* Assets.xcassets in Resources */,
 				11C73CD725F172BE00FB66DA /* TopographicLA.json in Resources */,
+				1181A8DE27EE5362003EE7AF /* LA1909.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

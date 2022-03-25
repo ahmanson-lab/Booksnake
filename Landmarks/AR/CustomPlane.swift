@@ -15,8 +15,6 @@ class CustomPlane: Entity, HasModel, HasCollision, HasAnchoring{
 	required init(image_url: URL, width: Float, height: Float) {
 		super .init()
 		
-		let bundle = Bundle(identifier: "Assets.xcassets")
-		
 		let resource = try?  TextureResource.load(contentsOf: image_url)
 		//let ao = try? TextureResource.load(named: "ao", in: bundle)
 		//let normal = try? TextureResource.load(named: "normal", in: bundle)

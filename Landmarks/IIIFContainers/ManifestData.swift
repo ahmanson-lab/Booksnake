@@ -141,7 +141,7 @@ struct ManifestDataHandler {
 // MARK: - FOR DEMO ONLY: add hard coded values from local manifests and images
 extension ManifestDataHandler {
     public static func addExamples(managedObjectContext: NSManagedObjectContext) async {
-        let resource_paths = ["MapOfCalifornia", "MapOfLosAngeles", "TopographicLA", "LA1909", "AutomobileLA", "Hollywood"]
+        let resource_paths = ["LA1909", "MapOfCalifornia", "MapOfLosAngeles", "TopographicLA", "AutomobileLA", "Hollywood"]
         let sizes = [[0.48, 0.69], [0.63, 0.56],[1.53, 0.56],[0.85, 1.02],[0.22, 0.08],[0.67, 0.66]]
 
         // ItemCollection
@@ -179,8 +179,8 @@ extension ManifestDataHandler {
         }
     }
 
-    private static func getLocalManifest(from resrouceName: String) async -> ManifestData? {
-        guard let url = Bundle.main.url(forResource: resrouceName, withExtension: "json"),
+    private static func getLocalManifest(from resourceName: String) async -> ManifestData? {
+        guard let url = Bundle.main.url(forResource: resourceName, withExtension: "json"),
               let data = try? Data(contentsOf: url),
               let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []),
               let jsonData = jsonObject as? [String: Any] else { return nil }
