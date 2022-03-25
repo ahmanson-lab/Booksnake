@@ -20,12 +20,14 @@ struct AssetRow: View, AssetRowProtocol {
     @FetchRequest(fetchRequest: Manifest.sortedFetchRequest()) var manifestItems: FetchedResults<Manifest>
     @State private var tabSelection = 1
     @State private var showLoading: Bool = false
-	@State private var showOnboarding: Bool = true
+	@State private var showOnboarding: Bool = false
+	@State private var showMiniOnboarding: Bool = false
 
     var body: some View {
         ZStack {
             TabView(selection: $tabSelection) {
 				//MARK: Tab 1 - Library
+				VStack{
                 NavigationView{
                     List {
                         ForEach(manifestItems, id: \.self) { item in
@@ -47,16 +49,18 @@ struct AssetRow: View, AssetRowProtocol {
                             }
                         }
                         .onDelete(perform: onDelete)
-                    }.navigationBarTitle("Library")
-						.toolbar(content: {
-							Button(action: {
-								showOnboarding = true
-							}, label: {
-								Image(systemName:  "questionmark.circle")
-							})
+                    }
+					.navigationBarTitle("Library")
+					.toolbar(content: {
+						Button(action: {
+							showMiniOnboarding = true
+						}, label: {
+							Image(systemName:  "questionmark.circle").foregroundColor(.blue)
 						})
+					})
                 }
                 .navigationViewStyle(StackNavigationViewStyle())
+				}
                 .tabItem {
                     Image(systemName: "scroll")
                     Text("Library")
@@ -65,8 +69,7 @@ struct AssetRow: View, AssetRowProtocol {
 				
 				//MARK: Tab 2 - Lists
 				NavigationView {
-					RootListView(delegate: self)
-						.navigationBarTitle("Lists")
+					RootListView(delegate: self).navigationBarTitle("Lists")
 				}
 				.navigationViewStyle(StackNavigationViewStyle())
 				.tabItem {
@@ -77,8 +80,7 @@ struct AssetRow: View, AssetRowProtocol {
 
 				//MARK: Tab 3 - Explore
                 NavigationView {
-                    CustomSearchMenu(delegate: self)
-                        .navigationBarTitle("Explore")
+                    CustomSearchMenu(delegate: self).navigationBarTitle("Explore")
                 }
                 .navigationViewStyle(StackNavigationViewStyle())
                 .tabItem {
@@ -95,6 +97,7 @@ struct AssetRow: View, AssetRowProtocol {
                     showLoading = false
                 }
             }
+			
 
 			//MARK: Loading Indicator
             ZStack {
@@ -105,13 +108,17 @@ struct AssetRow: View, AssetRowProtocol {
             }
             .isHidden(!showLoading)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-			
+
+			//MARK: Onboarding View
+			OnboardingView(delegate: self).isHidden(showOnboarding, remove: showOnboarding)
         }
-		.popover(isPresented: $showOnboarding, content: {OnboardingView(delegate: self)})
+		.sheet(isPresented: $showMiniOnboarding, content: {MiniOnboardingView(delegate: self) })
     }
+
 	
 	func closeOnboardingView(){
-		showOnboarding = false
+		showOnboarding = true
+		showMiniOnboarding = false
 	}
 
     // Delegate function
