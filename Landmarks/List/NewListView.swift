@@ -128,6 +128,7 @@ struct NewListView: View {
                 })
                 .sheet(isPresented: $showManifestItemsPickerView) {
                     ManifestItemsPickerView(selectedManifests: $collectionItems)
+                        .interactiveDismissDisabled(true)
                 }
 
                 ForEach(collectionItems, id: \.self) { item in
