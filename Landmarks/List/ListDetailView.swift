@@ -11,6 +11,7 @@ import SwiftUI
 struct ListDetailView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     @ObservedObject var collection: ItemCollection
+    @State private var editMode = false
     
     var body: some View {
         List {
@@ -63,49 +64,88 @@ struct ListDetailView: View {
                     .cornerRadius(5)
 
                     // Title
-                    Text("\(collection.title)")
-                        .font(.title2)
-                        .bold()
-                        .lineLimit(2)
-                        .truncationMode(.tail)
-                    
-                    Spacer()
-                        .frame(height: 5)
-                    
-                    // Subtitle
-                    if collection.subtitle != "" {
-                        Text("\(collection.subtitle)")
-                            .font(.title3)
+                    if editMode {
+                        TextField("Untitled List", text: $collection.title)
+                            .multilineTextAlignment(.center)
+                            .font(.title2.weight(.bold))
+                    } else {
+                        Text("\(collection.title)")
+                            .font(.title2)
+                            .bold()
                             .lineLimit(2)
                             .truncationMode(.tail)
                     }
+
+                    Spacer()
+                        .frame(height: 5)
+
+                    // Subtitle
+                    if editMode {
+                        TextField("Subtitle", text: $collection.subtitle)
+                            .multilineTextAlignment(.center)
+                            .font(.title3.weight(.light))
+                    } else {
+                        if collection.subtitle != "" {
+                            Text("\(collection.subtitle)")
+                                .font(.title3.weight(.light))
+                                .lineLimit(2)
+                                .truncationMode(.tail)
+                        }
+                    }
                     
                     // Author
-                    HStack(spacing: 3) {
-                        Image(systemName: "person.circle")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 12, height: 12)
-                        Text("\(collection.author != "" ? collection.author : "Unknown")")
-                            .font(.footnote)
-                            .lineLimit(1)
-                            .truncationMode(.tail)
+                    if editMode {
+                        HStack(spacing: 3) {
+                            Image(systemName: "person.circle")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 12, height: 12)
+                            TextField("List Creator", text: $collection.author)
+                                .font(.footnote)
+                        }
+                        .fixedSize()
+                        .frame(width: 200, height: nil, alignment: .center)
+                    } else {
+                        HStack(spacing: 3) {
+                            Image(systemName: "person.circle")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 12, height: 12)
+                            Text("\(collection.author != "" ? collection.author : "Unknown")")
+                                .font(.footnote)
+                                .lineLimit(1)
+                                .truncationMode(.tail)
+                        }
                     }
+
                     Spacer()
                         .frame(height: 10)
                 }
                 Spacer()
             }
 
-            if collection.detail != "" {
-                HStack {
+            if editMode {
+                VStack {
                     Spacer()
-                    Text("\(collection.detail)")
+                        .frame(height: 25)
+                    TextField("Description", text: $collection.detail)
+                        .multilineTextAlignment(.leading)
                         .font(.subheadline)
                         .foregroundColor(.gray)
-                        .lineLimit(5)
-                        .truncationMode(.tail)
                     Spacer()
+                        .frame(height: 25)
+                }
+            } else {
+                if collection.detail != "" {
+                    HStack {
+                        Spacer()
+                        Text("\(collection.detail)")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                            .lineLimit(5)
+                            .truncationMode(.tail)
+                        Spacer()
+                    }
                 }
             }
 
@@ -130,6 +170,19 @@ struct ListDetailView: View {
                 .onDelete(perform: onDelete)
             } else {
                 Text("Empty List")
+            }
+        }
+        .toolbar{
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    editMode.toggle()
+                }, label: {
+                    if editMode {
+                        Text("Finish")
+                    } else {
+                        Text("Edit")
+                    }
+                })
             }
         }
     }
