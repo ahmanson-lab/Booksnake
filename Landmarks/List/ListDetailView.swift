@@ -11,6 +11,7 @@ import SwiftUI
 struct ListDetailView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     @ObservedObject var collection: ItemCollection
+    @State var navigationBarBackButtonHidden = false
     @State private var editMode = false
     @State private var collectionItems: [Manifest] = []
     
@@ -213,10 +214,12 @@ struct ListDetailView: View {
         .onAppear {
             collectionItems = (collection.items?.array as? [Manifest]) ?? []
         }
+        .navigationBarBackButtonHidden(navigationBarBackButtonHidden)
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
                     editMode.toggle()
+                    navigationBarBackButtonHidden.toggle()
                 }, label: {
                     if editMode {
                         Text("Finish")
