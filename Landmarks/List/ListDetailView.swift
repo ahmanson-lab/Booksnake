@@ -12,6 +12,7 @@ struct ListDetailView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     @ObservedObject var collection: ItemCollection
     @State private var editMode = false
+    @State private var collectionItems: [Manifest] = []
     
     var body: some View {
         List {
@@ -149,28 +150,68 @@ struct ListDetailView: View {
                 }
             }
 
-            if let items = collection.items?.array as? [Manifest] {
-                ForEach(items, id: \.self) { item in
+            if !collectionItems.isEmpty {
+                ForEach(collectionItems, id: \.self) { item in
                     let image = UIImage.loadThumbnail(at: item.imageURL, forSize: .small) ?? UIImage()
-                    NavigationLink(destination: LazyView(ContentView(imageURL: item.imageURL,
-                                                                     width: (item.width),
-                                                                     length: (item.length),
-                                                                     labels: item.labels!,
-                                                                     values: item.values! ))) {
-                        Image(uiImage: image)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 50, height: 50)
 
-                        Text("\(item.itemLabel ?? "")")
-                            .lineLimit(2)
-                            .truncationMode(.tail)
+                    if editMode {
+                        HStack {
+                            Button(action: {
+                                if let index = collectionItems.firstIndex(of: item) {
+                                    withAnimation(.spring()) {
+                                        onDelete(offsets: IndexSet(integer: index))
+                                    }
+                                }
+                            }, label: {
+                                Image(systemName: "minus.circle.fill")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .foregroundColor(.red)
+                                    .frame(width: 20, height: 20)
+                            })
+                            .buttonStyle(PlainButtonStyle())
+                            Image(uiImage: image)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 50, height: 50)
+                            Text("\(item.itemLabel ?? "")")
+                                .lineLimit(2)
+                                .truncationMode(.tail)
+                            Spacer()
+                            Image(systemName: "line.3.horizontal")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .foregroundColor(.gray)
+                                .frame(width: 20, height: 20)
+                        }
+                        .onDrag {
+                            return NSItemProvider()
+                        }
+                    } else {
+                        NavigationLink(destination: LazyView(ContentView(imageURL: item.imageURL,
+                                                                         width: (item.width),
+                                                                         length: (item.length),
+                                                                         labels: item.labels!,
+                                                                         values: item.values! ))) {
+                            Image(uiImage: image)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 50, height: 50)
+
+                            Text("\(item.itemLabel ?? "")")
+                                .lineLimit(2)
+                                .truncationMode(.tail)
+                        }
                     }
                 }
                 .onDelete(perform: onDelete)
+                .onMove(perform: moveCollectionItems)
             } else {
                 Text("Empty List")
             }
+        }
+        .onAppear {
+            collectionItems = (collection.items?.array as? [Manifest]) ?? []
         }
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -186,12 +227,21 @@ struct ListDetailView: View {
             }
         }
     }
-    
-    private func onDelete(offsets: IndexSet) {
-        guard let contentToDeassociate = collection.items?[offsets.first!] as? Manifest else {
-            return
+
+    private func moveCollectionItems(from source: IndexSet, to destination: Int) {
+        collectionItems.move(fromOffsets: source, toOffset: destination)
+        collection.items = NSOrderedSet(array: collectionItems)
+        do {
+            try managedObjectContext.save()
         }
-        contentToDeassociate.removeFromCollections(collection)
+        catch {
+            print(error)
+        }
+    }
+
+    private func onDelete(offsets: IndexSet) {
+        collectionItems.remove(at: offsets.first!)
+        collection.items = NSOrderedSet(array: collectionItems)
         do {
             try managedObjectContext.save()
         }
