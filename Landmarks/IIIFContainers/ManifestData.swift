@@ -56,6 +56,7 @@ struct ManifestDataHandler {
                          toDirectory: .image,
                          withFileName: "\(new_manifest.id).jpg")
         contentdata.imageFileName = "\(new_manifest.id).jpg"
+        preCacheThumbnails(at: contentdata.imageURL)
 
         do {
             try managedObjectContext.save()
@@ -136,6 +137,12 @@ struct ManifestDataHandler {
 
         return UIImage(data: data)
     }
+
+    private static func preCacheThumbnails(at url: URL?) {
+        ImageThumbnailSize.allCases.forEach {
+            UIImage.loadThumbnail(at: url, forSize: $0)
+        }
+    }
 }
 
 // MARK: - FOR DEMO ONLY: add hard coded values from local manifests and images
@@ -167,6 +174,8 @@ extension ManifestDataHandler {
                                  toDirectory: .image,
                                  withFileName: "\(new_manifest.id).jpg")
                 contentdata.imageFileName = "\(new_manifest.id).jpg"
+                preCacheThumbnails(at: contentdata.imageURL)
+
                 contentdata.addToCollections(collectionData)
 
                 do {

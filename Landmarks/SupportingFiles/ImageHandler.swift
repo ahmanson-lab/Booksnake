@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import ImageIO
 
-enum ImageThumbnailSize: String {
+enum ImageThumbnailSize: String, CaseIterable {
     case small = "small"
     case medium = "medium"
 
@@ -25,6 +25,7 @@ enum ImageThumbnailSize: String {
 }
 
 extension UIImage {
+    @discardableResult
     static func loadThumbnail(at url: URL?, forSize size: ImageThumbnailSize) -> UIImage? {
         guard let url = url else { return nil }
         
