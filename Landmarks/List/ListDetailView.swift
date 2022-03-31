@@ -23,48 +23,14 @@ struct ListDetailView: View {
                 VStack {
                     Spacer()
                         .frame(height: 10)
-                    // Images
-                    VStack(spacing: 0) {
-                        let imageURLs = collection.compositeImageURLs
-                        let topLeftImage = UIImage.loadThumbnail(at: imageURLs[safe: 0], forSize: .medium) ?? UIColor.lightGray.image()
-                        let topRightImage = UIImage.loadThumbnail(at: imageURLs[safe: 1], forSize: .medium) ?? UIColor.lightGray.image()
-                        let bottomLeftImage = UIImage.loadThumbnail(at: imageURLs[safe: 2], forSize: .medium) ?? UIColor.lightGray.image()
-                        let bottomRightImage = UIImage.loadThumbnail(at: imageURLs[safe: 3], forSize: .medium) ?? UIColor.lightGray.image()
 
-                        HStack(spacing: 0) {
-                            Image(uiImage: topLeftImage)
-                                .resizable()
-                                .scaleEffect(1.1)   // some image has empty space, so we scale image to make it fill
-                                .scaledToFill()
-                                .frame(width: 100, height: 100, alignment: .center)
-                                .clipped()
-                                .animation(.none, value: topLeftImage)
-                            Image(uiImage: topRightImage)
-                                .resizable()
-                                .scaleEffect(1.1)
-                                .scaledToFill()
-                                .frame(width: 100, height: 100, alignment: .center)
-                                .clipped()
-                                .animation(.none, value: topRightImage)
-                        }
-                        HStack(spacing: 0) {
-                            Image(uiImage: bottomLeftImage)
-                                .resizable()
-                                .scaleEffect(1.1)
-                                .scaledToFill()
-                                .frame(width: 100, height: 100, alignment: .center)
-                                .clipped()
-                                .animation(.none, value: bottomLeftImage)
-                            Image(uiImage: bottomRightImage)
-                                .resizable()
-                                .scaleEffect(1.1)
-                                .scaledToFill()
-                                .frame(width: 100, height: 100, alignment: .center)
-                                .clipped()
-                                .animation(.none, value: bottomRightImage)
-                        }
-                    }
-                    .cornerRadius(5)
+                    // AlbumView
+                    let imageURLs = collection.compositeImageURLs
+                    AlbumView(imageSize: .medium,
+                              topLeftImageURL: imageURLs[safe: 0],
+                              topRightImageURL: imageURLs[safe: 1],
+                              bottomLeftImageURL: imageURLs[safe: 2],
+                              bottomRightImageURL: imageURLs[safe: 3])
 
                     // Title
                     if editMode {
