@@ -13,8 +13,9 @@ struct ListDetailView: View {
     @ObservedObject var collection: ItemCollection
     @State var navigationBarBackButtonHidden = false
     @State private var editMode = false
+    @State private var showManifestItemsPickerView = false
     @State private var collectionItems: [Manifest] = []
-    
+
     var body: some View {
         List {
             HStack {
@@ -151,6 +152,25 @@ struct ListDetailView: View {
                 }
             }
 
+            if editMode {
+                Button(action: {
+                    self.showManifestItemsPickerView = true
+                }, label: {
+                    HStack {
+                        Image(systemName: "plus.circle.fill")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .foregroundColor(.green)
+                            .frame(width: 20, height: 20)
+                        Text("Add Items")
+                    }
+                })
+                .sheet(isPresented: $showManifestItemsPickerView) {
+                    ManifestItemsPickerView(selectedManifests: $collectionItems)
+                        .interactiveDismissDisabled(true)
+                }
+            }
+
             if !collectionItems.isEmpty {
                 ForEach(collectionItems, id: \.self) { item in
                     let image = UIImage.loadThumbnail(at: item.imageURL, forSize: .small) ?? UIImage()
@@ -214,6 +234,7 @@ struct ListDetailView: View {
         .onAppear {
             collectionItems = (collection.items?.array as? [Manifest]) ?? []
         }
+        .onChange(of: collectionItems) { saveIntoDB(updatedItems: $0) }
         .navigationBarBackButtonHidden(navigationBarBackButtonHidden)
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -233,18 +254,18 @@ struct ListDetailView: View {
 
     private func moveCollectionItems(from source: IndexSet, to destination: Int) {
         collectionItems.move(fromOffsets: source, toOffset: destination)
-        collection.items = NSOrderedSet(array: collectionItems)
-        do {
-            try managedObjectContext.save()
-        }
-        catch {
-            print(error)
-        }
     }
 
     private func onDelete(offsets: IndexSet) {
         collectionItems.remove(at: offsets.first!)
-        collection.items = NSOrderedSet(array: collectionItems)
+    }
+
+    private func saveIntoDB(updatedItems: [Manifest]) {
+        let updatedSet = NSOrderedSet(array: updatedItems)
+        guard let setDifference = collection.items?.difference(from: updatedSet) as? NSOrderedCollectionDifference,
+              setDifference.hasChanges else { return }
+
+        collection.items = updatedSet
         do {
             try managedObjectContext.save()
         }
