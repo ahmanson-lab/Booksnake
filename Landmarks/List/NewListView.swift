@@ -34,10 +34,10 @@ struct NewListView: View {
 
                         // AlbumView
                         AlbumView(imageSize: .medium,
-                                  topLeftImageURL: collectionItems[safe: 0]?.imageURL,
-                                  topRightImageURL: collectionItems[safe: 1]?.imageURL,
-                                  bottomLeftImageURL: collectionItems[safe: 2]?.imageURL,
-                                  bottomRightImageURL: collectionItems[safe: 3]?.imageURL)
+                                  topLeftImageURL: .constant(collectionItems[safe: 0]?.imageURL),
+                                  topRightImageURL: .constant(collectionItems[safe: 1]?.imageURL),
+                                  bottomLeftImageURL: .constant(collectionItems[safe: 2]?.imageURL),
+                                  bottomRightImageURL: .constant(collectionItems[safe: 3]?.imageURL))
 
                         Spacer()
                             .frame(height: 20)

@@ -27,10 +27,10 @@ struct ListDetailView: View {
                     // AlbumView
                     let imageURLs = collection.compositeImageURLs
                     AlbumView(imageSize: .medium,
-                              topLeftImageURL: imageURLs[safe: 0],
-                              topRightImageURL: imageURLs[safe: 1],
-                              bottomLeftImageURL: imageURLs[safe: 2],
-                              bottomRightImageURL: imageURLs[safe: 3])
+                              topLeftImageURL: .constant(imageURLs[safe: 0]),
+                              topRightImageURL: .constant(imageURLs[safe: 1]),
+                              bottomLeftImageURL: .constant(imageURLs[safe: 2]),
+                              bottomRightImageURL: .constant(imageURLs[safe: 3]))
 
                     // Title
                     if editMode {

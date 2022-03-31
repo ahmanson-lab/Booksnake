@@ -20,11 +20,11 @@ extension ImageThumbnailSize {
 }
 
 struct AlbumView: View {
-    @State var imageSize: ImageThumbnailSize
-    @State var topLeftImageURL: URL?
-    @State var topRightImageURL: URL?
-    @State var bottomLeftImageURL: URL?
-    @State var bottomRightImageURL: URL?
+    var imageSize: ImageThumbnailSize
+    @Binding var topLeftImageURL: URL?
+    @Binding var topRightImageURL: URL?
+    @Binding var bottomLeftImageURL: URL?
+    @Binding var bottomRightImageURL: URL?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -72,7 +72,11 @@ struct AlbumView: View {
 
 struct AlbumView_Previews: PreviewProvider {
     static var previews: some View {
-        AlbumView(imageSize: .small)
+        AlbumView(imageSize: .small,
+                  topLeftImageURL: .constant(nil),
+                  topRightImageURL: .constant(nil),
+                  bottomLeftImageURL: .constant(nil),
+                  bottomRightImageURL: .constant(nil))
             .previewLayout(.sizeThatFits)
     }
 }

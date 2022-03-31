@@ -64,10 +64,10 @@ struct RootListView : View {
                         HStack(spacing: 14) {
                             // AlbumView
                             AlbumView(imageSize: .small,
-                                      topLeftImageURL: imageURLs[safe: 0],
-                                      topRightImageURL: imageURLs[safe: 1],
-                                      bottomLeftImageURL: imageURLs[safe: 2],
-                                      bottomRightImageURL: imageURLs[safe: 3])
+                                      topLeftImageURL: .constant(imageURLs[safe: 0]),
+                                      topRightImageURL: .constant(imageURLs[safe: 1]),
+                                      bottomLeftImageURL: .constant(imageURLs[safe: 2]),
+                                      bottomRightImageURL: .constant(imageURLs[safe: 3]))
 
                             // SideContentView
                             VStack(alignment: .leading) {
