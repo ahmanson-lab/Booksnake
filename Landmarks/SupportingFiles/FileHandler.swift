@@ -10,7 +10,9 @@ import Foundation
 
 enum FileDirectory {
     case image
+    case iiifArchive
     case imageCache
+    case archiveCache
 
     var url: URL? {
         switch self {
@@ -29,6 +31,21 @@ enum FileDirectory {
             }
 
             return imageDir
+        case .iiifArchive:
+            let iiifDir = URL(fileURLWithPath: FileHandler.documentDirectoryPath).appendingPathComponent("iiif")
+
+            if !FileManager.default.fileExists(atPath: iiifDir.path) {
+                do {
+                    try FileManager.default.createDirectory(at: iiifDir,
+                                                            withIntermediateDirectories: true,
+                                                            attributes: [FileAttributeKey.protectionKey: FileProtectionType.none])
+                } catch {
+                    print("Can't create iiif folder.")
+                    return nil
+                }
+            }
+
+            return iiifDir
         case .imageCache:
             let imageCacheDir = URL(fileURLWithPath: FileHandler.cachesDirectoryPath).appendingPathComponent("ImageCaches")
 
@@ -44,6 +61,21 @@ enum FileDirectory {
             }
 
             return imageCacheDir
+        case .archiveCache:
+            let archiveCacheDir = URL(fileURLWithPath: FileHandler.cachesDirectoryPath).appendingPathComponent("ArchiveCaches")
+
+            if !FileManager.default.fileExists(atPath: archiveCacheDir.path) {
+                do {
+                    try FileManager.default.createDirectory(at: archiveCacheDir,
+                                                            withIntermediateDirectories: true,
+                                                            attributes: [FileAttributeKey.protectionKey: FileProtectionType.none])
+                } catch {
+                    print("Can't create archiveCache folder.")
+                    return nil
+                }
+            }
+
+            return archiveCacheDir
         }
     }
 }

@@ -37,7 +37,7 @@
 		11C73CD725F172BE00FB66DA /* TopographicLA.json in Resources */ = {isa = PBXBuildFile; fileRef = 11C73CD425F172BE00FB66DA /* TopographicLA.json */; };
 		11C73CDA25F1733200FB66DA /* Hollywood.json in Resources */ = {isa = PBXBuildFile; fileRef = 11C73CD925F1733200FB66DA /* Hollywood.json */; };
 		11D0BCBF2741BF0500AD3B56 /* RealityViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D0BCBE2741BF0500AD3B56 /* RealityViewRepresentable.swift */; };
-		11DF87A82548955D00A1E5BD /* ManifestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DF87A72548955D00A1E5BD /* ManifestData.swift */; };
+		11DF87A82548955D00A1E5BD /* ManifestDataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DF87A72548955D00A1E5BD /* ManifestDataHandler.swift */; };
 		11FC2AAA255B0BFD00AC21EA /* WebControllerRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FC2AA9255B0BFD00AC21EA /* WebControllerRepresentable.swift */; };
 		11FDF31B27B5C27100EB5BDC /* NewListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDF31A27B5C27100EB5BDC /* NewListView.swift */; };
 		11FDF31E27B5CF4300EB5BDC /* ListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDF31D27B5CF4300EB5BDC /* ListsView.swift */; };
@@ -55,6 +55,7 @@
 		BAA84B3C27CCA69D000FE43C /* ListDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA84B3B27CCA69D000FE43C /* ListDetailView.swift */; };
 		BAB4BFAA2768702C007DC9A9 /* FileHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAB4BFA92768702C007DC9A9 /* FileHandler.swift */; };
 		BAB4BFAC2768735F007DC9A9 /* ImageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAB4BFAB2768735F007DC9A9 /* ImageHandler.swift */; };
+		BAC322B927F6BB8F00CCAE73 /* DataExportHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAC322B827F6BB8F00CCAE73 /* DataExportHandler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -103,7 +104,7 @@
 		11C73CD425F172BE00FB66DA /* TopographicLA.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TopographicLA.json; sourceTree = "<group>"; };
 		11C73CD925F1733200FB66DA /* Hollywood.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Hollywood.json; sourceTree = "<group>"; };
 		11D0BCBE2741BF0500AD3B56 /* RealityViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealityViewRepresentable.swift; sourceTree = "<group>"; };
-		11DF87A72548955D00A1E5BD /* ManifestData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManifestData.swift; sourceTree = "<group>"; };
+		11DF87A72548955D00A1E5BD /* ManifestDataHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManifestDataHandler.swift; sourceTree = "<group>"; };
 		11FC2AA9255B0BFD00AC21EA /* WebControllerRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebControllerRepresentable.swift; sourceTree = "<group>"; };
 		11FDF31A27B5C27100EB5BDC /* NewListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewListView.swift; sourceTree = "<group>"; };
 		11FDF31D27B5CF4300EB5BDC /* ListsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListsView.swift; sourceTree = "<group>"; };
@@ -121,6 +122,7 @@
 		BAA84B3B27CCA69D000FE43C /* ListDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListDetailView.swift; sourceTree = "<group>"; };
 		BAB4BFA92768702C007DC9A9 /* FileHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHandler.swift; sourceTree = "<group>"; };
 		BAB4BFAB2768735F007DC9A9 /* ImageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageHandler.swift; sourceTree = "<group>"; };
+		BAC322B827F6BB8F00CCAE73 /* DataExportHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExportHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,8 +176,9 @@
 				56CD50A724C7CA1C00EF8C3E /* AppDelegate.swift */,
 				BAA84B3F27CCA6EC000FE43C /* Library */,
 				BAA84B3E27CCA6C7000FE43C /* List */,
-				BAA84B4227CCA7AA000FE43C /* AR */,
 				BAA84B4327CCA7BD000FE43C /* Search */,
+				BAA84B4227CCA7AA000FE43C /* AR */,
+				BAC322B727F6BAF000CCAE73 /* Sharing */,
 				1193351F25830D9000CA19A2 /* Content Data */,
 				BAA84B4427CCA7D0000FE43C /* IIIFContainers */,
 				BAA84B4127CCA77F000FE43C /* SupportingFiles */,
@@ -243,7 +246,7 @@
 		BAA84B4427CCA7D0000FE43C /* IIIFContainers */ = {
 			isa = PBXGroup;
 			children = (
-				11DF87A72548955D00A1E5BD /* ManifestData.swift */,
+				11DF87A72548955D00A1E5BD /* ManifestDataHandler.swift */,
 				1166413F267E786700CB6666 /* MetadataItem.swift */,
 				11B2086A2537CE7900704F40 /* IIIFImage.swift */,
 				11B208672537CE4200704F40 /* IIIFAnnotation.swift */,
@@ -269,6 +272,14 @@
 				11C73CCC25F1662900FB66DA /* MapOfCalifornia.json */,
 			);
 			path = json;
+			sourceTree = "<group>";
+		};
+		BAC322B727F6BAF000CCAE73 /* Sharing */ = {
+			isa = PBXGroup;
+			children = (
+				BAC322B827F6BB8F00CCAE73 /* DataExportHandler.swift */,
+			);
+			path = Sharing;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -383,6 +394,7 @@
 				11B208592537C9AF00704F40 /* IIIFManifest.swift in Sources */,
 				11B208562537C90900704F40 /* MultiProperty.swift in Sources */,
 				BAB4BFAC2768735F007DC9A9 /* ImageHandler.swift in Sources */,
+				BAC322B927F6BB8F00CCAE73 /* DataExportHandler.swift in Sources */,
 				117C02ED26ACDE4D004197D3 /* CustomSearchMenu.swift in Sources */,
 				117C02EB26ACDDEE004197D3 /* InputView.swift in Sources */,
 				11B2ADEC2593E6B500A54488 /* ActivityIndicatorView.swift in Sources */,
@@ -392,7 +404,7 @@
 				BA5ADC9D27BC642000A0E87B /* ItemCollection+CoreDataProperties.swift in Sources */,
 				11B208682537CE4200704F40 /* IIIFAnnotation.swift in Sources */,
 				BAA84B3A27CCA5A1000FE43C /* Extensions.swift in Sources */,
-				11DF87A82548955D00A1E5BD /* ManifestData.swift in Sources */,
+				11DF87A82548955D00A1E5BD /* ManifestDataHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
