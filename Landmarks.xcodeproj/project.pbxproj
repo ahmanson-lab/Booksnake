@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -44,6 +44,8 @@
 		56CD50A824C7CA1C00EF8C3E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CD50A724C7CA1C00EF8C3E /* AppDelegate.swift */; };
 		56CD50AA24C7CA1C00EF8C3E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CD50A924C7CA1C00EF8C3E /* SceneDelegate.swift */; };
 		56CD50C024C7CEA000EF8C3E /* RectangularImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CD50BF24C7CEA000EF8C3E /* RectangularImage.swift */; };
+		BA2F05F927F577F000B32EA9 /* AlbumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2F05F827F577F000B32EA9 /* AlbumView.swift */; };
+		BA2F05FC27F67ADF00B32EA9 /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = BA2F05FB27F67ADF00B32EA9 /* Zip */; };
 		BA42D15E27E96CE000E9BA0B /* ManifestItemsPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA42D15D27E96CE000E9BA0B /* ManifestItemsPickerView.swift */; };
 		BA5ADC9127BC60B700A0E87B /* ItemCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5ADC9027BC60B700A0E87B /* ItemCollection.swift */; };
 		BA5ADC9B27BC642000A0E87B /* Manifest+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5ADC9727BC642000A0E87B /* Manifest+CoreDataProperties.swift */; };
@@ -110,6 +112,7 @@
 		56CD50A924C7CA1C00EF8C3E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		56CD50B524C7CA1F00EF8C3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		56CD50BF24C7CEA000EF8C3E /* RectangularImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangularImage.swift; sourceTree = "<group>"; };
+		BA2F05F827F577F000B32EA9 /* AlbumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumView.swift; sourceTree = "<group>"; };
 		BA42D15D27E96CE000E9BA0B /* ManifestItemsPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManifestItemsPickerView.swift; sourceTree = "<group>"; };
 		BA5ADC9027BC60B700A0E87B /* ItemCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCollection.swift; sourceTree = "<group>"; };
 		BA5ADC9727BC642000A0E87B /* Manifest+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Manifest+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -125,6 +128,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA2F05FC27F67ADF00B32EA9 /* Zip in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -187,6 +191,7 @@
 				BAA84B3B27CCA69D000FE43C /* ListDetailView.swift */,
 				11FDF31A27B5C27100EB5BDC /* NewListView.swift */,
 				BA42D15D27E96CE000E9BA0B /* ManifestItemsPickerView.swift */,
+				BA2F05F827F577F000B32EA9 /* AlbumView.swift */,
 			);
 			path = List;
 			sourceTree = "<group>";
@@ -283,6 +288,9 @@
 			dependencies = (
 			);
 			name = Landmarks;
+			packageProductDependencies = (
+				BA2F05FB27F67ADF00B32EA9 /* Zip */,
+			);
 			productName = Landmarks;
 			productReference = 56CD50A424C7CA1C00EF8C3E /* Booksnake.app */;
 			productType = "com.apple.product-type.application";
@@ -311,6 +319,9 @@
 				Base,
 			);
 			mainGroup = 56CD509B24C7CA1C00EF8C3E;
+			packageReferences = (
+				BA2F05FA27F67ADF00B32EA9 /* XCRemoteSwiftPackageReference "Zip" */,
+			);
 			productRefGroup = 56CD50A524C7CA1C00EF8C3E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -349,6 +360,7 @@
 				11FC2AAA255B0BFD00AC21EA /* WebControllerRepresentable.swift in Sources */,
 				11B2086B2537CE7900704F40 /* IIIFImage.swift in Sources */,
 				11664140267E786700CB6666 /* MetadataItem.swift in Sources */,
+				BA2F05F927F577F000B32EA9 /* AlbumView.swift in Sources */,
 				117C02E526ACD16C004197D3 /* CatalogSearchView.swift in Sources */,
 				56CD50C024C7CEA000EF8C3E /* RectangularImage.swift in Sources */,
 				1181A8CE27ED2C84003EE7AF /* ContentView.swift in Sources */,
@@ -576,6 +588,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		BA2F05FA27F67ADF00B32EA9 /* XCRemoteSwiftPackageReference "Zip" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/marmelroy/Zip.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		BA2F05FB27F67ADF00B32EA9 /* Zip */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BA2F05FA27F67ADF00B32EA9 /* XCRemoteSwiftPackageReference "Zip" */;
+			productName = Zip;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		1193352825830ED900CA19A2 /* ContentDataContainer.xcdatamodeld */ = {
