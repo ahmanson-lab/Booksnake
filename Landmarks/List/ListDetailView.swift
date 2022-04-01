@@ -193,7 +193,7 @@ struct ListDetailView: View {
                 }
                 .onDelete(perform: onDelete)
                 .onMove(perform: moveCollectionItems)
-            } else {
+            } else if !editMode {
                 Text("Empty List")
             }
         }
@@ -205,8 +205,10 @@ struct ListDetailView: View {
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
-                    editMode.toggle()
-                    navigationBarBackButtonHidden.toggle()
+                    withAnimation {
+                        editMode.toggle()
+                        navigationBarBackButtonHidden.toggle()
+                    }
                 }, label: {
                     if editMode {
                         Text("Finish")
