@@ -118,7 +118,7 @@ struct NewListView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 50, height: 50)
-                        Text("\(item.itemLabel ?? "")")
+                        Text("\(item.itemLabel)")
                             .lineLimit(2)
                             .truncationMode(.tail)
                         Spacer()

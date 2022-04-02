@@ -161,7 +161,7 @@ struct ListDetailView: View {
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .frame(width: 50, height: 50)
-                            Text("\(item.itemLabel ?? "")")
+                            Text("\(item.itemLabel)")
                                 .lineLimit(2)
                                 .truncationMode(.tail)
                             Spacer()
@@ -185,7 +185,7 @@ struct ListDetailView: View {
                                 .aspectRatio(contentMode: .fit)
                                 .frame(width: 50, height: 50)
 
-                            Text("\(item.itemLabel ?? "")")
+                            Text("\(item.itemLabel)")
                                 .lineLimit(2)
                                 .truncationMode(.tail)
                         }
@@ -208,11 +208,18 @@ struct ListDetailView: View {
                     Button(action: {
                         Task {
                             // Prepare collection archive
-                            _ = try? await DataExportHandler.prepareArchive(itemCollection: collection)
+                            let fileURL = try? await DataExportHandler.prepareArchive(itemCollection: collection)
+                            do {
+                                let importCollection = try await DataExportHandler.importArchive(archiveURL: fileURL!, managedObjectContext: managedObjectContext)
+                                print(importCollection)
+                            } catch {
+                                print(error)
+                            }
+
                             // Show share extension
                             
                             // Cleanup arhive cache folder
-                            FileHandler.clean(directory: .archiveCache)
+//                            FileHandler.clean(directory: .archiveCache)
                         }
                     }, label: {
                         if !editMode {
