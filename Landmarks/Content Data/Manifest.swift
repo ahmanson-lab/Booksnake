@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-public class Manifest: NSManagedObject, Identifiable {
+public class Manifest: NSManagedObject, Identifiable, Codable {
     @NSManaged public var id: UUID
     @NSManaged public var labels: [String]?
     @NSManaged public var values: [String]?
@@ -20,6 +20,34 @@ public class Manifest: NSManagedObject, Identifiable {
     //for init sizes
     @NSManaged public var width: Float
     @NSManaged public var length: Float
+
+    enum CodingKeys: CodingKey {
+        case id, labels, values, itemLabel, createdDate, width, length
+    }
+
+    required convenience public init(from decoder: Decoder) throws {
+        self.init()
+
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decode(UUID.self, forKey: .id)
+        self.labels = (try? container.decode([String].self, forKey: .labels)) ?? nil
+        self.values = (try? container.decode([String].self, forKey: .values)) ?? nil
+        self.itemLabel = (try? container.decode(String.self, forKey: .itemLabel)) ?? nil
+        self.createdDate = try container.decode(Date.self, forKey: .createdDate)
+        self.width = try container.decode(Float.self, forKey: .width)
+        self.length = try container.decode(Float.self, forKey: .length)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(labels, forKey: .labels)
+        try container.encode(values, forKey: .values)
+        try container.encode(itemLabel, forKey: .itemLabel)
+        try container.encode(createdDate, forKey: .createdDate)
+        try container.encode(width, forKey: .width)
+        try container.encode(length, forKey: .length)
+    }
 }
 
 extension Manifest {
