@@ -32,22 +32,22 @@ public class ItemCollection: NSManagedObject, Identifiable, Codable {
     }
 
     enum CodingKeys: CodingKey {
-        case title, subtitle, author, detail, createdDate, itemArray
+        case title, subtitle, author, detail, createdDate
     }
 
     required convenience public init(from decoder: Decoder) throws {
-        self.init()
+        guard let context = decoder.userInfo[CodingUserInfoKey.managedObjectContext] as? NSManagedObjectContext else {
+              throw DecoderError.missingManagedObjectContext
+        }
 
+        self.init(context: context)
+        
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.title = try container.decode(String.self, forKey: .title)
         self.subtitle = try container.decode(String.self, forKey: .subtitle)
         self.author = try container.decode(String.self, forKey: .author)
         self.detail = try container.decode(String.self, forKey: .detail)
         self.createdDate = try container.decode(Date.self, forKey: .createdDate)
-
-        if let itemArray = try? container.decode([Manifest].self, forKey: .itemArray) {
-            self.addToItems(NSOrderedSet(array: itemArray))
-        }
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -57,10 +57,6 @@ public class ItemCollection: NSManagedObject, Identifiable, Codable {
         try container.encode(author, forKey: .author)
         try container.encode(detail, forKey: .detail)
         try container.encode(createdDate, forKey: .createdDate)
-
-        if let itemArray = items?.array as? [Manifest] {
-            try container.encode(itemArray, forKey: .itemArray)
-        }
     }
 }
 

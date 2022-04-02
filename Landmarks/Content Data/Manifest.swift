@@ -13,7 +13,7 @@ public class Manifest: NSManagedObject, Identifiable, Codable {
     @NSManaged public var id: UUID
     @NSManaged public var labels: [String]?
     @NSManaged public var values: [String]?
-    @NSManaged public var itemLabel: String?
+    @NSManaged public var itemLabel: String
     @NSManaged public var createdDate: Date
     @NSManaged public var collections: NSSet
     
@@ -26,13 +26,17 @@ public class Manifest: NSManagedObject, Identifiable, Codable {
     }
 
     required convenience public init(from decoder: Decoder) throws {
-        self.init()
+        guard let context = decoder.userInfo[CodingUserInfoKey.managedObjectContext] as? NSManagedObjectContext else {
+            throw DecoderError.missingManagedObjectContext
+        }
+
+        self.init(context: context)
 
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(UUID.self, forKey: .id)
         self.labels = (try? container.decode([String].self, forKey: .labels)) ?? nil
         self.values = (try? container.decode([String].self, forKey: .values)) ?? nil
-        self.itemLabel = (try? container.decode(String.self, forKey: .itemLabel)) ?? nil
+        self.itemLabel = try container.decode(String.self, forKey: .itemLabel)
         self.createdDate = try container.decode(Date.self, forKey: .createdDate)
         self.width = try container.decode(Float.self, forKey: .width)
         self.length = try container.decode(Float.self, forKey: .length)
@@ -56,7 +60,7 @@ extension Manifest {
     }
 
     var fileURL: URL? {
-        return FileDirectory.iiifArchive.url?.appendingPathComponent("\(id).json")
+        return FileDirectory.iiifArchive.url?.appendingPathComponent("\(itemLabel).json")
     }
 
     static func sortedFetchRequest() -> NSFetchRequest<Manifest> {
