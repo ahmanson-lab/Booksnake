@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum FileDirectory {
+enum FileDirectory: String {
     case image
     case iiifArchive
     case imageCache
@@ -122,5 +122,22 @@ struct FileHandler {
         }
 
         return fileURL
+    }
+
+    static func clean(directory: FileDirectory) {
+        guard let directoryURL = directory.url,
+              FileManager.default.fileExists(atPath: directoryURL.path) else {
+            return
+        }
+
+        do {
+            let fileNames = try FileManager.default.contentsOfDirectory(atPath: directoryURL.path)
+
+            for fileName in fileNames {
+                try FileManager.default.removeItem(atPath: "\(directoryURL.path)/\(fileName)")
+            }
+        } catch {
+            print("Could not clean up directory \(directory.self): \(error)")
+        }
     }
 }

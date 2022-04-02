@@ -204,18 +204,35 @@ struct ListDetailView: View {
         .navigationBarBackButtonHidden(navigationBarBackButtonHidden)
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: {
-                    withAnimation {
-                        editMode.toggle()
-                        navigationBarBackButtonHidden.toggle()
-                    }
-                }, label: {
-                    if editMode {
-                        Text("Finish")
-                    } else {
-                        Text("Edit")
-                    }
-                })
+                HStack {
+                    Button(action: {
+                        Task {
+                            // Prepare collection archive
+                            _ = try? await DataExportHandler.prepareArchive(itemCollection: collection)
+                            // Show share extension
+                            
+                            // Cleanup arhive cache folder
+                            FileHandler.clean(directory: .archiveCache)
+                        }
+                    }, label: {
+                        if !editMode {
+                            Image(systemName: "square.and.arrow.up")
+                        }
+                    })
+
+                    Button(action: {
+                        withAnimation {
+                            editMode.toggle()
+                            navigationBarBackButtonHidden.toggle()
+                        }
+                    }, label: {
+                        if editMode {
+                            Text("Done")
+                        } else {
+                            Image(systemName: "pencil.circle")
+                        }
+                    })
+                }
             }
         }
     }
