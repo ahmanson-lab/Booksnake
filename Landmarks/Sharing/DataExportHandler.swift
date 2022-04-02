@@ -29,7 +29,7 @@ enum DataExportError: Error {
 
 struct DataExportHandler {
     static func prepareArchive(itemCollection: ItemCollection) async throws -> URL {
-        // Cleanup cache folder and prepare cacheDir
+        // Cleanup cache folder
         FileHandler.clean(directory: .archiveCache)
 
         // Encode ItemCollection
@@ -57,6 +57,10 @@ struct DataExportHandler {
     }
 
     static func importArchive(archiveURL: URL, managedObjectContext: NSManagedObjectContext) async throws -> ItemCollection {
+        // Cleanup cache folder
+        FileHandler.clean(directory: .archiveCache)
+
+        // Prepare cacheDir
         let collectionName = archiveURL.deletingPathExtension().lastPathComponent
         guard let archiveCacheDirectory = FileDirectory.archiveCache.url?.appendingPathComponent(collectionName),
               let iiifArchiveDirectory = FileDirectory.iiifArchive.url else {

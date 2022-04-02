@@ -208,18 +208,19 @@ struct ListDetailView: View {
                     Button(action: {
                         Task {
                             // Prepare collection archive
-                            let fileURL = try? await DataExportHandler.prepareArchive(itemCollection: collection)
                             do {
-                                let importCollection = try await DataExportHandler.importArchive(archiveURL: fileURL!, managedObjectContext: managedObjectContext)
-                                print(importCollection)
+                                let fileURL = try await DataExportHandler.prepareArchive(itemCollection: collection)
+                                // Show share extension
+                                openShareActionSheet(with: fileURL)
                             } catch {
                                 print(error)
                             }
-
-                            // Show share extension
-                            
-                            // Cleanup arhive cache folder
-//                            FileHandler.clean(directory: .archiveCache)
+//                            do {
+//                                let importCollection = try await DataExportHandler.importArchive(archiveURL: fileURL!, managedObjectContext: managedObjectContext)
+//                                print(importCollection)
+//                            } catch {
+//                                print(error)
+//                            }
                         }
                     }, label: {
                         if !editMode {
@@ -264,5 +265,15 @@ struct ListDetailView: View {
         catch {
             print(error)
         }
+    }
+
+    private func openShareActionSheet(with url: URL) {
+        let activityVC = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        let window = UIApplication
+            .shared
+            .connectedScenes
+            .flatMap { ($0 as? UIWindowScene)?.windows ?? [] }
+            .first { $0.isKeyWindow }
+        window?.rootViewController?.present(activityVC, animated: true, completion: nil)
     }
 }
