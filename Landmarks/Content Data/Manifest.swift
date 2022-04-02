@@ -14,7 +14,6 @@ public class Manifest: NSManagedObject, Identifiable {
     @NSManaged public var labels: [String]?
     @NSManaged public var values: [String]?
     @NSManaged public var itemLabel: String?
-    @NSManaged public var imageFileName: String
     @NSManaged public var createdDate: Date
     @NSManaged public var collections: NSSet
     
@@ -25,7 +24,11 @@ public class Manifest: NSManagedObject, Identifiable {
 
 extension Manifest {
     var imageURL: URL? {
-        return FileDirectory.image.url?.appendingPathComponent(imageFileName)
+        return FileDirectory.image.url?.appendingPathComponent("\(id).jpg")
+    }
+
+    var fileURL: URL? {
+        return FileDirectory.iiifArchive.url?.appendingPathComponent("\(id).json")
     }
 
     static func sortedFetchRequest() -> NSFetchRequest<Manifest> {

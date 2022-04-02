@@ -57,7 +57,6 @@ struct ManifestDataHandler {
         FileHandler.save(data: new_manifest.image.jpegData(compressionQuality: 1.0) ?? Data(),
                          toDirectory: .image,
                          withFileName: "\(new_manifest.id).jpg")
-        contentdata.imageFileName = "\(new_manifest.id).jpg"
         preCacheThumbnails(at: contentdata.imageURL)
 
         // Save iiifRawFile
@@ -183,7 +182,6 @@ extension ManifestDataHandler {
                 FileHandler.save(data: new_manifest.image.jpegData(compressionQuality: 1.0) ?? Data(),
                                  toDirectory: .image,
                                  withFileName: "\(new_manifest.id).jpg")
-                contentdata.imageFileName = "\(new_manifest.id).jpg"
                 preCacheThumbnails(at: contentdata.imageURL)
 
                 // Save iiifRawFile
