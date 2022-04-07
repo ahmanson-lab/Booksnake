@@ -20,7 +20,7 @@ struct AssetRow: View, AssetRowProtocol {
     @FetchRequest(fetchRequest: Manifest.sortedFetchRequest()) var manifestItems: FetchedResults<Manifest>
     @State private var tabSelection = 1
     @State private var showLoading: Bool = false
-	@State private var showOnboarding: Bool = false
+	@State var showOnboarding: Bool = false
 	@State private var showMiniOnboarding: Bool = false
 
     var body: some View {
@@ -109,7 +109,7 @@ struct AssetRow: View, AssetRowProtocol {
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
 
 			//MARK: Onboarding View
-			OnboardingView(delegate: self).isHidden(showOnboarding, remove: showOnboarding)
+			//OnboardingView(delegate: self).isHidden(showOnboarding, remove: showOnboarding)
         }
 		.sheet(isPresented: $showMiniOnboarding, content: {MiniOnboardingView(delegate: self) })
     }

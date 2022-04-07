@@ -42,3 +42,31 @@ extension CodingUserInfoKey {
 enum DecoderError: Error {
     case missingManagedObjectContext
 }
+
+func goLibrary() {
+	if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene  {
+		let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+		let contentView = AssetRow().environment(\.managedObjectContext, context)
+		
+		windowScene.windows.first?.rootViewController =  UIHostingController(rootView: contentView)
+		
+		windowScene.windows.first?.makeKeyAndVisible()
+		
+	}
+}
+
+struct CustomNavigationView<Content: View>: View {
+	let build: Content
+	init(@ViewBuilder build: @escaping () -> Content) {
+		self.build = build()
+	}
+	
+	var body: some View {
+		ZStack{
+			build
+			Button(action: {
+				goLibrary()
+			}, label: { Text("< Library") })
+		}
+	}
+}

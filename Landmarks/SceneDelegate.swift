@@ -22,7 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
             // Set view for SwiftUI
-            let contentView = AssetRow().environment(\.managedObjectContext, context)
+            let contentView = OnboardingView()  //AssetRow().environment(\.managedObjectContext, context)
             let window = UIWindow(windowScene: windowScene)
             window.rootViewController = UIHostingController(rootView: contentView)
             self.window = window
