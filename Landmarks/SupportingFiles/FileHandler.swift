@@ -8,9 +8,11 @@
 
 import Foundation
 
-enum FileDirectory {
+enum FileDirectory: String {
     case image
+    case iiifArchive
     case imageCache
+    case archiveCache
 
     var url: URL? {
         switch self {
@@ -29,6 +31,21 @@ enum FileDirectory {
             }
 
             return imageDir
+        case .iiifArchive:
+            let iiifDir = URL(fileURLWithPath: FileHandler.documentDirectoryPath).appendingPathComponent("iiif")
+
+            if !FileManager.default.fileExists(atPath: iiifDir.path) {
+                do {
+                    try FileManager.default.createDirectory(at: iiifDir,
+                                                            withIntermediateDirectories: true,
+                                                            attributes: [FileAttributeKey.protectionKey: FileProtectionType.none])
+                } catch {
+                    print("Can't create iiif folder.")
+                    return nil
+                }
+            }
+
+            return iiifDir
         case .imageCache:
             let imageCacheDir = URL(fileURLWithPath: FileHandler.cachesDirectoryPath).appendingPathComponent("ImageCaches")
 
@@ -44,6 +61,21 @@ enum FileDirectory {
             }
 
             return imageCacheDir
+        case .archiveCache:
+            let archiveCacheDir = URL(fileURLWithPath: FileHandler.cachesDirectoryPath).appendingPathComponent("ArchiveCaches")
+
+            if !FileManager.default.fileExists(atPath: archiveCacheDir.path) {
+                do {
+                    try FileManager.default.createDirectory(at: archiveCacheDir,
+                                                            withIntermediateDirectories: true,
+                                                            attributes: [FileAttributeKey.protectionKey: FileProtectionType.none])
+                } catch {
+                    print("Can't create archiveCache folder.")
+                    return nil
+                }
+            }
+
+            return archiveCacheDir
         }
     }
 }
@@ -90,5 +122,22 @@ struct FileHandler {
         }
 
         return fileURL
+    }
+
+    static func clean(directory: FileDirectory) {
+        guard let directoryURL = directory.url,
+              FileManager.default.fileExists(atPath: directoryURL.path) else {
+            return
+        }
+
+        do {
+            let fileNames = try FileManager.default.contentsOfDirectory(atPath: directoryURL.path)
+
+            for fileName in fileNames {
+                try FileManager.default.removeItem(atPath: "\(directoryURL.path)/\(fileName)")
+            }
+        } catch {
+            print("Could not clean up directory \(directory.self): \(error)")
+        }
     }
 }

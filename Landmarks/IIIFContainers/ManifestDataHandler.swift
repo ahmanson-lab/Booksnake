@@ -15,7 +15,7 @@ enum ManifestDataErorr: Error {
 }
 
 public struct ManifestData {
-    var label: String = ""
+    var label: String = UUID().uuidString // Use a unique identifier if there's no labelItemName
     var image: UIImage?
     var width: Float?
     var height: Float?
@@ -36,26 +36,45 @@ struct ManifestDataHandler {
                                       width: Float = 1,
                                       length: Float = 1,
                                       managedObjectContext: NSManagedObjectContext) async -> Result<String, ManifestDataErorr> {
-        guard let new_item = await ManifestDataHandler.getRemoteManifest(from: urlPath) else {
+        guard let (new_item, iiifRawData) = await ManifestDataHandler.getRemoteManifest(from: urlPath) else {
             return .failure(.remoteFetchError)
         }
 
         print("adding remote manifest")
 
-        let new_manifest = ManifestItem(item: new_item, image: new_item.image!)
+        // Create ManifestItem
+        let manifestItem = ManifestItem(item: new_item, image: new_item.image!)
 
+        // Save iiifRawFile
+        FileHandler.save(data: iiifRawData,
+                         toDirectory: .iiifArchive,
+                         withFileName: "\(manifestItem.item.label).json")
+
+        // Save ItemIntoDB
+        saveManifestInDB(with: manifestItem, managedObjectContext: managedObjectContext)
+
+        return .success(manifestItem.item.label)
+    }
+
+    @discardableResult
+    public static func saveManifestInDB(with manifestItem: ManifestItem,
+                                        width: Float = 1,
+                                        length: Float = 1,
+                                        managedObjectContext: NSManagedObjectContext) -> Manifest {
         let contentdata = NSEntityDescription.insertNewObject(forEntityName: "Manifest", into: managedObjectContext) as! Manifest
-        contentdata.id = new_manifest.id
-        contentdata.labels = new_manifest.item.labels
-        contentdata.itemLabel = new_manifest.item.label
-        contentdata.values = new_manifest.item.values
-        contentdata.width = new_manifest.item.width ?? width
-        contentdata.length = new_manifest.item.height ?? length
+        contentdata.id = manifestItem.id
+        contentdata.labels = manifestItem.item.labels
+        contentdata.itemLabel = manifestItem.item.label
+        contentdata.values = manifestItem.item.values
+        contentdata.width = manifestItem.item.width ?? width
+        contentdata.length = manifestItem.item.height ?? length
         contentdata.createdDate = Date()
-        FileHandler.save(data: new_manifest.image.jpegData(compressionQuality: 1.0) ?? Data(),
+
+        // Save iiifImages
+        FileHandler.save(data: manifestItem.image.jpegData(compressionQuality: 1.0) ?? Data(),
                          toDirectory: .image,
-                         withFileName: "\(new_manifest.id).jpg")
-        contentdata.imageFileName = "\(new_manifest.id).jpg"
+                         withFileName: "\(manifestItem.id).jpg")
+        preCacheThumbnails(at: contentdata.imageURL)
 
         do {
             try managedObjectContext.save()
@@ -63,19 +82,29 @@ struct ManifestDataHandler {
             print(error)
         }
 
-        return .success(new_manifest.item.label)
+        return contentdata
     }
 
-    private static func getRemoteManifest(from urlString: String) async -> ManifestData? {
+    public static func getLocalManifest(from localURL: URL) async -> (ManifestData, Data)? {
+        guard let data = try? Data(contentsOf: localURL),
+              let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []),
+              let jsonData = jsonObject as? [String: Any],
+              let manifestData = await parseJson(dictionary: jsonData) else { return nil }
+
+        return (manifestData, data)
+    }
+
+    private static func getRemoteManifest(from urlString: String) async -> (ManifestData, Data)? {
         guard let url = URL(string: urlString) else { return nil }
 
         let request = URLRequest(url: url)
         guard let (data, response) = try? await URLSession.shared.data(for: request),
               (response as? HTTPURLResponse)?.statusCode == 200,
               let jsonObject = try? JSONSerialization.jsonObject(with: data, options: .allowFragments),
-              let jsonData = jsonObject as? [String: Any] else { return nil }
+              let jsonData = jsonObject as? [String: Any],
+              let manifestData = await parseJson(dictionary: jsonData) else { return nil }
 
-        return await parseJson(dictionary: jsonData)
+        return (manifestData, data)
     }
 
     private static func parseJson(dictionary: [String: Any]) async -> ManifestData? {
@@ -136,12 +165,18 @@ struct ManifestDataHandler {
 
         return UIImage(data: data)
     }
+
+    private static func preCacheThumbnails(at url: URL?) {
+        ImageThumbnailSize.allCases.forEach {
+            UIImage.loadThumbnail(at: url, forSize: $0)
+        }
+    }
 }
 
 // MARK: - FOR DEMO ONLY: add hard coded values from local manifests and images
 extension ManifestDataHandler {
     public static func addExamples(managedObjectContext: NSManagedObjectContext) async {
-        let resource_paths = ["MapOfCalifornia", "MapOfLosAngeles", "TopographicLA", "LA1909", "AutomobileLA", "Hollywood"]
+        let resourceNames = ["MapOfCalifornia", "MapOfLosAngeles", "TopographicLA", "LA1909", "AutomobileLA", "Hollywood"]
         let sizes = [[0.48, 0.69], [0.63, 0.56],[1.53, 0.56],[0.85, 1.02],[0.22, 0.08],[0.67, 0.66]]
 
         // ItemCollection
@@ -152,39 +187,41 @@ extension ManifestDataHandler {
         collectionData.detail = ""
         collectionData.createdDate = Date()
 
-        for index in 0..<resource_paths.count {
-            if let new_item = await ManifestDataHandler.getLocalManifest(from: resource_paths[index]) {
-                let new_manifest = ManifestItem(item:new_item, image: UIImage(named: resource_paths[index])!)
-                let contentdata = NSEntityDescription.insertNewObject(forEntityName: "Manifest", into: managedObjectContext) as! Manifest
-                contentdata.id = new_manifest.id
-                contentdata.labels = new_manifest.item.labels
-                contentdata.itemLabel = new_manifest.item.label
-                contentdata.values = new_manifest.item.values
-                contentdata.width = Float(sizes[index][1])
-                contentdata.length = Float (sizes[index][0])
-                contentdata.createdDate = Date()
-                FileHandler.save(data: new_manifest.image.jpegData(compressionQuality: 1.0) ?? Data(),
-                                 toDirectory: .image,
-                                 withFileName: "\(new_manifest.id).jpg")
-                contentdata.imageFileName = "\(new_manifest.id).jpg"
-                contentdata.addToCollections(collectionData)
+        for index in 0..<resourceNames.count {
+            guard let url = Bundle.main.url(forResource: resourceNames[index], withExtension: "json"),
+                let (new_item, iiifRawData) = await ManifestDataHandler.getLocalManifest(from: url) else {
+                continue
+            }
 
-                do {
-                    try managedObjectContext.save()
-                }
-                catch {
-                    print(error)
-                }
+            let new_manifest = ManifestItem(item:new_item, image: UIImage(named: resourceNames[index])!)
+            let contentdata = NSEntityDescription.insertNewObject(forEntityName: "Manifest", into: managedObjectContext) as! Manifest
+            contentdata.id = new_manifest.id
+            contentdata.labels = new_manifest.item.labels
+            contentdata.itemLabel = new_manifest.item.label
+            contentdata.values = new_manifest.item.values
+            contentdata.width = Float(sizes[index][1])
+            contentdata.length = Float (sizes[index][0])
+            contentdata.createdDate = Date()
+
+            // Save iiifImages
+            FileHandler.save(data: new_manifest.image.jpegData(compressionQuality: 1.0) ?? Data(),
+                             toDirectory: .image,
+                             withFileName: "\(new_manifest.id).jpg")
+            preCacheThumbnails(at: contentdata.imageURL)
+
+            // Save iiifRawFile
+            FileHandler.save(data: iiifRawData,
+                             toDirectory: .iiifArchive,
+                             withFileName: "\(new_manifest.item.label).json")
+
+            contentdata.addToCollections(collectionData)
+
+            do {
+                try managedObjectContext.save()
+            }
+            catch {
+                print(error)
             }
         }
-    }
-
-    private static func getLocalManifest(from resrouceName: String) async -> ManifestData? {
-        guard let url = Bundle.main.url(forResource: resrouceName, withExtension: "json"),
-              let data = try? Data(contentsOf: url),
-              let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []),
-              let jsonData = jsonObject as? [String: Any] else { return nil }
-
-        return await parseJson(dictionary: jsonData)
     }
 }

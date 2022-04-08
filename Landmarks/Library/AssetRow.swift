@@ -39,7 +39,7 @@ struct AssetRow: View, AssetRowProtocol {
                                     .frame(width: 50, height: 50)
 
                                 //item label
-                                Text("\(item.itemLabel ?? "")")
+                                Text("\(item.itemLabel)")
                                    .lineLimit(2)
                                    .truncationMode(.tail)
                             }

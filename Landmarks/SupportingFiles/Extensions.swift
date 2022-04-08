@@ -34,3 +34,11 @@ extension UIColor {
         }
     }
 }
+
+extension CodingUserInfoKey {
+  static let managedObjectContext = CodingUserInfoKey(rawValue: "managedObjectContext")!
+}
+
+enum DecoderError: Error {
+    case missingManagedObjectContext
+}
