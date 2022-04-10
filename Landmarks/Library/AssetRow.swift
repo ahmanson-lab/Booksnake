@@ -12,6 +12,7 @@ import CoreData
 
 protocol AssetRowProtocol {
     func switchToLibraryTab()
+	func closeOnboardingView()
 }
 
 struct AssetRow: View, AssetRowProtocol {
@@ -19,11 +20,14 @@ struct AssetRow: View, AssetRowProtocol {
     @FetchRequest(fetchRequest: Manifest.sortedFetchRequest()) var manifestItems: FetchedResults<Manifest>
     @State private var tabSelection = 1
     @State private var showLoading: Bool = false
-	@State private var showOnboarding: Bool = true
+	@State var showOnboarding: Bool = false
+	@State private var showMiniOnboarding: Bool = false
 
     var body: some View {
         ZStack {
             TabView(selection: $tabSelection) {
+				//MARK: Tab 1 - Library
+				VStack{
                 NavigationView{
                     List {
                         ForEach(manifestItems, id: \.self) { item in
@@ -45,29 +49,27 @@ struct AssetRow: View, AssetRowProtocol {
                             }
                         }
                         .onDelete(perform: onDelete)
-                    }.navigationBarTitle("Library")
+                    }
+					.navigationBarTitle("Library")
+					.toolbar(content: {
+						Button(action: {
+							showMiniOnboarding = true
+						}, label: {
+							Image(systemName:  "questionmark.circle").foregroundColor(.blue)
+						})
+					})
                 }
-				.toolbar(content: {
-					NavigationView {
-						OnboardingView()
-					}
-					.navigationViewStyle(StackNavigationViewStyle())
-					.tabItem {
-						Image(systemName: "info.circle")
-						Text("Tutorial")
-					}
-					
-				})
                 .navigationViewStyle(StackNavigationViewStyle())
+				}
                 .tabItem {
                     Image(systemName: "scroll")
                     Text("Library")
                 }
                 .tag(1)
 				
+				//MARK: Tab 2 - Lists
 				NavigationView {
-					RootListView(delegate: self)
-						.navigationBarTitle("Lists")
+					RootListView(delegate: self).navigationBarTitle("Lists")
 				}
 				.navigationViewStyle(StackNavigationViewStyle())
 				.tabItem {
@@ -76,9 +78,9 @@ struct AssetRow: View, AssetRowProtocol {
 				}
 				.tag(2)
 
+				//MARK: Tab 3 - Explore
                 NavigationView {
-                    CustomSearchMenu(delegate: self)
-                        .navigationBarTitle("Explore")
+                    CustomSearchMenu(delegate: self).navigationBarTitle("Explore")
                 }
                 .navigationViewStyle(StackNavigationViewStyle())
                 .tabItem {
@@ -86,18 +88,6 @@ struct AssetRow: View, AssetRowProtocol {
                     Text("Explore")
                 }
                 .tag(3)
-				
-				//TODO: move to toolbar
-				NavigationView {
-					OnboardingView()
-						.navigationBarTitle("Tutorial")
-				}
-				.navigationViewStyle(StackNavigationViewStyle())
-				.tabItem {
-					Image(systemName: "info.circle")
-					Text("Tutorial")
-				}
-				.tag(4)
             }
             .task {
                 // To add some demo items in the collection
@@ -107,7 +97,8 @@ struct AssetRow: View, AssetRowProtocol {
                     showLoading = false
                 }
             }
-
+		
+			//MARK: Loading Indicator
             ZStack {
                 ActivityIndicator(isAnimating: $showLoading, text: "Adding Some Samples", style: .large)
                     .frame(width: 200.0, height: 200.0, alignment: .center)
@@ -117,7 +108,14 @@ struct AssetRow: View, AssetRowProtocol {
             .isHidden(!showLoading)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         }
+		.sheet(isPresented: $showMiniOnboarding, content: {MiniOnboardingView(delegate: self) })
     }
+
+	
+	func closeOnboardingView(){
+		showOnboarding = true
+		showMiniOnboarding = false
+	}
 
     // Delegate function
     func switchToLibraryTab() {
@@ -126,10 +124,7 @@ struct AssetRow: View, AssetRowProtocol {
     }
 
     private func onDelete(offsets: IndexSet) {
-        guard let contentToDelete = manifestItems[safe: offsets.first!] else {
-            return
-        }
-        
+        guard let contentToDelete = manifestItems[safe: offsets.first!] else { return }
         managedObjectContext.delete(contentToDelete)
         do {
             try managedObjectContext.save()
