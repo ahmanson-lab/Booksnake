@@ -105,6 +105,7 @@ struct OnboardingView: View {
                             Button(action: {
                                 // Set onboardingView Showed when user is finished
                                 UserDefaults.standard.set(true, forKey: "isOnboardingShowed")
+
                                 delegate?.closeOnboardingView()
                                 goRealityView()
                             }, label: {
@@ -150,6 +151,9 @@ struct OnboardingView: View {
             .tabViewStyle(.page)
             .indexViewStyle(.page(backgroundDisplayMode: .always))
             Button(self.buttonName){
+                // Set onboardingView Showed when user is finished
+                UserDefaults.standard.set(true, forKey: "isOnboardingShowed")
+
                 delegate?.closeOnboardingView()
                 goLibrary()
             }
