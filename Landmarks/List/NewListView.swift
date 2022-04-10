@@ -31,47 +31,13 @@ struct NewListView: View {
                     VStack {
                         Spacer()
                             .frame(height: 10)
-                        // Images
-                        VStack(spacing: 0) {
-                            let topLeftImage = UIImage.loadThumbnail(at: collectionItems[safe: 0]?.imageURL, forSize: .medium) ?? UIColor.lightGray.image()
-                            let topRightImage = UIImage.loadThumbnail(at: collectionItems[safe: 1]?.imageURL, forSize: .medium) ?? UIColor.lightGray.image()
-                            let bottomLeftImage = UIImage.loadThumbnail(at: collectionItems[safe: 2]?.imageURL, forSize: .medium) ?? UIColor.lightGray.image()
-                            let bottomRightImage = UIImage.loadThumbnail(at: collectionItems[safe: 3]?.imageURL, forSize: .medium) ?? UIColor.lightGray.image()
-                            
-                            HStack(spacing: 0) {
-                                Image(uiImage: topLeftImage)
-                                    .resizable()
-                                    .scaleEffect(1.1)   // some image has empty space, so we scale image to make it fill
-                                    .scaledToFill()
-                                    .frame(width: 100, height: 100, alignment: .center)
-                                    .clipped()
-                                    .animation(.none, value: topLeftImage)
-                                Image(uiImage: topRightImage)
-                                    .resizable()
-                                    .scaleEffect(1.1)
-                                    .scaledToFill()
-                                    .frame(width: 100, height: 100, alignment: .center)
-                                    .clipped()
-                                    .animation(.none, value: topRightImage)
-                            }
-                            HStack(spacing: 0) {
-                                Image(uiImage: bottomLeftImage)
-                                    .resizable()
-                                    .scaleEffect(1.1)
-                                    .scaledToFill()
-                                    .frame(width: 100, height: 100, alignment: .center)
-                                    .clipped()
-                                    .animation(.none, value: bottomLeftImage)
-                                Image(uiImage: bottomRightImage)
-                                    .resizable()
-                                    .scaleEffect(1.1)
-                                    .scaledToFill()
-                                    .frame(width: 100, height: 100, alignment: .center)
-                                    .clipped()
-                                    .animation(.none, value: bottomRightImage)
-                            }
-                        }
-                        .cornerRadius(5)
+
+                        // AlbumView
+                        AlbumView(imageSize: .medium,
+                                  topLeftImageURL: .constant(collectionItems[safe: 0]?.imageURL),
+                                  topRightImageURL: .constant(collectionItems[safe: 1]?.imageURL),
+                                  bottomLeftImageURL: .constant(collectionItems[safe: 2]?.imageURL),
+                                  bottomRightImageURL: .constant(collectionItems[safe: 3]?.imageURL))
 
                         Spacer()
                             .frame(height: 20)
@@ -128,6 +94,7 @@ struct NewListView: View {
                 })
                 .sheet(isPresented: $showManifestItemsPickerView) {
                     ManifestItemsPickerView(selectedManifests: $collectionItems)
+                        .interactiveDismissDisabled(true)
                 }
 
                 ForEach(collectionItems, id: \.self) { item in
@@ -151,7 +118,7 @@ struct NewListView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 50, height: 50)
-                        Text("\(item.itemLabel ?? "")")
+                        Text("\(item.itemLabel)")
                             .lineLimit(2)
                             .truncationMode(.tail)
                         Spacer()

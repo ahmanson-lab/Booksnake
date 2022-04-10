@@ -60,49 +60,16 @@ struct RootListView : View {
             List {
                 ForEach(itemCollections, id: \.self) { collection in
                     let imageURLs = collection.compositeImageURLs
-                    let topLeftImage = UIImage.loadThumbnail(at: imageURLs[safe: 0], forSize: .small) ?? UIColor.lightGray.image()
-                    let topRightImage = UIImage.loadThumbnail(at: imageURLs[safe: 1], forSize: .small) ?? UIColor.lightGray.image()
-                    let bottomLeftImage = UIImage.loadThumbnail(at: imageURLs[safe: 2], forSize: .small) ?? UIColor.lightGray.image()
-                    let bottomRightImage = UIImage.loadThumbnail(at: imageURLs[safe: 3], forSize: .small) ?? UIColor.lightGray.image()
-
                     NavigationLink(destination: LazyView(ListDetailView(collection: collection))) {
                         HStack(spacing: 14) {
-                            VStack(spacing: 0) {
-                                HStack(spacing: 0) {
-                                    Image(uiImage: topLeftImage)
-                                        .resizable()
-                                        .scaleEffect(1.1)   // some image has empty space, so we scale image to make it fill
-                                        .scaledToFill()
-                                        .frame(width: 50, height: 50, alignment: .center)
-                                        .clipped()
-                                        .animation(.none, value: topLeftImage)
-                                    Image(uiImage: topRightImage)
-                                        .resizable()
-                                        .scaleEffect(1.1)
-                                        .scaledToFill()
-                                        .frame(width: 50, height: 50, alignment: .center)
-                                        .clipped()
-                                        .animation(.none, value: topRightImage)
-                                }
-                                HStack(spacing: 0) {
-                                    Image(uiImage: bottomLeftImage)
-                                        .resizable()
-                                        .scaleEffect(1.1)
-                                        .scaledToFill()
-                                        .frame(width: 50, height: 50, alignment: .center)
-                                        .clipped()
-                                        .animation(.none, value: bottomLeftImage)
-                                    Image(uiImage: bottomRightImage)
-                                        .resizable()
-                                        .scaleEffect(1.1)
-                                        .scaledToFill()
-                                        .frame(width: 50, height: 50, alignment: .center)
-                                        .clipped()
-                                        .animation(.none, value: bottomRightImage)
-                                }
-                            }
-                            .cornerRadius(5)
+                            // AlbumView
+                            AlbumView(imageSize: .small,
+                                      topLeftImageURL: .constant(imageURLs[safe: 0]),
+                                      topRightImageURL: .constant(imageURLs[safe: 1]),
+                                      bottomLeftImageURL: .constant(imageURLs[safe: 2]),
+                                      bottomRightImageURL: .constant(imageURLs[safe: 3]))
 
+                            // SideContentView
                             VStack(alignment: .leading) {
                                 Spacer()
                                     .frame(height: 5)

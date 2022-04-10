@@ -20,7 +20,11 @@ struct AssetRow: View, AssetRowProtocol {
     @FetchRequest(fetchRequest: Manifest.sortedFetchRequest()) var manifestItems: FetchedResults<Manifest>
     @State private var tabSelection = 1
     @State private var showLoading: Bool = false
+<<<<<<< HEAD
 	@State private var showOnboarding: Bool = false
+=======
+	@State var showOnboarding: Bool = false
+>>>>>>> a7f78d2656fa532437ef16d9e422cbaf1c129ebc
 	@State private var showMiniOnboarding: Bool = false
 
     var body: some View {
@@ -42,7 +46,12 @@ struct AssetRow: View, AssetRowProtocol {
                                     .aspectRatio(contentMode: .fit)
                                     .frame(width: 50, height: 50)
 
+<<<<<<< HEAD
                                 Text("\(item.itemLabel ?? "")")
+=======
+                                //item label
+                                Text("\(item.itemLabel)")
+>>>>>>> a7f78d2656fa532437ef16d9e422cbaf1c129ebc
                                    .lineLimit(2)
                                    .truncationMode(.tail)
                             }
