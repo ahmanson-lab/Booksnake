@@ -107,9 +107,6 @@ struct AssetRow: View, AssetRowProtocol {
             }
             .isHidden(!showLoading)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-
-			//MARK: Onboarding View
-			//OnboardingView(delegate: self).isHidden(showOnboarding, remove: showOnboarding)
         }
 		.sheet(isPresented: $showMiniOnboarding, content: {MiniOnboardingView(delegate: self) })
     }

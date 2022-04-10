@@ -18,13 +18,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
-            // Get persistentContainer
-            let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+            let window = UIWindow(windowScene: windowScene)
+
+            // Check if onboardingView is seen
+            if UserDefaults.standard.bool(forKey: "isOnboardingShowed") == false {
+                UserDefaults.standard.set(true, forKey: "isOnboardingShowed")
+                let rootViewController = UIHostingController(rootView: OnboardingView())
+                window.rootViewController = rootViewController
+            } else {
+                // Get persistentContainer
+                let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+                let rootViewController = UIHostingController(rootView: AssetRow().environment(\.managedObjectContext, context))
+                window.rootViewController = rootViewController
+            }
 
             // Set view for SwiftUI
-            let contentView = OnboardingView()  //AssetRow().environment(\.managedObjectContext, context)
-            let window = UIWindow(windowScene: windowScene)
-            window.rootViewController = UIHostingController(rootView: contentView)
             self.window = window
             window.screen.brightness = 1.0
             window.makeKeyAndVisible()
