@@ -22,89 +22,89 @@ struct OnboardingView: View {
 	var description: [[String]] = [["Booksnake lets you explore digitized archival materials as if they were physically present in the real world.", "Select an item, then tap \"View in AR.\" \n\nSwipe left for a quick orientation."], ["\nHold your device horizontally and aim it a table or wall within ten feet of you. For best results, turn the room lights on."], ["\nAfter aiming, tap the middle of your device’s screen to place your digitized item on a flat surface in the real world."],["\nMove your device to explore. Instead of pinching to zoom, try moving closer, farther, over, or around your item."], [""]]
 	
 	@ViewBuilder
-	var body: some View {
-		GeometryReader{ proxy in
-		ZStack{
-			Color.white.ignoresSafeArea()
-		VStack{		
-			TabView{
-				ForEach(Array(zip(preloadContents.indices, preloadContents)), id: \.0) { index, contentName in
-					if (index == 0) {
-						VStack{
-							Spacer()
-							Text(image_title[index])
+    var body: some View {
+        VStack{
+            TabView{
+                ForEach(Array(zip(preloadContents.indices, preloadContents)), id: \.0) { index, contentName in
+                    if (index == 0) {
+                        VStack{
+                            Spacer()
+                            Text(image_title[index])
                                 .font(.title)
                                 .fontWeight(.bold)
                                 .frame(alignment: .center)
-							Text( "\n" + description[0][0] + "\n")
-									.font(.subheadline)
-									.fontWeight(.light)
-									.frame(alignment: .center)
-							Image(uiImage: UIImage(named: contentName) ?? UIImage())
-								.resizable()
-								.scaledToFit()
-							Text("\n" + description[0][1])
-									.font(.subheadline)
-									.fontWeight(.light)
-									.frame(alignment: .center)
-							Spacer()
-						}
-						.frame(alignment: .center)
-						.padding(EdgeInsets(top: 20, leading: 20, bottom: 60, trailing: 20))
-						.onAppear(perform: {buttonName = "Skip"})
-					}
-					else if (index == 4) {
-						VStack{
-							Spacer()
-							Text(image_title[index])
+                            Text( "\n" + description[0][0] + "\n")
+                                .font(.subheadline)
+                                .fontWeight(.light)
+                                .frame(alignment: .center)
+                            Image(uiImage: UIImage(named: contentName) ?? UIImage())
+                                .resizable()
+                                .scaledToFit()
+                            Text("\n" + description[0][1])
+                                .font(.subheadline)
+                                .fontWeight(.light)
+                                .frame(alignment: .center)
+                            Spacer()
+                        }
+                        .frame(alignment: .center)
+                        .padding(EdgeInsets(top: 20, leading: 20, bottom: 60, trailing: 20))
+                        .onAppear(perform: {buttonName = "Skip"})
+                    }
+                    else if (index == 4) {
+                        VStack {
+                            Spacer()
+                            Text(image_title[index])
                                 .font(.title)
                                 .fontWeight(.bold)
-                                .frame(alignment: .center)
-                            VStack(alignment: .leading) {
-                                HStack {
-									Image(systemName: "camera.metering.multispot")
-                                        .resizable()
-                                        .aspectRatio(1.0, contentMode: .scaleToFill)
-                                        .foregroundColor(.blue)
-                                        .frame(maxWidth: 100, alignment: .center)
-                                    Spacer()
-                                        .frame(width: 20)
-									Text(description[1][0])
-                                        .minimumScaleFactor(0.1)
-								}
                                 .frame(alignment: .center)
 
-								HStack {
-									Image(systemName: "hand.tap")
+                            VStack(alignment: .leading) {
+                                HStack {
+                                    Image(systemName: "camera.metering.multispot")
                                         .resizable()
-                                        .aspectRatio(1.0, contentMode: .scaleToFill)
+                                        .scaledToFit()
                                         .foregroundColor(.blue)
-                                        .frame(maxWidth: 100, alignment: .center)
+                                        .frame(width: 80.0, height: 80.0, alignment: .center)
                                     Spacer()
                                         .frame(width: 20)
-									Text(description[2][0])
+                                    Text(description[1][0])
                                         .minimumScaleFactor(0.1)
                                 }
                                 .frame(alignment: .center)
 
                                 HStack {
-									Image(systemName: "person.fill.and.arrow.left.and.arrow.right")
+                                    Image(systemName: "hand.tap")
                                         .resizable()
-                                        .aspectRatio(1.0, contentMode: .scaleToFill)
+                                        .scaledToFit()
                                         .foregroundColor(.blue)
-                                        .frame(maxWidth: 100, alignment: .center)
+                                        .frame(width: 80.0, height: 80.0, alignment: .center)
                                     Spacer()
                                         .frame(width: 20)
-									Text(description[3][0])
+                                    Text(description[2][0])
                                         .minimumScaleFactor(0.1)
-								}
+                                }
                                 .frame(alignment: .center)
-							}
-							.padding(EdgeInsets(top: 20, leading: 40, bottom: 20, trailing: 40))
 
-							Spacer()
-					
+                                HStack {
+                                    Image(systemName: "person.fill.and.arrow.left.and.arrow.right")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .foregroundColor(.blue)
+                                        .frame(width: 80.0, height: 80.0, alignment: .center)
+                                    Spacer()
+                                        .frame(width: 20)
+                                    Text(description[3][0])
+                                        .minimumScaleFactor(0.1)
+                                }
+                                .frame(alignment: .center)
+                            }
+                            .padding(EdgeInsets(top: 20, leading: 40, bottom: 20, trailing: 40))
+
+                            Spacer()
+
                             Button(action: {
+                                // Set onboardingView Showed when user is finished
+                                UserDefaults.standard.set(true, forKey: "isOnboardingShowed")
                                 delegate?.closeOnboardingView()
                                 goRealityView()
                             }, label: {
@@ -124,42 +124,37 @@ struct OnboardingView: View {
                         }
                         .padding(EdgeInsets(top: 20, leading: 20, bottom: 60, trailing: 20))
                         .onAppear(perform: {buttonName = "Go to Library"})
-					}
-					else {
-						VStack{
-							Spacer()
+                    }
+                    else {
+                        VStack{
+                            Spacer()
                             AnimatedImage(url: Bundle.main.url(forResource: contentName, withExtension: "gif")!)
                                 .playbackMode(.normal)
                                 .resizable()
                                 .scaledToFit()
-							Text(image_title[index])
+                            Text(image_title[index])
                                 .font(.title)
                                 .fontWeight(.bold)
                                 .frame(alignment: .leading)
-							Text (description[index][0])
+                            Text (description[index][0])
                                 .font(.subheadline)
                                 .fontWeight(.light)
                                 .frame(alignment: .leading)
-							Spacer()
-						}
-						 
-						.padding(EdgeInsets(top: 20, leading: 20, bottom: 60, trailing: 20))
-						.onAppear(perform: {buttonName = "Skip"})
-					}
-				}
-			}
-			
-			.tabViewStyle(.page)
-			.indexViewStyle(.page(backgroundDisplayMode: .always))
-			Button(self.buttonName){
-				delegate?.closeOnboardingView()
-				goLibrary()
-			}
-			Spacer()
-			}
-		.frame(width: proxy.size.width, height: proxy.size.height, alignment: .center)
-			}
-		}
+                            Spacer()
+                        }
+                        .padding(EdgeInsets(top: 20, leading: 20, bottom: 60, trailing: 20))
+                        .onAppear(perform: {buttonName = "Skip"})
+                    }
+                }
+            }
+            .tabViewStyle(.page)
+            .indexViewStyle(.page(backgroundDisplayMode: .always))
+            Button(self.buttonName){
+                delegate?.closeOnboardingView()
+                goLibrary()
+            }
+            Spacer()
+        }
 	}
 	
 	func goRealityView() {

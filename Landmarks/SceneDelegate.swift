@@ -22,7 +22,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
             // Check if onboardingView is seen
             if UserDefaults.standard.bool(forKey: "isOnboardingShowed") == false {
-                UserDefaults.standard.set(true, forKey: "isOnboardingShowed")
                 let rootViewController = UIHostingController(rootView: OnboardingView())
                 window.rootViewController = rootViewController
             } else {
