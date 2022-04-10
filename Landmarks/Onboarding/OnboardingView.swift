@@ -8,16 +8,15 @@
 
 import Foundation
 import SwiftUI
-import AVKit
+import SDWebImageSwiftUI
  
 struct OnboardingView: View {
 	var delegate: AssetRowProtocol?
 	@State private var showingPreview = false
 	@State private var isLast = false
 	@State private var buttonName = "Skip"
-	@State private var player = AVPlayer()
-	
-	var preloaded: [Any] = ["0_onboarding", AVPlayer(url: Bundle.main.url(forResource: "1_Aim", withExtension: "mov")!), AVPlayer(url: Bundle.main.url(forResource: "2_Tap", withExtension: "mov")!),AVPlayer(url: Bundle.main.url(forResource: "3_Explore", withExtension: "mov")!),"4"]
+
+	var preloadContents: [String] = ["onboarding_page1", "1_Aim", "2_Tap", "3_Explore",""]
 	
 	var image_title: [String] = ["Welcome to Booksnake!", "1. Aim Your Device", "2. Tap to Place", "3. Explore Your Item","Aim. Tap. Explore."]
 	var description: [[String]] = [["Booksnake lets you explore digitized archival materials as if they were physically present in the real world.", "Select an item, then tap \"View in AR.\" \n\nSwipe left for a quick orientation."], ["\nHold your device horizontally and aim it a table or wall within ten feet of you. For best results, turn the room lights on."], ["\nAfter aiming, tap the middle of your device’s screen to place your digitized item on a flat surface in the real world."],["\nMove your device to explore. Instead of pinching to zoom, try moving closer, farther, over, or around your item."], [""]]
@@ -29,16 +28,19 @@ struct OnboardingView: View {
 			Color.white.ignoresSafeArea()
 		VStack{		
 			TabView{
-				ForEach(0..<preloaded.count ){ num in
-					if (preloaded[num] as? String == "0_onboarding"){
+				ForEach(Array(zip(preloadContents.indices, preloadContents)), id: \.0) { index, contentName in
+					if (index == 0) {
 						VStack{
 							Spacer()
-							Text(image_title[num]).font(.title).fontWeight(.bold).frame(alignment: .center)
+							Text(image_title[index])
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .frame(alignment: .center)
 							Text( "\n" + description[0][0] + "\n")
 									.font(.subheadline)
 									.fontWeight(.light)
 									.frame(alignment: .center)
-							Image(uiImage: UIImage(named: preloaded[num] as! String) ?? UIImage())
+							Image(uiImage: UIImage(named: contentName) ?? UIImage())
 								.resizable()
 								.scaledToFit()
 							Text("\n" + description[0][1])
@@ -51,61 +53,93 @@ struct OnboardingView: View {
 						.padding(EdgeInsets(top: 20, leading: 20, bottom: 60, trailing: 20))
 						.onAppear(perform: {buttonName = "Skip"})
 					}
-					else if (preloaded[num] as? String == "4"){
+					else if (index == 4) {
 						VStack{
 							Spacer()
-							Text(image_title[num]).font(.title).fontWeight(.bold).frame(alignment: .center)
-							VStack{
-								HStack{
-									Image(systemName: "camera.metering.multispot").resizable().foregroundColor(.blue).frame(width: 60, height: 40)
+							Text(image_title[index])
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .frame(alignment: .center)
+                            VStack(alignment: .leading) {
+                                HStack {
+									Image(systemName: "camera.metering.multispot")
+                                        .resizable()
+                                        .aspectRatio(1.0, contentMode: .scaleToFill)
+                                        .foregroundColor(.blue)
+                                        .frame(maxWidth: 100, alignment: .center)
+                                    Spacer()
+                                        .frame(width: 20)
 									Text(description[1][0])
-										.padding(EdgeInsets(top: 20, leading: 40, bottom: 20, trailing: 40))
+                                        .minimumScaleFactor(0.1)
 								}
-								HStack{
-									Image(systemName: "hand.tap").resizable().foregroundColor(.blue).frame(width: 60, height: 60)
+                                .frame(alignment: .center)
+
+								HStack {
+									Image(systemName: "hand.tap")
+                                        .resizable()
+                                        .aspectRatio(1.0, contentMode: .scaleToFill)
+                                        .foregroundColor(.blue)
+                                        .frame(maxWidth: 100, alignment: .center)
+                                    Spacer()
+                                        .frame(width: 20)
 									Text(description[2][0])
-										.padding(EdgeInsets(top: 20, leading: 40, bottom: 20, trailing: 40))
-								}
-								HStack{
-									Image(systemName: "person.fill.and.arrow.left.and.arrow.right").resizable().foregroundColor(.blue).frame(width: 60, height: 40)
+                                        .minimumScaleFactor(0.1)
+                                }
+                                .frame(alignment: .center)
+
+                                HStack {
+									Image(systemName: "person.fill.and.arrow.left.and.arrow.right")
+                                        .resizable()
+                                        .aspectRatio(1.0, contentMode: .scaleToFill)
+                                        .foregroundColor(.blue)
+                                        .frame(maxWidth: 100, alignment: .center)
+                                    Spacer()
+                                        .frame(width: 20)
 									Text(description[3][0])
-										.padding(EdgeInsets(top: 20, leading: 40, bottom: 20, trailing: 40))
+                                        .minimumScaleFactor(0.1)
 								}
+                                .frame(alignment: .center)
 							}
 							.padding(EdgeInsets(top: 20, leading: 40, bottom: 20, trailing: 40))
+
 							Spacer()
 					
-							Button(action: {
-								delegate?.closeOnboardingView()
-								goRealityView()
-							},
-								   label: {
-										ZStack{
-											Color.init(.systemBlue)
-													.cornerRadius(10)
-												Text("View in AR")
-											  .foregroundColor(.white)
-											  .font(.system(size: 18, weight: .medium, design: .default))
-											}
-										  .frame(height: 50.0)
-										  .padding(EdgeInsets(top: 10, leading: 30, bottom: 10, trailing: 30))
-							})
-								
-							Text("Tap to try with an example item")
-							Spacer()
-						}
-						.padding(EdgeInsets(top: 20, leading: 20, bottom: 60, trailing: 20))
-						.onAppear(perform: {buttonName = "Go to Library"})
+                            Button(action: {
+                                delegate?.closeOnboardingView()
+                                goRealityView()
+                            }, label: {
+                                ZStack{
+                                    Color.init(.systemBlue)
+                                        .cornerRadius(10)
+                                    Text("View in AR")
+                                        .foregroundColor(.white)
+                                        .font(.system(size: 18, weight: .medium, design: .default))
+                                }
+                                .frame(height: 50.0)
+                                .padding(EdgeInsets(top: 10, leading: 30, bottom: 10, trailing: 30))
+                            })
+
+                            Text("Tap to try with an example item")
+                            Spacer()
+                        }
+                        .padding(EdgeInsets(top: 20, leading: 20, bottom: 60, trailing: 20))
+                        .onAppear(perform: {buttonName = "Go to Library"})
 					}
-					else{
+					else {
 						VStack{
 							Spacer()
-							VideoPlayer(player: preloaded[num] as? AVPlayer)
-								.onAppear(perform: {
-									DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: { (preloaded[num] as! AVPlayer).play()})
-								})
-							Text(image_title[num]).font(.title).fontWeight(.bold).frame(alignment: .leading)
-							Text (description[num][0]).font(.subheadline).fontWeight(.light).frame(alignment: .leading)
+                            AnimatedImage(url: Bundle.main.url(forResource: contentName, withExtension: "gif")!)
+                                .playbackMode(.normal)
+                                .resizable()
+                                .scaledToFit()
+							Text(image_title[index])
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .frame(alignment: .leading)
+							Text (description[index][0])
+                                .font(.subheadline)
+                                .fontWeight(.light)
+                                .frame(alignment: .leading)
 							Spacer()
 						}
 						 
@@ -136,7 +170,7 @@ struct OnboardingView: View {
 	}
 }
 
-struct MiniOnboardingView: View{
+struct MiniOnboardingView: View {
 	@Environment(\.presentationMode) var presentationMode
 	var delegate: AssetRowProtocol?
 	var description: [[String]] = [["Booksnake lets you explore digitized archival materials as if they were physically present in the real world.", "Select an item, then tap \"View in AR.\" \n\nSwipe left for a quick orientation."], ["\nHold your device horizontally and aim it a table or wall within ten feet of you. For best results, turn the room lights on."], ["\nAfter aiming, tap the middle of your device’s screen to place your digitized item on a flat surface in the real world."],["\nMove your device to explore. Instead of pinching to zoom, try moving closer, farther, over, or around your item."], [""]]
