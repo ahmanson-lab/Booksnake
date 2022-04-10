@@ -176,11 +176,7 @@ struct ManifestDataHandler {
 // MARK: - FOR DEMO ONLY: add hard coded values from local manifests and images
 extension ManifestDataHandler {
     public static func addExamples(managedObjectContext: NSManagedObjectContext) async {
-<<<<<<< HEAD:Landmarks/IIIFContainers/ManifestData.swift
-        let resource_paths = ["LA1909", "MapOfCalifornia", "MapOfLosAngeles", "TopographicLA", "AutomobileLA", "Hollywood"]
-=======
         let resourceNames = ["MapOfCalifornia", "MapOfLosAngeles", "TopographicLA", "LA1909", "AutomobileLA", "Hollywood"]
->>>>>>> a7f78d2656fa532437ef16d9e422cbaf1c129ebc:Landmarks/IIIFContainers/ManifestDataHandler.swift
         let sizes = [[0.48, 0.69], [0.63, 0.56],[1.53, 0.56],[0.85, 1.02],[0.22, 0.08],[0.67, 0.66]]
 
         // ItemCollection
@@ -196,16 +192,6 @@ extension ManifestDataHandler {
                 let (new_item, iiifRawData) = await ManifestDataHandler.getLocalManifest(from: url) else {
                 continue
             }
-
-<<<<<<< HEAD:Landmarks/IIIFContainers/ManifestData.swift
-    private static func getLocalManifest(from resourceName: String) async -> ManifestData? {
-        guard let url = Bundle.main.url(forResource: resourceName, withExtension: "json"),
-              let data = try? Data(contentsOf: url),
-              let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []),
-              let jsonData = jsonObject as? [String: Any] else { return nil }
-
-        return await parseJson(dictionary: jsonData)
-=======
             let new_manifest = ManifestItem(item:new_item, image: UIImage(named: resourceNames[index])!)
             let contentdata = NSEntityDescription.insertNewObject(forEntityName: "Manifest", into: managedObjectContext) as! Manifest
             contentdata.id = new_manifest.id
@@ -236,6 +222,5 @@ extension ManifestDataHandler {
                 print(error)
             }
         }
->>>>>>> a7f78d2656fa532437ef16d9e422cbaf1c129ebc:Landmarks/IIIFContainers/ManifestDataHandler.swift
     }
 }
