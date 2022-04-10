@@ -142,18 +142,21 @@ struct NewListView: View {
                         presentation.wrappedValue.dismiss()
                     }.foregroundColor(.red)
                 }
-                ToolbarItem(placement: .navigationBarTrailing){
-                    Button("Done") {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
                         // Use default name if title is unset
                         if collectionTitle == "" {
                             collectionTitle = "Untitled List"
                         }
-                        
+
                         if saveCollection() {
                             presentation.wrappedValue.dismiss()
                         } else {
                             showAlert = true
                         }
+                    } label: {
+                        Text("Create")
+                            .bold()
                     }
                 }
             }
