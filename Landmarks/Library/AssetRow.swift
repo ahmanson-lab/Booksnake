@@ -20,7 +20,6 @@ struct AssetRow: View, AssetRowProtocol {
     @FetchRequest(fetchRequest: Manifest.sortedFetchRequest()) var manifestItems: FetchedResults<Manifest>
     @State private var tabSelection = 1
     @State private var showLoading: Bool = false
-	@State var showOnboarding: Bool = false
 	@State private var showMiniOnboarding: Bool = false
 
     var body: some View {
@@ -111,10 +110,8 @@ struct AssetRow: View, AssetRowProtocol {
         }
 		.sheet(isPresented: $showMiniOnboarding, content: {MiniOnboardingView(delegate: self) })
     }
-
 	
 	func closeOnboardingView(){
-		showOnboarding = true
 		showMiniOnboarding = false
 	}
 

@@ -68,7 +68,7 @@ class RealityView: UIViewController, ARSessionDelegate  {
 	}
 	
 	@objc func longGesture(_ sender: UILongPressGestureRecognizer? = nil){
-		guard let hittest = realityView.entity(at: sender?.location(in: realityView) ?? realityView.center)else { return}
+//		guard let hittest = realityView.entity(at: sender?.location(in: realityView) ?? realityView.center)else { return}
 			
 		//MARK: 3D text removed
 //			if hittest.name == "custom_plane" {

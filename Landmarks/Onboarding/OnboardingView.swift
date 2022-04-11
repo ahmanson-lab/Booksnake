@@ -17,11 +17,11 @@ struct OnboardingView: View {
 	@State private var buttonName = "Skip"
 
 	var preloadContents: [String] = ["onboarding_page1", "1_Aim", "2_Tap", "3_Explore",""]
-	
 	var image_title: [String] = ["Welcome to Booksnake!", "1. Aim Your Device", "2. Tap to Place", "3. Explore Your Item","Aim. Tap. Explore."]
-	var description: [[String]] = [["Booksnake lets you explore digitized archival materials as if they were physically present in the real world.", "Select an item, then tap \"View in AR.\" \n\nSwipe left for a quick orientation."], ["\nHold your device horizontally and aim it a table or wall within ten feet of you. For best results, turn the room lights on."], ["\nAfter aiming, tap the middle of your device’s screen to place your digitized item on a flat surface in the real world."],["\nMove your device to explore. Instead of pinching to zoom, try moving closer, farther, over, or around your item."], [""]]
+	var description: [String] = ["Booksnake lets you explore digitized archival materials as if they were physically present in the real world.", "\nHold your device horizontally and aim it a table or wall within ten feet of you. For best results, turn the room lights on.", "\nAfter aiming, tap the middle of your device’s screen to place your digitized item on a flat surface in the real world.","\nMove your device to explore. Instead of pinching to zoom, try moving closer, farther, over, or around your item.", ""]
+	var icon_list: [String] = ["", "camera.metering.multispot", "hand.tap", "person.fill.and.arrow.left.and.arrow.right"]
 	
-	@ViewBuilder
+	//@ViewBuilder
     var body: some View {
         VStack{
             TabView{
@@ -33,14 +33,14 @@ struct OnboardingView: View {
                                 .font(.title)
                                 .fontWeight(.bold)
                                 .frame(alignment: .center)
-                            Text( "\n" + description[0][0] + "\n")
+                            Text( "\n" + description[0] + "\n")
                                 .font(.subheadline)
                                 .fontWeight(.light)
                                 .frame(alignment: .center)
                             Image(uiImage: UIImage(named: contentName) ?? UIImage())
                                 .resizable()
                                 .scaledToFit()
-                            Text("\n" + description[0][1])
+                            Text("\n" + "Select an item, then tap \"View in AR.\" \n\nSwipe left for a quick orientation.")
                                 .font(.subheadline)
                                 .fontWeight(.light)
                                 .frame(alignment: .center)
@@ -51,61 +51,34 @@ struct OnboardingView: View {
                         .onAppear(perform: {buttonName = "Skip"})
                     }
                     else if (index == 4) {
-                        VStack {
+						VStack {
                             Spacer()
                             Text(image_title[index])
                                 .font(.title)
                                 .fontWeight(.bold)
                                 .frame(alignment: .center)
-
-                            VStack(alignment: .leading) {
-                                HStack {
-                                    Image(systemName: "camera.metering.multispot")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .foregroundColor(.blue)
-                                        .frame(width: 80.0, height: 80.0, alignment: .center)
-                                    Spacer()
-                                        .frame(width: 20)
-                                    Text(description[1][0])
-                                        .minimumScaleFactor(0.1)
-                                }
-                                .frame(alignment: .center)
-
-                                HStack {
-                                    Image(systemName: "hand.tap")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .foregroundColor(.blue)
-                                        .frame(width: 80.0, height: 80.0, alignment: .center)
-                                    Spacer()
-                                        .frame(width: 20)
-                                    Text(description[2][0])
-                                        .minimumScaleFactor(0.1)
-                                }
-                                .frame(alignment: .center)
-
-                                HStack {
-                                    Image(systemName: "person.fill.and.arrow.left.and.arrow.right")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .foregroundColor(.blue)
-                                        .frame(width: 80.0, height: 80.0, alignment: .center)
-                                    Spacer()
-                                        .frame(width: 20)
-                                    Text(description[3][0])
-                                        .minimumScaleFactor(0.1)
-                                }
-                                .frame(alignment: .center)
-                            }
-                            .padding(EdgeInsets(top: 20, leading: 40, bottom: 20, trailing: 40))
+								
+							List {
+								ForEach(1..<description.count - 1){ num in
+									HStack {
+										Image(systemName: icon_list[num])
+											.resizable()
+											.scaledToFit()
+											.foregroundColor(.blue)
+											.frame(width: 80.0, height: 80.0, alignment: .leading)
+										Spacer()
+											.frame(width: 20)
+										Text(description[num])
+											.minimumScaleFactor(0.1)
+									}
+									.listRowSeparator(.hidden)
+								}
+							}
 
                             Spacer()
-
                             Button(action: {
-                                // Set onboardingView Showed when user is finished
-                                UserDefaults.standard.set(true, forKey: "isOnboardingShowed")
-
+								// Set onboardingView Showed when user is finished
+								UserDefaults.standard.set(true, forKey: "isOnboardingShowed")
                                 delegate?.closeOnboardingView()
                                 goRealityView()
                             }, label: {
@@ -124,6 +97,7 @@ struct OnboardingView: View {
                             Spacer()
                         }
                         .padding(EdgeInsets(top: 20, leading: 20, bottom: 60, trailing: 20))
+						.frame(alignment: .leading)
                         .onAppear(perform: {buttonName = "Go to Library"})
                     }
                     else {
@@ -137,23 +111,22 @@ struct OnboardingView: View {
                                 .font(.title)
                                 .fontWeight(.bold)
                                 .frame(alignment: .leading)
-                            Text (description[index][0])
+                            Text (description[index])
                                 .font(.subheadline)
                                 .fontWeight(.light)
                                 .frame(alignment: .leading)
                             Spacer()
                         }
                         .padding(EdgeInsets(top: 20, leading: 20, bottom: 60, trailing: 20))
-                        .onAppear(perform: {buttonName = "Skip"})
+                        .onAppear(perform: { buttonName = "Skip" })
                     }
                 }
             }
             .tabViewStyle(.page)
             .indexViewStyle(.page(backgroundDisplayMode: .always))
             Button(self.buttonName){
-                // Set onboardingView Showed when user is finished
-                UserDefaults.standard.set(true, forKey: "isOnboardingShowed")
-
+				// Set onboardingView Showed when user is finished
+				UserDefaults.standard.set(true, forKey: "isOnboardingShowed")
                 delegate?.closeOnboardingView()
                 goLibrary()
             }
@@ -172,36 +145,47 @@ struct OnboardingView: View {
 struct MiniOnboardingView: View {
 	@Environment(\.presentationMode) var presentationMode
 	var delegate: AssetRowProtocol?
-	var description: [[String]] = [["Booksnake lets you explore digitized archival materials as if they were physically present in the real world.", "Select an item, then tap \"View in AR.\" \n\nSwipe left for a quick orientation."], ["\nHold your device horizontally and aim it a table or wall within ten feet of you. For best results, turn the room lights on."], ["\nAfter aiming, tap the middle of your device’s screen to place your digitized item on a flat surface in the real world."],["\nMove your device to explore. Instead of pinching to zoom, try moving closer, farther, over, or around your item."], [""]]
+	
+	var description: [String] = ["Hold your device horizontally and aim it a table or wall within ten feet of you. For best results, turn the room lights on.", "After aiming, tap the middle of your device’s screen to place your digitized item on a flat surface in the real world.","Move your device to explore. Instead of pinching to zoom, try moving closer, farther, over, or around your item."]
+	var icon_list: [String] = ["camera.metering.multispot", "hand.tap", "person.fill.and.arrow.left.and.arrow.right"]
+	var titles: [String] = ["Aim", "Tap", "Explore"]
+	
 	var body: some View {
 		NavigationView{
 			VStack{
-				Text("How to Use Booksnake").font(.title).fontWeight(.bold).frame(alignment: .top)
-					Spacer()
-				HStack{
-					Image(systemName: "camera.metering.multispot").resizable().foregroundColor(.blue).frame(width: 60, height: 40)
-					VStack{
-						Text("Aim").font(.title).fontWeight(.bold)
-						Text(description[1][0])
-					}
-				}
-				
-				HStack{
-					Image(systemName: "hand.tap").resizable().foregroundColor(.blue).frame(width: 60, height: 60)
-					VStack{
-						Text("Tap").font(.title).fontWeight(.bold)
-						Text(description[2][0])
-					}
-				}
-				HStack{
-					Image(systemName: "person.fill.and.arrow.left.and.arrow.right").resizable().foregroundColor(.blue).frame(width: 60, height: 40)
-					VStack{
-						Text("Explore").font(.title).fontWeight(.bold)
-						Text(description[3][0])
+				Text("How to Use Booksnake")
+					.font(.title)
+					.fontWeight(.bold)
+					.padding(EdgeInsets(top: 10, leading: 10, bottom: 20, trailing: 10))
+				List {
+					ForEach(0..<description.count){ num in
+						HStack{
+							Image(systemName: icon_list[num])
+								.resizable()
+								.scaledToFit()
+								.foregroundColor(.blue)
+								.frame(width: 50, height: 50)
+							Spacer()
+								.frame(width: 20)
+							VStack{
+								HStack{
+									Text(titles[num])
+										.font(.title)
+										.fontWeight(.bold)
+									Spacer()
+								}
+								.padding(EdgeInsets(top: 10, leading: 5, bottom: 1, trailing: 10))
+								Text(description[num])
+									.minimumScaleFactor(0.1)
+									.multilineTextAlignment(.leading)
+									.padding(EdgeInsets(top: 10, leading: 1, bottom: 1, trailing: 10))
+							}
+						}
+						.padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+						.listRowSeparator(.hidden)
 					}
 				}
 			}
-			.padding(EdgeInsets(top: 20, leading: 20, bottom: 10, trailing: 20))
 			.toolbar(content: {
 				ToolbarItem(placement: .navigationBarLeading){
 					Button("Done"){

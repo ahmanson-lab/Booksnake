@@ -47,16 +47,14 @@ func goLibrary() {
 	if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene  {
 		let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 		let contentView = AssetRow().environment(\.managedObjectContext, context)
-		
 		windowScene.windows.first?.rootViewController =  UIHostingController(rootView: contentView)
-		
 		windowScene.windows.first?.makeKeyAndVisible()
-		
 	}
 }
 
 struct CustomNavigationView<Content: View>: View {
 	let build: Content
+	
 	init(@ViewBuilder build: @escaping () -> Content) {
 		self.build = build()
 	}
@@ -64,9 +62,18 @@ struct CustomNavigationView<Content: View>: View {
 	var body: some View {
 		ZStack{
 			build
-			Button(action: {
-				goLibrary()
-			}, label: { Text("< Library") })
+			VStack{
+				HStack{
+					Button(action: { goLibrary() }, label: { Text("Library") })
+						.padding(.all, 10.0)
+						.font(.title)
+					Spacer()
+				}
+				.frame(alignment: .leading)
+				Spacer()
+			}
+			.frame(alignment: .leading)
 		}
+		.frame(alignment: .topLeading)
 	}
 }

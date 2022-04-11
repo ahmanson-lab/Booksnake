@@ -20,12 +20,10 @@ struct RealityViewRepresentable: UIViewControllerRepresentable {
 	
 	func makeUIViewController(context: Context) -> UIViewController {
 		let picker = RealityView()
-		//picker.textureImage = image
 		picker.width = width
 		picker.height = length
 		picker.texture_url = image_url
 		picker.title_text = title
-		
 		
 		return picker
 	}
