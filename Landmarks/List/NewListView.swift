@@ -22,6 +22,8 @@ struct NewListView: View {
     @State private var collectionItems: [Manifest] = []
     @State private var showManifestItemsPickerView = false
     @State private var showAlert = false
+    @State private var alertTitle = ""
+    @State private var alertMessage = ""
 
 	var body: some View {
         NavigationView {
@@ -149,9 +151,21 @@ struct NewListView: View {
                             collectionTitle = "Untitled List"
                         }
 
-                        if saveCollection() {
+                        // 1. Title formatted check
+                        // 2. Empty item check
+                        if isTitleExistedInDB(title: collectionTitle) {
+                            alertTitle = "Title is existed"
+                            alertMessage = "The title is existed in your collection, please rename the title."
+                            showAlert = true
+                        } else if collectionItems.isEmpty {
+                            alertTitle = "No item is selected"
+                            alertMessage = "Please at lease pick one item to create collection."
+                            showAlert = true
+                        } else if saveCollection() {
                             presentation.wrappedValue.dismiss()
                         } else {
+                            alertTitle = "Database Error"
+                            alertMessage = "Something wrong when saving collection, please try again later."
                             showAlert = true
                         }
                     } label: {
@@ -161,8 +175,8 @@ struct NewListView: View {
                 }
             }
             .alert(isPresented: $showAlert) {
-                Alert(title: Text("Title is existed"),
-                      message: Text("The title is existed in your collection, please rename the title."),
+                Alert(title: Text(alertTitle),
+                      message: Text(alertMessage),
                       dismissButton: .default(Text("OK")))
             }
 		}
@@ -173,11 +187,6 @@ struct NewListView: View {
     }
     
     private func saveCollection() -> Bool {
-        // Title formatted check
-        guard !isTitleExistedInDB(title: collectionTitle) else {
-            return false
-        }
-        
         let collectionData = NSEntityDescription.insertNewObject(forEntityName: "ItemCollection", into: managedObjectContext) as! ItemCollection
         collectionData.createdDate = Date()
         collectionData.title = collectionTitle
