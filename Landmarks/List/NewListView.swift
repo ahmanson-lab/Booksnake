@@ -72,14 +72,19 @@ struct NewListView: View {
                 }
                 
                 VStack {
-                    Spacer()
-                        .frame(height: 25)
-                    TextField("Description", text: $collectionDescription)
-                        .multilineTextAlignment(.leading)
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                    Spacer()
-                        .frame(height: 25)
+                    ZStack {
+                        if collectionDescription.isEmpty == true {
+                            Text("Description")
+                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                                .padding(.horizontal, 1)
+                                .foregroundColor(.gray)
+                        }
+                        TextEditor(text: $collectionDescription)
+                            .multilineTextAlignment(.leading)
+                            .frame(maxHeight: .infinity)
+                            .padding(.horizontal, -1.5)
+                            .foregroundColor(.black)
+                    }
                 }
                 
                 Button(action: {

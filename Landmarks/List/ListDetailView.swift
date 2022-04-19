@@ -95,14 +95,19 @@ struct ListDetailView: View {
 
             if editMode {
                 VStack {
-                    Spacer()
-                        .frame(height: 25)
-                    TextField("Description", text: $collection.detail)
-                        .multilineTextAlignment(.leading)
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                    Spacer()
-                        .frame(height: 25)
+                    ZStack {
+                        if collection.detail.isEmpty == true {
+                            Text("Description")
+                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                                .padding(.horizontal, 1)
+                                .foregroundColor(.gray)
+                        }
+                        TextEditor(text: $collection.detail)
+                            .multilineTextAlignment(.leading)
+                            .frame(maxHeight: .infinity)
+                            .padding(.horizontal, -1.5)
+                            .foregroundColor(.black)
+                    }
                 }
             } else {
                 if collection.detail != "" {
