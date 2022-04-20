@@ -56,6 +56,7 @@ struct DataExportHandler {
         return zipFileURL
     }
 
+    @discardableResult
     static func importArchive(archiveURL: URL, managedObjectContext: NSManagedObjectContext) async throws -> ItemCollection {
         // Cleanup cache folder
         FileHandler.clean(directory: .archiveCache)
@@ -71,7 +72,7 @@ struct DataExportHandler {
         try await unzipFile(archiveURL, destination: archiveCacheDirectory)
 
         // Retrieve meta json file
-        guard let metaCollectionData = FileHandler.read(from: .archiveCache, fileName: "meta.json") else {
+        guard let metaCollectionData = FileHandler.read(from: .archiveCache, fileName: "\(collectionName)/meta.json") else {
             throw DataExportError.cannotReadMetaFile
         }
         let decoder = JSONDecoder()

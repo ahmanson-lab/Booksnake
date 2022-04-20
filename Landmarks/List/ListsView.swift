@@ -15,6 +15,7 @@ struct RootListView : View {
 	var delegate: AssetRowProtocol?
 	
 	@State private var showNewListView = false
+    @State private var showImporter = false
 	
 	var body: some View {
 		VStack {
@@ -42,7 +43,7 @@ struct RootListView : View {
                     .frame(width: 20)
                 
                 Button(action: {
-                    // TODO: Implement Import feature
+                    showImporter = true
                 }, label: {
                     Image(systemName: "link.badge.plus")
                         .resizable()
@@ -103,7 +104,24 @@ struct RootListView : View {
                 }
                 .onDelete(perform: onDelete)
             }
-		}
+		}.fileImporter(
+            isPresented: $showImporter,
+            allowedContentTypes: [.zip],
+            allowsMultipleSelection: false
+        ) { result in
+            do {
+                guard let selectedFileURL: URL = try result.get().first else { return }
+                Task {
+                    guard selectedFileURL.startAccessingSecurityScopedResource() else { return }
+
+                    try await DataExportHandler.importArchive(archiveURL: selectedFileURL, managedObjectContext: managedObjectContext)
+
+                    selectedFileURL.stopAccessingSecurityScopedResource()
+                }
+            } catch {
+                print(error)
+            }
+        }
 	}
     
     private func onDelete(offsets: IndexSet) {
