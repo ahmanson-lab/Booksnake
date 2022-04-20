@@ -15,6 +15,8 @@ struct ListDetailView: View {
     @State private var editMode = false
     @State private var showManifestItemsPickerView = false
     @State private var collectionItems: [Manifest] = []
+    @State private var showShareSheet = false
+    @State private var shareItems = [Any]()
     @FocusState private var focusedField: Field?
     private enum Field: Hashable {
         case titleField
@@ -248,7 +250,10 @@ struct ListDetailView: View {
                             do {
                                 let fileURL = try await DataExportHandler.prepareArchive(itemCollection: collection)
                                 // Show share extension
-                                openShareActionSheet(with: fileURL)
+//                                openShareActionSheet(with: fileURL)
+                                print(fileURL)
+                                shareItems = [fileURL]
+                                showShareSheet = true
                             } catch {
                                 print(error)
                             }
@@ -288,6 +293,9 @@ struct ListDetailView: View {
                 }
             }
         }
+        .sheet(isPresented: $showShareSheet) {
+            ShareSheet(activityItems: $shareItems)
+        }
     }
 
     private func moveCollectionItems(from source: IndexSet, to destination: Int) {
@@ -310,15 +318,5 @@ struct ListDetailView: View {
         catch {
             print(error)
         }
-    }
-
-    private func openShareActionSheet(with url: URL) {
-        let activityVC = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-        let window = UIApplication
-            .shared
-            .connectedScenes
-            .flatMap { ($0 as? UIWindowScene)?.windows ?? [] }
-            .first { $0.isKeyWindow }
-        window?.rootViewController?.present(activityVC, animated: true, completion: nil)
     }
 }
