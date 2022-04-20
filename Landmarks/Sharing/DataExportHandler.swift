@@ -104,8 +104,8 @@ struct DataExportHandler {
                 }
 
                 // Parse IIIF Json
-                guard let destinationURL = URL(string: destinationPath),
-                      let (new_item, _) = await ManifestDataHandler.getLocalManifest(from: destinationURL) else { continue }
+                let destinationURL = URL(fileURLWithPath: destinationPath)
+                guard let (new_item, _) = await ManifestDataHandler.getLocalManifest(from: destinationURL) else { continue }
 
                 // Create ManifestItem
                 let manifestItem = ManifestItem(item: new_item, image: new_item.image!)
