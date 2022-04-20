@@ -119,14 +119,20 @@ struct ListDetailView: View {
                 VStack {
                     ZStack {
                         if collection.detail.isEmpty == true {
-                            Text("Description")
-                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                                .padding(.horizontal, 1)
-                                .foregroundColor(.gray)
+                            VStack {
+                                HStack {
+                                    Text("Description")
+                                        .padding(.horizontal, 3.5)
+                                        .padding(.vertical, 8)
+                                        .foregroundColor(.gray)
+                                    Spacer()
+                                }
+                                Spacer()
+                            }
                         }
                         TextEditor(text: $collection.detail)
                             .multilineTextAlignment(.leading)
-                            .frame(maxHeight: .infinity)
+                            .frame(minHeight: 100, maxHeight: .infinity)
                             .padding(.horizontal, -1.5)
                             .focused($focusedField, equals: .descriptionField)
                             .onChange(of: collection.detail, perform: { value in

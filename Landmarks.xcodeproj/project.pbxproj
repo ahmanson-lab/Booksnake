@@ -152,11 +152,6 @@
 		1181A8D827ED35BC003EE7AF /* OnboardingMat */ = {
 			isa = PBXGroup;
 			children = (
-				1181A8DD27EE5362003EE7AF /* LA1909.jpg */,
-				1181A8DB27ED38BD003EE7AF /* 0_onboarding.png */,
-				1181A8D427ED35B8003EE7AF /* 1_Aim.mov */,
-				1181A8D327ED35B8003EE7AF /* 2_Tap.mov */,
-				1181A8D227ED35B8003EE7AF /* 3_Explore.mov */,
 			);
 			name = OnboardingMat;
 			sourceTree = "<group>";
@@ -396,7 +391,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				11C73CD625F172BE00FB66DA /* AutomobileLA.json in Resources */,
-				1181A8D527ED35B8003EE7AF /* 3_Explore.mov in Resources */,
 				1147E68B269D1D5B00BAECE1 /* Launch Screen.storyboard in Resources */,
 				1181A8DC27ED38BD003EE7AF /* onboarding_page1.png in Resources */,
 				BA06978628029CC900BC080C /* 2_Tap.gif in Resources */,
