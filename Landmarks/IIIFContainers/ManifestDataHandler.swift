@@ -180,6 +180,12 @@ extension ManifestDataHandler {
     public static func addExamples(managedObjectContext: NSManagedObjectContext) async {
         let resourceNames = ["MapOfCalifornia", "MapOfLosAngeles", "TopographicLA", "LA1909", "AutomobileLA", "Hollywood"]
         let sizes = [[0.48, 0.69], [0.63, 0.56],[1.53, 0.56],[0.85, 1.02],[0.22, 0.08],[0.67, 0.66]]
+        let resourceURLs = [URL(string: "https://www.loc.gov/item/99443375/manifest.json")!,
+                            URL(string: "https://www.loc.gov/item/2006627666/manifest.json")!,
+                            URL(string: "https://www.loc.gov/item/2006626012/manifest.json")!,
+                            URL(string: "https://www.loc.gov/item/2005632465/manifest.json")!,
+                            URL(string: "https://www.loc.gov/item/2006627660/manifest.json")!,
+                            URL(string: "https://www.loc.gov/item/2006626076/manifest.json")!]
 
         // ItemCollection
         let collectionData = NSEntityDescription.insertNewObject(forEntityName: "ItemCollection", into: managedObjectContext) as! ItemCollection
@@ -202,7 +208,7 @@ extension ManifestDataHandler {
             contentdata.values = new_manifest.item.values
             contentdata.width = Float(sizes[index][1])
             contentdata.length = Float (sizes[index][0])
-            contentdata.sourceURL = URL(string: "https://booksnake.app/\(new_manifest.item.label.urlEscaped)")! // Create a unique URL for local imported sample manifest
+            contentdata.sourceURL = resourceURLs[index]
             contentdata.createdDate = Date()
 
             // Save iiifImages
