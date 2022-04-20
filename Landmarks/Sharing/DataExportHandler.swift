@@ -87,11 +87,11 @@ struct DataExportHandler {
         // Retrieve Manifest json files
         let archiveCacheFileNames = try FileManager.default.contentsOfDirectory(atPath: archiveCacheDirectory.path)
         for fileName in archiveCacheFileNames {
-            guard fileName != "meta.json" else { continue }
+            guard fileName != "meta.json",
+                  let manifestItemURL = URL(string: (fileName as NSString).deletingPathExtension.urlDecoded) else { continue }
 
             // Check if Manifest exist in DB
-            let manifestItemName = (fileName as NSString).deletingPathExtension
-            fetchRequest.predicate = NSPredicate(format: "itemLabel LIKE[cd] %@", manifestItemName)
+            fetchRequest.predicate = NSPredicate(format: "sourceURL = %@", manifestItemURL as CVarArg)
             if let existedManifest = try managedObjectContext.fetch(fetchRequest).first {
                 itemCollection.addToItems(existedManifest)
             } else {
@@ -110,7 +110,9 @@ struct DataExportHandler {
                 let manifestItem = ManifestItem(item: new_item, image: new_item.image!)
 
                 // Save ItemIntoDB
-                let manifest = ManifestDataHandler.saveManifestInDB(with: manifestItem, managedObjectContext: managedObjectContext)
+                let manifest = ManifestDataHandler.saveManifestInDB(with: manifestItem,
+                                                                    urlPath: manifestItemURL.path,
+                                                                    managedObjectContext: managedObjectContext)
 
                 itemCollection.addToItems(manifest)
             }

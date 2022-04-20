@@ -16,6 +16,7 @@ public class Manifest: NSManagedObject, Identifiable, Codable {
     @NSManaged public var itemLabel: String
     @NSManaged public var createdDate: Date
     @NSManaged public var collections: NSSet
+    @NSManaged public var sourceURL: URL
     
     //for init sizes
     @NSManaged public var width: Float
@@ -60,7 +61,7 @@ extension Manifest {
     }
 
     var fileURL: URL? {
-        return FileDirectory.iiifArchive.url?.appendingPathComponent("\(itemLabel).json")
+        return FileDirectory.iiifArchive.url?.appendingPathComponent("\(sourceURL.absoluteString.urlEscaped).json")
     }
 
     static func sortedFetchRequest() -> NSFetchRequest<Manifest> {

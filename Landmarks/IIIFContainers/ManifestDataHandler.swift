@@ -48,16 +48,17 @@ struct ManifestDataHandler {
         // Save iiifRawFile
         FileHandler.save(data: iiifRawData,
                          toDirectory: .iiifArchive,
-                         withFileName: "\(manifestItem.item.label).json")
+                         withFileName: "\(urlPath.urlEscaped).json")
 
         // Save ItemIntoDB
-        saveManifestInDB(with: manifestItem, managedObjectContext: managedObjectContext)
+        saveManifestInDB(with: manifestItem, urlPath: urlPath, managedObjectContext: managedObjectContext)
 
         return .success(manifestItem.item.label)
     }
 
     @discardableResult
     public static func saveManifestInDB(with manifestItem: ManifestItem,
+                                        urlPath: String,
                                         width: Float = 1,
                                         length: Float = 1,
                                         managedObjectContext: NSManagedObjectContext) -> Manifest {
@@ -68,6 +69,7 @@ struct ManifestDataHandler {
         contentdata.values = manifestItem.item.values
         contentdata.width = manifestItem.item.width ?? width
         contentdata.length = manifestItem.item.height ?? length
+        contentdata.sourceURL = URL(string: urlPath)!
         contentdata.createdDate = Date()
 
         // Save iiifImages
@@ -200,6 +202,7 @@ extension ManifestDataHandler {
             contentdata.values = new_manifest.item.values
             contentdata.width = Float(sizes[index][1])
             contentdata.length = Float (sizes[index][0])
+            contentdata.sourceURL = URL(string: "https://booksnake.app/\(new_manifest.item.label.urlEscaped)")! // Create a unique URL for local imported sample manifest
             contentdata.createdDate = Date()
 
             // Save iiifImages
@@ -211,7 +214,7 @@ extension ManifestDataHandler {
             // Save iiifRawFile
             FileHandler.save(data: iiifRawData,
                              toDirectory: .iiifArchive,
-                             withFileName: "\(new_manifest.item.label).json")
+                             withFileName: "\(contentdata.sourceURL.absoluteString.urlEscaped).json")
 
             contentdata.addToCollections(collectionData)
 
