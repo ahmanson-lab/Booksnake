@@ -63,5 +63,6 @@ struct ManifestItemsPickerView: View {
                 }
             }
         }
+        .navigationViewStyle(.stack)
     }
 }
