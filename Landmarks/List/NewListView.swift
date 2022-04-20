@@ -24,6 +24,13 @@ struct NewListView: View {
     @State private var showAlert = false
     @State private var alertTitle = ""
     @State private var alertMessage = ""
+    @FocusState private var focusedField: Field?
+    private enum Field: Hashable {
+        case titleField
+        case subtitleField
+        case creatorField
+        case descriptionField
+    }
 
 	var body: some View {
         NavigationView {
@@ -48,11 +55,22 @@ struct NewListView: View {
                         TextField("Untitled List", text: $collectionTitle)
                             .multilineTextAlignment(.center)
                             .font(.title2.weight(.bold))
+                            .submitLabel(.next)
+                            .focused($focusedField, equals: .titleField)
+                            .onSubmit {
+                                focusedField = .subtitleField
+                            }
 
                         // Subtitle
                         TextField("Subtitle", text: $collectionSubtitle)
                             .multilineTextAlignment(.center)
                             .font(.title3.weight(.light))
+                            .submitLabel(.next)
+                            .focused($focusedField, equals: .subtitleField)
+                            .onSubmit {
+                                focusedField = .creatorField
+                            }
+
                         // Author
                         HStack(spacing: 3) {
                             Image(systemName: "person.circle")
@@ -61,6 +79,11 @@ struct NewListView: View {
                                 .frame(width: 12, height: 12)
                             TextField("List Creator", text: $collectionCreator)
                                 .font(.footnote)
+                                .submitLabel(.next)
+                                .focused($focusedField, equals: .creatorField)
+                                .onSubmit {
+                                    focusedField = .descriptionField
+                                }
                         }
                         .fixedSize()
                         .frame(width: 200, height: nil, alignment: .center)
@@ -83,7 +106,12 @@ struct NewListView: View {
                             .multilineTextAlignment(.leading)
                             .frame(maxHeight: .infinity)
                             .padding(.horizontal, -1.5)
-                            .foregroundColor(.black)
+                            .focused($focusedField, equals: .descriptionField)
+                            .onChange(of: collectionDescription, perform: { value in
+                                if collectionDescription == "\n" {
+                                    collectionDescription = ""
+                                }
+                            })
                     }
                 }
                 
@@ -175,6 +203,14 @@ struct NewListView: View {
                         }
                     } label: {
                         Text("Create")
+                            .bold()
+                    }
+                }
+                ToolbarItem(placement: .keyboard) {
+                    Button {
+                        focusedField = nil
+                    } label: {
+                        Text("Close Keyboard")
                             .bold()
                     }
                 }

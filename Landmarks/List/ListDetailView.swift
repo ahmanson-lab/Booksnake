@@ -15,6 +15,13 @@ struct ListDetailView: View {
     @State private var editMode = false
     @State private var showManifestItemsPickerView = false
     @State private var collectionItems: [Manifest] = []
+    @FocusState private var focusedField: Field?
+    private enum Field: Hashable {
+        case titleField
+        case subtitleField
+        case creatorField
+        case descriptionField
+    }
 
     var body: some View {
         List {
@@ -37,6 +44,11 @@ struct ListDetailView: View {
                         TextField("Untitled List", text: $collection.title)
                             .multilineTextAlignment(.center)
                             .font(.title2.weight(.bold))
+                            .submitLabel(.next)
+                            .focused($focusedField, equals: .titleField)
+                            .onSubmit {
+                                focusedField = .subtitleField
+                            }
                     } else {
                         Text("\(collection.title)")
                             .font(.title2)
@@ -53,6 +65,11 @@ struct ListDetailView: View {
                         TextField("Subtitle", text: $collection.subtitle)
                             .multilineTextAlignment(.center)
                             .font(.title3.weight(.light))
+                            .submitLabel(.next)
+                            .focused($focusedField, equals: .subtitleField)
+                            .onSubmit {
+                                focusedField = .creatorField
+                            }
                     } else {
                         if collection.subtitle != "" {
                             Text("\(collection.subtitle)")
@@ -71,6 +88,11 @@ struct ListDetailView: View {
                                 .frame(width: 12, height: 12)
                             TextField("List Creator", text: $collection.author)
                                 .font(.footnote)
+                                .submitLabel(.next)
+                                .focused($focusedField, equals: .creatorField)
+                                .onSubmit {
+                                    focusedField = .descriptionField
+                                }
                         }
                         .fixedSize()
                         .frame(width: 200, height: nil, alignment: .center)
@@ -106,13 +128,17 @@ struct ListDetailView: View {
                             .multilineTextAlignment(.leading)
                             .frame(maxHeight: .infinity)
                             .padding(.horizontal, -1.5)
-                            .foregroundColor(.black)
+                            .focused($focusedField, equals: .descriptionField)
+                            .onChange(of: collection.detail, perform: { value in
+                                if collection.detail == "\n" {
+                                    collection.detail = ""
+                                }
+                            })
                     }
                 }
             } else {
                 if collection.detail != "" {
                     HStack {
-                        Spacer()
                         Text("\(collection.detail)")
                             .font(.subheadline)
                             .foregroundColor(.gray)
@@ -245,6 +271,14 @@ struct ListDetailView: View {
                             Image(systemName: "pencil.circle")
                         }
                     })
+                }
+            }
+            ToolbarItem(placement: .keyboard) {
+                Button {
+                    focusedField = nil
+                } label: {
+                    Text("Close Keyboard")
+                        .bold()
                 }
             }
         }
