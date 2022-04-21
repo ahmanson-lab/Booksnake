@@ -22,6 +22,15 @@ struct NewListView: View {
     @State private var collectionItems: [Manifest] = []
     @State private var showManifestItemsPickerView = false
     @State private var showAlert = false
+    @State private var alertTitle = ""
+    @State private var alertMessage = ""
+    @FocusState private var focusedField: Field?
+    private enum Field: Hashable {
+        case titleField
+        case subtitleField
+        case creatorField
+        case descriptionField
+    }
 
 	var body: some View {
         NavigationView {
@@ -46,11 +55,22 @@ struct NewListView: View {
                         TextField("Untitled List", text: $collectionTitle)
                             .multilineTextAlignment(.center)
                             .font(.title2.weight(.bold))
+                            .submitLabel(.next)
+                            .focused($focusedField, equals: .titleField)
+                            .onSubmit {
+                                focusedField = .subtitleField
+                            }
 
                         // Subtitle
                         TextField("Subtitle", text: $collectionSubtitle)
                             .multilineTextAlignment(.center)
                             .font(.title3.weight(.light))
+                            .submitLabel(.next)
+                            .focused($focusedField, equals: .subtitleField)
+                            .onSubmit {
+                                focusedField = .creatorField
+                            }
+
                         // Author
                         HStack(spacing: 3) {
                             Image(systemName: "person.circle")
@@ -59,6 +79,11 @@ struct NewListView: View {
                                 .frame(width: 12, height: 12)
                             TextField("List Creator", text: $collectionCreator)
                                 .font(.footnote)
+                                .submitLabel(.next)
+                                .focused($focusedField, equals: .creatorField)
+                                .onSubmit {
+                                    focusedField = .descriptionField
+                                }
                         }
                         .fixedSize()
                         .frame(width: 200, height: nil, alignment: .center)
@@ -70,14 +95,30 @@ struct NewListView: View {
                 }
                 
                 VStack {
-                    Spacer()
-                        .frame(height: 25)
-                    TextField("Description", text: $collectionDescription)
-                        .multilineTextAlignment(.leading)
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                    Spacer()
-                        .frame(height: 25)
+                    ZStack {
+                        if collectionDescription.isEmpty == true {
+                            VStack {
+                                HStack {
+                                    Text("Description")
+                                        .padding(.horizontal, 3.5)
+                                        .padding(.vertical, 8)
+                                        .foregroundColor(.gray)
+                                    Spacer()
+                                }
+                                Spacer()
+                            }
+                        }
+                        TextEditor(text: $collectionDescription)
+                            .multilineTextAlignment(.leading)
+                            .frame(minHeight: 100, maxHeight: .infinity)
+                            .padding(.horizontal, -1.5)
+                            .focused($focusedField, equals: .descriptionField)
+                            .onChange(of: collectionDescription, perform: { value in
+                                if collectionDescription == "\n" {
+                                    collectionDescription = ""
+                                }
+                            })
+                    }
                 }
                 
                 Button(action: {
@@ -142,24 +183,47 @@ struct NewListView: View {
                         presentation.wrappedValue.dismiss()
                     }.foregroundColor(.red)
                 }
-                ToolbarItem(placement: .navigationBarTrailing){
-                    Button("Done") {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
                         // Use default name if title is unset
                         if collectionTitle == "" {
                             collectionTitle = "Untitled List"
                         }
-                        
-                        if saveCollection() {
+
+                        // 1. Title formatted check
+                        // 2. Empty item check
+                        if isTitleExistedInDB(title: collectionTitle) {
+                            alertTitle = "Title is existed"
+                            alertMessage = "The title is existed in your collection, please rename the title."
+                            showAlert = true
+                        } else if collectionItems.isEmpty {
+                            alertTitle = "No item is selected"
+                            alertMessage = "Please at lease pick one item to create collection."
+                            showAlert = true
+                        } else if saveCollection() {
                             presentation.wrappedValue.dismiss()
                         } else {
+                            alertTitle = "Database Error"
+                            alertMessage = "Something wrong when saving collection, please try again later."
                             showAlert = true
                         }
+                    } label: {
+                        Text("Create")
+                            .bold()
+                    }
+                }
+                ToolbarItem(placement: .keyboard) {
+                    Button {
+                        focusedField = nil
+                    } label: {
+                        Text("Close Keyboard")
+                            .bold()
                     }
                 }
             }
             .alert(isPresented: $showAlert) {
-                Alert(title: Text("Title is existed"),
-                      message: Text("The title is existed in your collection, please rename the title."),
+                Alert(title: Text(alertTitle),
+                      message: Text(alertMessage),
                       dismissButton: .default(Text("OK")))
             }
 		}
@@ -170,11 +234,6 @@ struct NewListView: View {
     }
     
     private func saveCollection() -> Bool {
-        // Title formatted check
-        guard !isTitleExistedInDB(title: collectionTitle) else {
-            return false
-        }
-        
         let collectionData = NSEntityDescription.insertNewObject(forEntityName: "ItemCollection", into: managedObjectContext) as! ItemCollection
         collectionData.createdDate = Date()
         collectionData.title = collectionTitle
