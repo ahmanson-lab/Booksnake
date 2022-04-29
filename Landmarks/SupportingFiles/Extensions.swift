@@ -43,6 +43,16 @@ enum DecoderError: Error {
     case missingManagedObjectContext
 }
 
+extension String {
+    var urlEscaped: String {
+        self.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+    }
+
+    var urlDecoded: String {
+        self.removingPercentEncoding!
+    }
+}
+
 func goLibrary() {
 	if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene  {
 		let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext

@@ -14,12 +14,13 @@
         <attribute name="itemLabel" attributeType="String"/>
         <attribute name="labels" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName=".[String]"/>
         <attribute name="length" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="sourceURL" attributeType="URI"/>
         <attribute name="values" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName=".[String]"/>
         <attribute name="width" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <relationship name="collections" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ItemCollection" inverseName="items" inverseEntity="ItemCollection"/>
     </entity>
     <elements>
-        <element name="ItemCollection" positionX="286.29736328125" positionY="-32.0364990234375" width="128" height="119"/>
-        <element name="Manifest" positionX="-31.7490234375" positionY="-91.912353515625" width="128" height="149"/>
+        <element name="ItemCollection" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Manifest" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

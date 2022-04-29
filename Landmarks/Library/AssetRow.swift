@@ -99,7 +99,8 @@ struct AssetRow: View, AssetRowProtocol {
                     showLoading = false
                 }
             }
-		
+            .disabled(showLoading)
+
 			//MARK: Loading Indicator
             ZStack {
                 ActivityIndicator(isAnimating: $showLoading, text: "Adding Some Samples", style: .large)
