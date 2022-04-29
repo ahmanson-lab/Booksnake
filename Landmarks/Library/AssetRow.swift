@@ -21,10 +21,13 @@ struct AssetRow: View, AssetRowProtocol {
     @State private var tabSelection = 1
     @State private var showLoading: Bool = false
 	@State private var showMiniOnboarding: Bool = false
+	
+	@State private var isTabShown = true
 
     var body: some View {
         ZStack {
             TabView(selection: $tabSelection) {
+				if isTabShown{
 				//MARK: Tab 1 - Library
 				VStack{
                 NavigationView{
@@ -35,7 +38,8 @@ struct AssetRow: View, AssetRowProtocol {
                                                                              width: (item.width),
                                                                              length: (item.length),
                                                                              labels: item.labels! ,
-                                                                             values: item.values! ))) {
+                                                                             values: item.values! ,
+																			 isTabShown: $isTabShown))) {
                                 Image(uiImage: image)
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
@@ -85,6 +89,7 @@ struct AssetRow: View, AssetRowProtocol {
                     Text("Explore")
                 }
                 .tag(3)
+				}
             }
             .task {
                 // To add some demo items in the collection
@@ -107,6 +112,7 @@ struct AssetRow: View, AssetRowProtocol {
 
 			//MARK: Onboarding View
 			OnboardingView(delegate: self).isHidden(UserDefaults.standard.bool(forKey: "isOnboardingShowed"))
+			
         }
 		.sheet(isPresented: $showMiniOnboarding, content: {MiniOnboardingView(delegate: self) })
     }

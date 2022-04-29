@@ -16,6 +16,9 @@ struct ListDetailView: View {
     @State private var showManifestItemsPickerView = false
     @State private var collectionItems: [Manifest] = []
 
+	//flag to hide Tab Bar View when user is in AR view
+	@State var isTabShown = true
+	
     var body: some View {
         List {
             HStack {
@@ -179,7 +182,8 @@ struct ListDetailView: View {
                                                                          width: (item.width),
                                                                          length: (item.length),
                                                                          labels: item.labels!,
-                                                                         values: item.values! ))) {
+																		 values: item.values!,
+																		 isTabShown: $isTabShown ))) {
                             Image(uiImage: image)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)

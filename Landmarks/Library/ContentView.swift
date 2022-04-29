@@ -19,6 +19,8 @@ struct ContentView: View {
     var labels: [String]
     var values: [String]
 
+	@Binding var isTabShown: Bool
+	
     var body: some View {
 		List {
             VStack {
@@ -35,8 +37,11 @@ struct ContentView: View {
 			
 			NavigationLink(
 				destination: LazyView(RealityViewRepresentable(width:width, length: length, image_url: imageURL, title: values[0]))
+					.edgesIgnoringSafeArea(.all)
 					.navigationBarTitle("")
-					.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: .center),
+					.navigationBarHidden(false)
+					.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: .center)
+					.onAppear(perform: { isTabShown = false}),
 				isActive: $showingPreview) {
 					ZStack(){
 						Color.init(.systemBlue)
@@ -48,6 +53,7 @@ struct ContentView: View {
 					.frame(height: 50.0)
 					.padding(EdgeInsets(top: 10, leading: 30, bottom: 10, trailing: 30))
 			}
+				
 			ForEach(0..<labels.count, id: \.self){ item in
 				VStack (alignment: .leading) {
 						Text("\(labels[item])")
@@ -60,5 +66,6 @@ struct ContentView: View {
 				}
 			}
 		.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 20))
+		.onAppear(perform: { isTabShown = true})
     }
 }

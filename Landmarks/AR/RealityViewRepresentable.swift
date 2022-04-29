@@ -13,7 +13,7 @@ struct RealityViewRepresentable: UIViewControllerRepresentable {
 	var width: Float?
 	var length: Float?
 	var image_url: URL?
-	var hasReturn: Bool = false
+	//var hasReturn: Bool = false
 	var title: String?
 	
 	typealias UIViewControllerType = UIViewController
