@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17709" systemVersion="19E287" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="ContentData" representedClassName=".ContentData" syncable="YES">
-        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="image" optional="YES" attributeType="Transformable" valueTransformerName=""/>
-        <attribute name="index" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="item_label" optional="YES" attributeType="String"/>
-        <attribute name="labels" optional="YES" attributeType="Transformable" valueTransformerName="ManifestData" customClassName=".ManifestData"/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21E258" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="ItemCollection" representedClassName=".ItemCollection" syncable="YES">
+        <attribute name="author" attributeType="String"/>
+        <attribute name="createdDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="detail" attributeType="String"/>
+        <attribute name="subtitle" attributeType="String"/>
+        <attribute name="title" attributeType="String"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Manifest" inverseName="collections" inverseEntity="Manifest"/>
+    </entity>
+    <entity name="Manifest" representedClassName=".Manifest" syncable="YES">
+        <attribute name="createdDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="itemLabel" attributeType="String"/>
+        <attribute name="labels" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName=".[String]"/>
         <attribute name="length" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="values" optional="YES" attributeType="Transformable"/>
+        <attribute name="values" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName=".[String]"/>
         <attribute name="width" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="collections" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ItemCollection" inverseName="items" inverseEntity="ItemCollection"/>
     </entity>
     <elements>
-        <element name="ContentData" positionX="-27" positionY="18" width="128" height="163"/>
+        <element name="ItemCollection" positionX="286.29736328125" positionY="-32.0364990234375" width="128" height="119"/>
+        <element name="Manifest" positionX="-31.7490234375" positionY="-91.912353515625" width="128" height="149"/>
     </elements>
 </model>
