@@ -17,6 +17,9 @@ struct RootListView : View {
 	@State private var showNewListView = false
     @State private var showImporter = false
     @State private var showLoading = false
+    @State private var showAlert = false
+    @State private var alertTitle = ""
+    @State private var alertMessage = ""
 	
 	var body: some View {
         ZStack {
@@ -111,19 +114,35 @@ struct RootListView : View {
                 allowedContentTypes: [.zip],
                 allowsMultipleSelection: false
             ) { result in
-                do {
-                    guard let selectedFileURL: URL = try result.get().first else { return }
-                    Task {
-                        guard selectedFileURL.startAccessingSecurityScopedResource() else { return }
+                Task {
+                    do {
+                        guard let selectedFileURL: URL = try result.get().first else { throw DataExportError.cannotReadImportingFile }
+
+                        guard selectedFileURL.startAccessingSecurityScopedResource() else { throw DataExportError.cannotReadImportingFile }
 
                         showLoading = true
                         try await DataExportHandler.importArchive(archiveURL: selectedFileURL, managedObjectContext: managedObjectContext)
-                        showLoading = false
 
                         selectedFileURL.stopAccessingSecurityScopedResource()
+                    } catch DataExportError.cannotReadImportingFile {
+                        showAlert = true
+                        alertTitle = "Failed to import"
+                        alertMessage = "Cannot access selected file, please check the importing file."
+                    } catch DataExportError.cannotOpenArchiveFolder, DataExportError.cannotCreateFetchRequest {
+                        showAlert = true
+                        alertTitle = "Failed to import"
+                        alertMessage = "System error when importing items, please kill and reopen the app."
+                    } catch DataExportError.cannotReadMetaFile {
+                        showAlert = true
+                        alertTitle = "Failed to import"
+                        alertMessage = "Cannot read the collection."
+                    } catch {
+                        showAlert = true
+                        alertTitle = "Failed to import"
+                        alertMessage = "Unknown error, please try again later."
                     }
-                } catch {
-                    print(error)
+
+                    showLoading = false
                 }
             }
             .disabled(showLoading)
@@ -137,6 +156,11 @@ struct RootListView : View {
             }
             .isHidden(!showLoading)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+        }
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text(alertTitle),
+                  message: Text(alertMessage),
+                  dismissButton: .default(Text("OK")))
         }
 	}
     
