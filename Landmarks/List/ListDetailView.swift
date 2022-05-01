@@ -288,12 +288,14 @@ struct ListDetailView: View {
                         })
                     }
                 }
-                ToolbarItem(placement: .keyboard) {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
                     Button {
                         focusedField = nil
                     } label: {
-                        Text("Close Keyboard")
-                            .bold()
+                        Image(systemName: "keyboard.chevron.compact.down")
+                            .resizable()
+                            .scaledToFit()
                     }
                 }
             }
