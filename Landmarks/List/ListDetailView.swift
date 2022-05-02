@@ -243,12 +243,12 @@ struct ListDetailView: View {
             }
             .onChange(of: collectionItems) { saveIntoDB(updatedItems: $0) }
             .navigationBarBackButtonHidden(navigationBarBackButtonHidden)
+            .navigationBarTitle("", displayMode: .inline)
             .toolbar{
                 ToolbarItem(placement: .navigationBarTrailing) {
                     HStack {
                         Button(action: {
                             Task {
-                                // Prepare collection archive
                                 do {
                                     showLoading = true
                                     let fileURL = try await DataExportHandler.prepareArchive(itemCollection: collection)
@@ -258,12 +258,6 @@ struct ListDetailView: View {
                                 } catch {
                                     print(error)
                                 }
-    //                            do {
-    //                                let importCollection = try await DataExportHandler.importArchive(archiveURL: fileURL!, managedObjectContext: managedObjectContext)
-    //                                print(importCollection)
-    //                            } catch {
-    //                                print(error)
-    //                            }
                             }
                         }, label: {
                             if !editMode {
