@@ -29,7 +29,7 @@ class RealityView: UIViewController, ARSessionDelegate  {
         realityView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         realityView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         realityView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-		
+
 		dir_light.light.color = .white
 		dir_light.light.intensity = 20000
 		dir_light.light.isRealWorldProxy = true
