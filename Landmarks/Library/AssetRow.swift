@@ -24,10 +24,9 @@ struct AssetRow: View, AssetRowProtocol {
 
     var body: some View {
         ZStack {
-            TabView(selection: $tabSelection) {
-				//MARK: Tab 1 - Library
-				VStack{
-                NavigationView{
+            NavigationView {
+                TabView(selection: $tabSelection) {
+                    // MARK: Tab 1 - Library Tab
                     List {
                         ForEach(manifestItems, id: \.self) { item in
                             let image = UIImage.loadThumbnail(at: item.imageURL, forSize: .small) ?? UIImage()
@@ -41,51 +40,44 @@ struct AssetRow: View, AssetRowProtocol {
                                     .aspectRatio(contentMode: .fit)
                                     .frame(width: 50, height: 50)
                                 Text("\(item.itemLabel)")
-                                   .lineLimit(2)
-                                   .truncationMode(.tail)
+                                    .lineLimit(2)
+                                    .truncationMode(.tail)
                             }
                         }
                         .onDelete(perform: onDelete)
                     }
-					.navigationBarTitle("Library")
-					.toolbar(content: {
-						Button(action: {
-							showMiniOnboarding = true
-						}, label: {
-							Image(systemName:  "questionmark.circle").foregroundColor(.blue)
-						})
-					})
-                }
-                .navigationViewStyle(StackNavigationViewStyle())
-				}
-                .tabItem {
-                    Image(systemName: "scroll")
-                    Text("Library")
-                }
-                .tag(1)
-				
-				//MARK: Tab 2 - Lists
-				NavigationView {
-					RootListView(delegate: self).navigationBarTitle("Lists")
-				}
-				.navigationViewStyle(StackNavigationViewStyle())
-				.tabItem {
-					Image(systemName: "list.bullet")
-					Text("Lists")
-				}
-				.tag(2)
+                    .toolbar(content: {
+                        Button(action: {
+                            showMiniOnboarding = true
+                        }, label: {
+                            Image(systemName:  "questionmark.circle").foregroundColor(.blue)
+                        })
+                    })
+                    .tabItem {
+                        Image(systemName: "scroll")
+                        Text("Library")
+                    }
+                    .tag(1)
 
-				//MARK: Tab 3 - Explore
-                NavigationView {
-                    CustomSearchMenu(delegate: self).navigationBarTitle("Explore")
+                    //MARK: Tab 2 - Lists
+                    RootListView(delegate: self)
+                        .tabItem {
+                            Image(systemName: "list.bullet")
+                            Text("Lists")
+                        }
+                        .tag(2)
+
+                    //MARK: Tab 3 - Explore
+                    CustomSearchMenu(delegate: self)
+                        .tabItem {
+                            Image(systemName: "magnifyingglass")
+                            Text("Explore")
+                        }
+                        .tag(3)
                 }
-                .navigationViewStyle(StackNavigationViewStyle())
-                .tabItem {
-                    Image(systemName: "magnifyingglass")
-                    Text("Explore")
-                }
-                .tag(3)
+                .navigationBarTitle(navigationBarTitle(tabSelection: tabSelection))
             }
+            .navigationViewStyle(StackNavigationViewStyle())
             .task {
                 // To add some demo items in the collection
                 if(manifestItems.count < 1) {
@@ -97,14 +89,12 @@ struct AssetRow: View, AssetRowProtocol {
             .disabled(showLoading)
 
 			//MARK: Loading Indicator
-            ZStack {
-                ActivityIndicator(isAnimating: $showLoading, text: "Adding Some Samples", style: .large)
-                    .frame(width: 200.0, height: 200.0, alignment: .center)
-                    .background(Color(white: 0.7, opacity: 0.7))
-                    .cornerRadius(20)
-            }
-            .isHidden(!showLoading)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            ActivityIndicator(isAnimating: $showLoading, text: "Adding Some Samples", style: .large)
+                .frame(width: 200.0, height: 200.0, alignment: .center)
+                .background(Color(white: 0.7, opacity: 0.7))
+                .cornerRadius(20)
+                .isHidden(!showLoading)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
 
 			//MARK: Onboarding View
 			OnboardingView(delegate: self).isHidden(UserDefaults.standard.bool(forKey: "isOnboardingShowed"))
@@ -120,6 +110,19 @@ struct AssetRow: View, AssetRowProtocol {
     func switchToLibraryTab() {
         // Switch back to Library tab
         tabSelection = 1
+    }
+
+    func navigationBarTitle(tabSelection: Int) -> String{
+        switch tabSelection {
+        case 1:
+            return "Library"
+        case 2:
+            return "Lists"
+        case 3:
+            return "Explore"
+        default:
+            return ""
+        }
     }
 
     private func onDelete(offsets: IndexSet) {
