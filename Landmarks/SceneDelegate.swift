@@ -18,8 +18,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
+			
 			//give all instances of UITableView a clear background color
 			UITableView.appearance().backgroundColor = .clear
+			UITabBar.appearance().backgroundColor = .clear
 			
             let window = UIWindow(windowScene: windowScene)
 

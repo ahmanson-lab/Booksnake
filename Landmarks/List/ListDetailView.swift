@@ -26,6 +26,9 @@ struct ListDetailView: View {
         case descriptionField
     }
 
+	//flag to hide Tab Bar View when user is in AR view
+	@State var isTabShown = true
+	
     var body: some View {
         ZStack {
             List {
