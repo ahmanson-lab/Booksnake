@@ -21,8 +21,6 @@ struct AssetRow: View, AssetRowProtocol {
     @State private var tabSelection = 1
     @State private var showLoading: Bool = false
 	@State private var showMiniOnboarding: Bool = false
-	
-	@State private var isTabShown = true
 
     var body: some View {
         ZStack {
@@ -35,9 +33,8 @@ struct AssetRow: View, AssetRowProtocol {
                             NavigationLink(destination: LazyView(ContentView(imageURL: item.imageURL,
                                                                              width: (item.width),
                                                                              length: (item.length),
-                                                                             labels: item.labels! ,
-                                                                             values: item.values! ,
-																			 isTabShown: $isTabShown))) {
+                                                                             labels: item.labels!,
+                                                                             values: item.values!))) {
                                 Image(uiImage: image)
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)

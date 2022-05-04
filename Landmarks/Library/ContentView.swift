@@ -18,8 +18,6 @@ struct ContentView: View {
 	
     var labels: [String]
     var values: [String]
-
-	@Binding var isTabShown: Bool
 	
     var body: some View {
         List {

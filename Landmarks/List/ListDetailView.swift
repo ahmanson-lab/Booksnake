@@ -25,9 +25,6 @@ struct ListDetailView: View {
         case creatorField
         case descriptionField
     }
-
-	//flag to hide Tab Bar View when user is in AR view
-	@State var isTabShown = true
 	
     var body: some View {
         ZStack {
@@ -223,7 +220,7 @@ struct ListDetailView: View {
                                                                              width: (item.width),
                                                                              length: (item.length),
                                                                              labels: item.labels!,
-                                                                             values: item.values! ))) {
+                                                                             values: item.values!))) {
                                 Image(uiImage: image)
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
