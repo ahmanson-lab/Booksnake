@@ -94,7 +94,9 @@ class RealityView: UIViewController, ARSessionDelegate  {
 			realityView.scene.anchors.removeAll()
 			realityView.scene.anchors.append(plane)
 			
-			realityView.installGestures([.all], for: plane)
+			realityView.installGestures([.all], for: plane).forEach({gestureRecognizer in
+				gestureRecognizer.addTarget(self, action: #selector(handleGesture(_:)))
+			})
 			
 			plane.generateCollisionShapes(recursive: true)
 			firstTap = false
@@ -108,6 +110,23 @@ class RealityView: UIViewController, ARSessionDelegate  {
 			if let plane = realityView.scene.findEntity(named: "custom_plane"){
 				plane.transform = transform
 			}
+		}
+	}
+	
+	@objc private func handleGesture(_ recognizer: UIGestureRecognizer){
+		guard let pinchGesture = recognizer as? EntityScaleGestureRecognizer else {return}
+		
+		switch pinchGesture.state{
+		case.began:
+			print("Pinch began")
+		case .changed:
+			if ((pinchGesture.entity?.scale.x)! > 0.9 && (pinchGesture.entity?.scale.x)! < 1.2){
+				pinchGesture.entity?.scale = [1.0,1.0,1.0]
+			}
+		case .ended:
+			print("ended")
+		default:
+			break
 		}
 	}
 }
