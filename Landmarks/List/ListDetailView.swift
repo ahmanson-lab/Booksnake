@@ -19,6 +19,7 @@ struct ListDetailView: View {
     @State private var shareItems = [Any]()
     @State private var showLoading: Bool = false
     @FocusState private var focusedField: Field?
+	
     private enum Field: Hashable {
         case titleField
         case subtitleField
@@ -223,7 +224,8 @@ struct ListDetailView: View {
                                                                              width: (item.width),
                                                                              length: (item.length),
                                                                              labels: item.labels!,
-                                                                             values: item.values! ))) {
+																			 values: item.values!,
+																			 isTabShown: $isTabShown))) {
                                 Image(uiImage: image)
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
