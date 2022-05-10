@@ -75,12 +75,7 @@ struct AssetRow: View, AssetRowProtocol {
                         }
                         .tag(3)
                 }
-                .navigationTitle(navigationBarTitle(tabSelection: tabSelection))
-                .tabItem {
-                    Image(systemName: "magnifyingglass")
-                    Text("Explore")
-                }
-                .tag(3)
+                .navigationBarTitle(navigationBarTitle(tabSelection: tabSelection))
             }
             .navigationViewStyle(StackNavigationViewStyle())
             .task {
