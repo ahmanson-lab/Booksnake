@@ -25,9 +25,6 @@ struct ListDetailView: View {
         case creatorField
         case descriptionField
     }
-
-	//flag to hide Tab Bar View when user is in AR view
-	@State var isTabShown = true
 	
     var body: some View {
         ZStack {
@@ -223,7 +220,7 @@ struct ListDetailView: View {
                                                                              width: (item.width),
                                                                              length: (item.length),
                                                                              labels: item.labels!,
-                                                                             values: item.values! ))) {
+                                                                             values: item.values!))) {
                                 Image(uiImage: image)
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
@@ -246,12 +243,12 @@ struct ListDetailView: View {
             }
             .onChange(of: collectionItems) { saveIntoDB(updatedItems: $0) }
             .navigationBarBackButtonHidden(navigationBarBackButtonHidden)
+            .navigationBarTitle("", displayMode: .inline)
             .toolbar{
                 ToolbarItem(placement: .navigationBarTrailing) {
                     HStack {
                         Button(action: {
                             Task {
-                                // Prepare collection archive
                                 do {
                                     showLoading = true
                                     let fileURL = try await DataExportHandler.prepareArchive(itemCollection: collection)
@@ -261,12 +258,6 @@ struct ListDetailView: View {
                                 } catch {
                                     print(error)
                                 }
-    //                            do {
-    //                                let importCollection = try await DataExportHandler.importArchive(archiveURL: fileURL!, managedObjectContext: managedObjectContext)
-    //                                print(importCollection)
-    //                            } catch {
-    //                                print(error)
-    //                            }
                             }
                         }, label: {
                             if !editMode {
@@ -288,12 +279,14 @@ struct ListDetailView: View {
                         })
                     }
                 }
-                ToolbarItem(placement: .keyboard) {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
                     Button {
                         focusedField = nil
                     } label: {
-                        Text("Close Keyboard")
-                            .bold()
+                        Image(systemName: "keyboard.chevron.compact.down")
+                            .resizable()
+                            .scaledToFit()
                     }
                 }
             }

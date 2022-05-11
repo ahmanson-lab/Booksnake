@@ -25,6 +25,7 @@ enum DataExportError: Error {
     case cannotOpenArchiveFolder
     case cannotReadMetaFile
     case cannotCreateFetchRequest
+    case cannotReadImportingFile
 }
 
 struct DataExportHandler {

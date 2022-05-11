@@ -136,7 +136,9 @@ struct OnboardingView: View {
 	
 	func goRealityView() {
 		if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene  {
-			windowScene.windows.first?.rootViewController = UIHostingController(rootView: CustomNavigationView{RealityViewRepresentable(width: 1, length: 1, image_url: Bundle.main.url(forResource: "LA1909", withExtension: "jpg"), title: "Los Angeles, 1909")})
+			windowScene.windows.first?.rootViewController = UIHostingController(rootView: CustomNavigationView {
+                RealityViewRepresentable(width: 1, length: 1, image_url: Bundle.main.url(forResource: "LA1909", withExtension: "jpg"), title: "Los Angeles, 1909")
+            })
 			windowScene.windows.first?.makeKeyAndVisible()
 		}
 	}
