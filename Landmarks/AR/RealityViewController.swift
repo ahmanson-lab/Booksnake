@@ -11,7 +11,7 @@ import RealityKit
 import UIKit
 import ARKit
 
-class RealityView: UIViewController, ARSessionDelegate  {
+class RealityViewController: UIViewController, ARSessionDelegate  {
 	var texture_url: URL?
 	var width: Float?
 	var height: Float?
@@ -19,7 +19,7 @@ class RealityView: UIViewController, ARSessionDelegate  {
 	var dir_light: DirectionalLight = DirectionalLight()
 	var firstTap: Bool = true
 	var realityView = ARView(frame: .zero)
-	
+
 	override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -112,7 +112,7 @@ class RealityView: UIViewController, ARSessionDelegate  {
 	}
 }
 
-extension RealityView: ARCoachingOverlayViewDelegate {
+extension RealityViewController: ARCoachingOverlayViewDelegate {
 	func addCoaching(){
 		let coachingOverlay = ARCoachingOverlayView()
 		coachingOverlay.delegate = self

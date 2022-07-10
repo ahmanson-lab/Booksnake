@@ -15,16 +15,14 @@ struct RealityViewRepresentable: UIViewControllerRepresentable {
 	var image_url: URL?
 	//var hasReturn: Bool = false
 	var title: String?
-	
-	typealias UIViewControllerType = UIViewController
-	
+
 	func makeUIViewController(context: Context) -> UIViewController {
-		let picker = RealityView()
+		let picker = RealityViewController()
 		picker.width = width
 		picker.height = length
 		picker.texture_url = image_url
 		picker.title_text = title
-		
+
 		return picker
 	}
 	func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
