@@ -105,6 +105,7 @@ struct FullWebView : View {
                               message: Text("Tap OK to return to main page."),
                               dismissButton: .default(Text("OK"), action: {
                     delegate?.switchToLibraryTab()
+                    NavigationUtil.popToRootView()
                 }))
             }
         })
