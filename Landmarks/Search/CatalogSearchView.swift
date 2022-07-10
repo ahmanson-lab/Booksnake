@@ -17,8 +17,8 @@ struct CatalogSearchView: View {
 	@State var instructions: String
 	@State var filter: String
 	@State var fieldURL: [String]
-	
 	@State var fieldValue: String = ""
+    @FocusState private var focusedField: Field?
 	@State var urlPath: String = ""
 	@State private var isAlert: Bool = false
 	@State private var activeAlert: ActiveAlert = .first
@@ -30,10 +30,13 @@ struct CatalogSearchView: View {
 	@State private var hasBackList: Bool = false
 	@State private var hasForwardList: Bool = false
 	@State private var active: Bool = false
+
+    private enum Field: CaseIterable, Hashable {
+        case search
+    }
 	
 	var delegate: AssetRowProtocol?
 	var body: some View {
-
 			ZStack(alignment: .top, content: {
 				Color.init(.systemGray6)
 
@@ -53,6 +56,7 @@ struct CatalogSearchView: View {
 					TextField(fieldDescription, text: $fieldValue, onEditingChanged: {_ in }, onCommit: {
 						active  = true
 					})
+                    .focused($focusedField, equals: .search)
 					.textContentType(.oneTimeCode)
 					.keyboardType(.webSearch)
 					.padding(.horizontal, 20.0)
@@ -86,5 +90,11 @@ struct CatalogSearchView: View {
 					Spacer()
 				}
 			})
+            .onAppear(perform: {
+                // The focusedField won't work if we don't delay the signal, https://stackoverflow.com/a/67892111 . It's a bug from Apple.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.focusedField = .search
+                }
+            })
 	}
 }
