@@ -42,7 +42,7 @@
 		11DF87A82548955D00A1E5BD /* ManifestDataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DF87A72548955D00A1E5BD /* ManifestDataHandler.swift */; };
 		11FC2AAA255B0BFD00AC21EA /* WebControllerRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FC2AA9255B0BFD00AC21EA /* WebControllerRepresentable.swift */; };
 		11FDF31B27B5C27100EB5BDC /* NewListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDF31A27B5C27100EB5BDC /* NewListView.swift */; };
-		11FDF31E27B5CF4300EB5BDC /* ListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDF31D27B5CF4300EB5BDC /* ListsView.swift */; };
+		11FDF31E27B5CF4300EB5BDC /* RootListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDF31D27B5CF4300EB5BDC /* RootListView.swift */; };
 		56CD50A824C7CA1C00EF8C3E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CD50A724C7CA1C00EF8C3E /* AppDelegate.swift */; };
 		56CD50AA24C7CA1C00EF8C3E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CD50A924C7CA1C00EF8C3E /* SceneDelegate.swift */; };
 		56CD50C024C7CEA000EF8C3E /* RectangularImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CD50BF24C7CEA000EF8C3E /* RectangularImage.swift */; };
@@ -116,7 +116,7 @@
 		11DF87A72548955D00A1E5BD /* ManifestDataHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManifestDataHandler.swift; sourceTree = "<group>"; };
 		11FC2AA9255B0BFD00AC21EA /* WebControllerRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebControllerRepresentable.swift; sourceTree = "<group>"; };
 		11FDF31A27B5C27100EB5BDC /* NewListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewListView.swift; sourceTree = "<group>"; };
-		11FDF31D27B5CF4300EB5BDC /* ListsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListsView.swift; sourceTree = "<group>"; };
+		11FDF31D27B5CF4300EB5BDC /* RootListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootListView.swift; sourceTree = "<group>"; };
 		56CD50A424C7CA1C00EF8C3E /* Booksnake.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Booksnake.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		56CD50A724C7CA1C00EF8C3E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		56CD50A924C7CA1C00EF8C3E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -234,7 +234,7 @@
 		BAA84B3E27CCA6C7000FE43C /* List */ = {
 			isa = PBXGroup;
 			children = (
-				11FDF31D27B5CF4300EB5BDC /* ListsView.swift */,
+				11FDF31D27B5CF4300EB5BDC /* RootListView.swift */,
 				BAA84B3B27CCA69D000FE43C /* ListDetailView.swift */,
 				11FDF31A27B5C27100EB5BDC /* NewListView.swift */,
 				BA42D15D27E96CE000E9BA0B /* ManifestItemsPickerView.swift */,
@@ -438,7 +438,7 @@
 				11929F5E2739D97F00EB2036 /* RealityViewController.swift in Sources */,
 				56CD50A824C7CA1C00EF8C3E /* AppDelegate.swift in Sources */,
 				BA5BADED27A4AC5700A35AC6 /* Manifest.swift in Sources */,
-				11FDF31E27B5CF4300EB5BDC /* ListsView.swift in Sources */,
+				11FDF31E27B5CF4300EB5BDC /* RootListView.swift in Sources */,
 				1181A8C927ED2C0E003EE7AF /* TargetScene.rcproject in Sources */,
 				BA6CE574280F9F5200C1D4DD /* ShareSheet.swift in Sources */,
 				1193352A25830ED900CA19A2 /* ContentDataContainer.xcdatamodeld in Sources */,

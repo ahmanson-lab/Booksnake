@@ -16,6 +16,10 @@ struct InputView: View {
 	@State var activeAlert: ActiveAlert = .first
 	@State private var showLoading: Bool = false
     @State private var newItemLabel: String = ""
+    @FocusState private var focusedField: Field?
+    private enum Field: CaseIterable, Hashable {
+        case url
+    }
 	
 	var delegate: AssetRowProtocol?
 	
@@ -41,16 +45,16 @@ struct InputView: View {
                 })
                     .buttonStyle(BorderlessButtonStyle())
 
-                TextField("Enter IIIF manifest URL", text: $fieldValue, onEditingChanged: { _ in
-                }, onCommit: {
+                TextField("Enter IIIF manifest URL", text: $fieldValue, onCommit: {
                     urlEnter()
                 })
-                    .padding(.horizontal, 20.0)
-                    .multilineTextAlignment(.leading)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .foregroundColor(.gray)
-                    .font(.body)
-                    .padding(EdgeInsets(top: 25, leading: 0, bottom: 0, trailing: 0))
+                .focused($focusedField, equals: .url)
+                .padding(.horizontal, 20.0)
+                .multilineTextAlignment(.leading)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .foregroundColor(.gray)
+                .font(.body)
+                .padding(EdgeInsets(top: 25, leading: 0, bottom: 0, trailing: 0))
 
                 Text("Type or paste an item's IIIF manifest URL to add it to Booksnake.")
                     .font(.caption)
@@ -82,6 +86,12 @@ struct InputView: View {
             }, label:{
                 Text("Add")
             })
+        })
+        .onAppear(perform: {
+            // The focusedField won't work if we don't delay the signal, https://stackoverflow.com/a/67892111 . It's a bug from Apple.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.focusedField = .url
+            }
         })
         .alert(isPresented: $isAlert) {
             switch activeAlert {
