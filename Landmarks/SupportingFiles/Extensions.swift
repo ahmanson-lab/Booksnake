@@ -87,3 +87,59 @@ struct CustomNavigationView<Content: View>: View {
 		.frame(alignment: .topLeading)
 	}
 }
+
+extension CaseIterable where Self: Equatable, AllCases: BidirectionalCollection {
+    func previous() -> Self {
+        let all = Self.allCases
+        let idx = all.firstIndex(of: self)!
+        let previous = all.index(before: idx)
+        return all[previous < all.startIndex ? all.index(before: all.endIndex) : previous]
+    }
+
+    func next() -> Self {
+        let all = Self.allCases
+        let idx = all.firstIndex(of: self)!
+        let next = all.index(after: idx)
+        return all[next == all.endIndex ? all.startIndex : next]
+    }
+}
+
+extension UIApplication {
+    var keyWindow: UIWindow? {
+        // Get connected scenes
+        return UIApplication.shared.connectedScenes
+            // Keep only active scenes, onscreen and visible to the user
+            .filter { $0.activationState == .foregroundActive }
+            // Keep only the first `UIWindowScene`
+            .first(where: { $0 is UIWindowScene })
+            // Get its associated windows
+            .flatMap({ $0 as? UIWindowScene })?.windows
+            // Finally, keep only the key window
+            .first(where: \.isKeyWindow)
+    }
+}
+
+
+// Idea for pop to root: https://stackoverflow.com/questions/57334455/swiftui-how-to-pop-to-root-view
+struct NavigationUtil {
+  static func popToRootView() {
+    findNavigationController(viewController: UIApplication.shared.keyWindow?.rootViewController)?
+      .popToRootViewController(animated: true)
+  }
+
+  static func findNavigationController(viewController: UIViewController?) -> UINavigationController? {
+    guard let viewController = viewController else {
+      return nil
+    }
+
+    if let navigationController = viewController as? UINavigationController {
+      return navigationController
+    }
+
+    for childViewController in viewController.children {
+      return findNavigationController(viewController: childViewController)
+    }
+
+    return nil
+  }
+}

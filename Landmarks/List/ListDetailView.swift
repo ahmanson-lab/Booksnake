@@ -19,7 +19,7 @@ struct ListDetailView: View {
     @State private var shareItems = [Any]()
     @State private var showLoading: Bool = false
     @FocusState private var focusedField: Field?
-    private enum Field: Hashable {
+    private enum Field: CaseIterable, Hashable {
         case titleField
         case subtitleField
         case creatorField
@@ -280,6 +280,20 @@ struct ListDetailView: View {
                     }
                 }
                 ToolbarItemGroup(placement: .keyboard) {
+                    Button {
+                        focusedField = focusedField?.previous()
+                    } label: {
+                        Image(systemName: "chevron.up")
+                            .resizable()
+                            .scaledToFit()
+                    }
+                    Button {
+                        focusedField = focusedField?.next()
+                    } label: {
+                        Image(systemName: "chevron.down")
+                            .resizable()
+                            .scaledToFit()
+                    }
                     Spacer()
                     Button {
                         focusedField = nil
