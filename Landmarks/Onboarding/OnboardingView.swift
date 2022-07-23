@@ -154,7 +154,7 @@ struct MiniOnboardingView: View {
 	
 	var body: some View {
 		NavigationView{
-			VStack(alignment: .center){
+			VStack{
 				List {
 					ForEach(0..<description.count){ num in
 						HStack(alignment: .top){
@@ -165,7 +165,7 @@ struct MiniOnboardingView: View {
 								.frame(width: 50, height: 50)
 							Spacer()
 								.frame(width: 30)
-							VStack{
+							VStack(alignment: .leading){
 								HStack{
 									Text(titles[num] )
 										.font(.title)
@@ -181,7 +181,7 @@ struct MiniOnboardingView: View {
 					}
 				}
 			}
-			.padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+			//.padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
 			.toolbar(content: {
 				ToolbarItem(placement: .navigationBarLeading){
 					Button("Done"){
