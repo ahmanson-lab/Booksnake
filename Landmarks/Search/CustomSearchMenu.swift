@@ -24,6 +24,10 @@ struct CustomSearchMenu: View {
     var body: some View {
 		ScrollView (.vertical, showsIndicators: false) {
 			LazyVGrid(columns: items, alignment: .center, spacing: 50) {
+				Spacer().frame(height: 10)
+				
+				//Add using IIIF link - BETA FEATURE
+				ZStack(alignment: .topTrailing){
 				NavigationLink( destination: LazyView(InputView(delegate: delegate)),
 					label: {
 						Text("Add from IIIF Manifest")
@@ -35,8 +39,13 @@ struct CustomSearchMenu: View {
 											.padding(.all, 10.0)
 							.font(.title)
 							.foregroundColor(.white)
-							.frame(width: 360 - 30, height: 400 / 3, alignment: .center)
 					})
+					Text("BETA")
+						.foregroundColor(.white)
+						.bold()
+						.offset(y:-30)
+				}
+				Spacer().frame(height: 2)
 				
 					//LOC Catalogue
 					NavigationLink(
@@ -51,8 +60,8 @@ struct CustomSearchMenu: View {
 												.padding(.all, 10.0)
 								.font(.title)
 								.foregroundColor(.white)
-								.frame(width: 360 - 10, height: 400 / 3, alignment: .center)
 						})
+				Spacer().frame(height: 2)
 				
 				//Huntington Catalogue
 				NavigationLink(
@@ -67,9 +76,8 @@ struct CustomSearchMenu: View {
 											.padding(.all, 10.0)
 							.font(.title)
 							.foregroundColor(.white)
-						   .frame(width: 360 - 30, height: 400 / 3, alignment: .center)
 					})
-			}
+				}
 		}
 	}
 }
