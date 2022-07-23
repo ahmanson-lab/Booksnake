@@ -46,13 +46,6 @@ struct AssetRow: View, AssetRowProtocol {
                         }
                         .onDelete(perform: onDelete)
                     }
-                    .toolbar(content: {
-                        Button(action: {
-                            showMiniOnboarding = true
-                        }, label: {
-                            Image(systemName:  "questionmark.circle").foregroundColor(.blue)
-                        })
-                    })
                     .tabItem {
                         Image(systemName: "scroll")
                         Text("Library")
@@ -75,6 +68,13 @@ struct AssetRow: View, AssetRowProtocol {
                         }
                         .tag(3)
                 }
+				.toolbar(content: {
+					Button(action: {
+						showMiniOnboarding = true
+					}, label: {
+						Image(systemName:  "questionmark.circle").foregroundColor(.blue)
+					})
+				})
                 .navigationBarTitle(navigationBarTitle(tabSelection: tabSelection))
             }
             .navigationViewStyle(StackNavigationViewStyle())
