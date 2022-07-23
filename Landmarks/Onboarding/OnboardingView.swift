@@ -154,40 +154,34 @@ struct MiniOnboardingView: View {
 	
 	var body: some View {
 		NavigationView{
-			VStack{
-				Text("How to Use Booksnake")
-					.font(.title)
-					.fontWeight(.bold)
-					.padding(EdgeInsets(top: 10, leading: 10, bottom: 20, trailing: 10))
+			VStack(alignment: .center){
 				List {
 					ForEach(0..<description.count){ num in
-						HStack{
+						HStack(alignment: .top){
 							Image(systemName: icon_list[num])
 								.resizable()
 								.scaledToFit()
 								.foregroundColor(.blue)
 								.frame(width: 50, height: 50)
 							Spacer()
-								.frame(width: 20)
+								.frame(width: 30)
 							VStack{
 								HStack{
-									Text(titles[num])
+									Text(titles[num] )
 										.font(.title)
 										.fontWeight(.bold)
 									Spacer()
 								}
-								.padding(EdgeInsets(top: 10, leading: 5, bottom: 1, trailing: 10))
-								Text(description[num])
+								Text(description[num] + "\n")
 									.minimumScaleFactor(0.1)
 									.multilineTextAlignment(.leading)
-									.padding(EdgeInsets(top: 10, leading: 1, bottom: 1, trailing: 10))
 							}
 						}
-						.padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
 						.listRowSeparator(.hidden)
 					}
 				}
 			}
+			.padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
 			.toolbar(content: {
 				ToolbarItem(placement: .navigationBarLeading){
 					Button("Done"){
@@ -196,6 +190,7 @@ struct MiniOnboardingView: View {
 					}
 				}
 			})
+			.navigationTitle( "How to Use Booksnake")
 		}
 	}
 }
